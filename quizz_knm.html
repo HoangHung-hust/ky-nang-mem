@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Ứng dụng ôn tập trắc nghiệm</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    font-family: "Segoe UI", sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+}
+.app{
+    width:820px;
+    background:rgba(0,0,0,.85);
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 0 40px rgba(0,0,0,.7);
+}
+
+.header{
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#ffd369;
+    margin-bottom:20px;
+}
+.question-card{
+    background:#1b2a4e;
+    padding:20px;
+    border-radius:12px;
+    font-size:20px;
+    margin-bottom:20px;
+}
+.answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+.answer-card{
+    background:#162447;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+.answer-card:hover{
+    background:#1f4068;
+    transform:scale(1.03);
+}
+
+.chosen{
+    background: linear-gradient(145deg, #ff9800, #f57c00) !important;
+    color: #000;
+}
+
+.correct{ background:#2ecc71 !important; }
+.wrong{ background:#e74c3c !important; }
+
+.controls{
+    margin-top:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+button{
+    padding:12px 30px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+.submit{
+    background:#00adb5;
+    color:#000;
+}
+.next{
+    background:#ffd369;
+    color:#000;
+    display:none;
+}
+.info{
+    margin-top:15px;
+    font-size:16px;
+}
+input[type=text]{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    font-size:16px;
+}
+select{
+    padding:8px;
+    border-radius:8px;
+    margin-left:10px;
+}
+
+.answer-card input:checked + span,
+.answer-card input:checked{
+    accent-color: orange;
+}
+
+.badge{
+    position:absolute;
+    top:-12px;
+    right:15px;
+    padding:6px 12px;
+    font-size:12px;
+    border-radius:20px;
+    font-weight:bold;
+    color:#000;
+}
+.badge.single{ background:#4da3ff; }
+.badge.multiple{ background:#ff9800; }
+.badge.fill{ background:#2ecc71; }
+.badge.match{ background:#9b59b6; }
+
+.instruction{
+    font-size:14px;
+    color:#ccc;
+    margin-top:8px;
+}
+.question-wrapper{
+    position:relative;
+}
+.stat{
+    margin-top:15px;
+    font-size:16px;
+    text-align:center;
+    color:#eee;
+}
+.stat span{
+    font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+<div class="app">
+    <div class="header">ÔN TẬP</div>
+    <div id="questionWrapper" class="question-card question-wrapper">
+    <div id="badge" class="badge"></div>
+    <div id="question"></div>
+    <div id="instruction" class="instruction"></div>
+</div>
+
+    <div id="answers" class="answers"></div>
+
+    <div class="controls">
+        <button id="submitBtn" class="submit">SUBMIT</button>
+        <button id="nextBtn" class="next">NEXT</button>
+    </div>
+
+    <div id="stat" class="stat">
+    ✔ Đúng: <span id="correctCount">0</span> /
+    <span id="totalCount">0</span>
+    &nbsp;&nbsp;&nbsp;
+    ✖ Sai: <span id="wrongCount">0</span> /
+    <span id="totalCount2">0</span>
+    </div>
+
+    <div id="info" class="info"></div>
+</div>
+
+<script>
+/* ====== DỮ LIỆU ====== */
+let questions=[
+    {
+    type: "single",
+    q: "Khi nào thì giao tiếp bằng văn bản phù hợp hơn giao tiếp trực tiếp?",
+    options: [
+        "Khi bạn muốn trình bày một ý tưởng phức tạp.",
+        "Khi bạn muốn tránh nói chuyện với ai đó.",
+        "Khi bạn muốn đưa ra nhiều câu hỏi.",
+        "Khi bạn muốn nhanh chóng nhận được ý kiến trả lời về một vấn đề."
+    ],
+    correct: ["Khi bạn muốn trình bày một ý tưởng phức tạp."]
+    },
+    {
+    type: "single",
+    q: "Bạn có thể làm gì để hiểu rõ những điều người khác đang nói?",
+    options: [
+        "Cố gắng hiểu các ngôn ngữ cơ thể",
+        "Đưa ra những đánh giá dựa trên những điều họ đang nói.",
+        "Đặt ra các câu hỏi.",
+        "Sử dụng ngữ điệu."
+    ],
+    correct: ["Đặt ra các câu hỏi."]
+    },
+    {
+    type: "single",
+    q: "Để tạo ra một thông điệp hiệu quả, bạn sẽ làm theo hướng dẫn nào sau đây?",
+    options: [
+        "Sử dụng tiếng lóng",
+        "Sử dụng biệt ngữ và từ địa phương",
+        "Lựa chọn từ phù hợp, dễ hiểu",
+        "Dùng ngôn từ khó hiểu"
+    ],
+    correct: ["Lựa chọn từ phù hợp, dễ hiểu"]
+    },
+    {
+    type: "single",
+    q: "Khi bạn có những ý kiến phản đối hay lời phê bình trước một vấn đề",
+    options: [
+        "Bạn đưa ra những lời nhận xét khả quan trước.",
+        "Bạn chẳng nói gì cả.",
+        "Đơn giản, bạn sẽ phát biểu."
+    ],
+    correct: ["Bạn đưa ra những lời nhận xét khả quan trước."]
+    },
+    {
+    type: "single",
+    q: "Để kết thúc 1 cuộc trò chuyện, ...",
+    options: [
+        "Bạn thường chỉ bỏ đi",
+        "Bạn bắt đầu trông thiếu kiên nhẫn và hy vọng người đó sẽ gợi ý.",
+        "Bạn kết thúc những vấn đề trên với một sự phát biểu đóng."
+    ],
+    correct: ["Bạn kết thúc những vấn đề trên với một sự phát biểu đóng."]
+    },
+    {
+    type: "single",
+    q: "Giai đoạn giải mã thông điệp diễn ra khi nào?",
+    options: [
+        "Khi người nghe tiếp nhận thông tin.",
+        "Khi bạn diễn đạt suy nghĩ và ý tưởng của mình.",
+        "Khi các thông tin được truyền tải đi",
+        "Khi người nghe lý giải thông tin."
+    ],
+    correct: ["Khi người nghe lý giải thông tin."]
+    },
+    {
+    type: "single",
+    q: "Trong cuộc nói chuyện, bạn:",
+    options: [
+        "Đứng cách người nói 5-6 bước chân",
+        "Đứng cách người nói 2-3 bước chân",
+        "Đứng cách người nói 1 bước chân"
+    ],
+    correct: ["Đứng cách người nói 2-3 bước chân"]
+    },
+    {
+    type: "multiple",
+    q: "Bạn phải làm gì để gây ấn tượng và tạo mối quan hệ với người khác?",
+    options: [
+        "Đồng tình với những gì họ nói.",
+        "Thay đổi âm lượng giọng nói cho phù hợp với người bạn đang đối thoại.",
+        "Bắt chước tư thế giao tiếp của họ"
+    ],
+    correct: ["Thay đổi âm lượng giọng nói cho phù hợp với người bạn đang đối thoại.","Bắt chước tư thế giao tiếp của họ"]
+    },
+    {
+    type: "single",
+    q: "Ba bí quyết nào sau đây sẽ luôn giúp bạn thành công, luôn được những người khác yêu mến trong cuộc sống và công việc?",
+    options: [
+        "Đặt câu hỏi, Giúp đỡ nhiệt tình, Phê bình khi có sai sót",
+        "Góp ý thẳng thắn, Lắng nghe và Tôn trọng",
+        "Luôn tươi cười, Học cách khen ngợi, Lắng nghe"
+    ],
+    correct: ["Luôn tươi cười, Học cách khen ngợi, Lắng nghe"]
+    },
+    {
+    type: "multiple",
+    q: "Khi viết thư điện tử, bạn nên...",
+    options: [
+        "Nêu rõ những yêu cầu của bạn (nếu có) trong bức thư.",
+        "Sử dụng phong cách và giọng văn khác với người nhận",
+        "Luôn ghi rõ mục đích của thư trong mục 'Tiêu đề thư'."
+    ],
+    correct: ["Nêu rõ những yêu cầu của bạn (nếu có) trong bức thư.","Luôn ghi rõ mục đích của thư trong mục 'Tiêu đề thư'."]
+    },
+    {
+    type: "multiple",
+    q: "Lắng nghe tích cực có đặc điểm như thế nào?",
+    options: [
+        "Thể hiện tư thế sẵn sàng phản hồi.",
+        "Mỉm cười với người nói.",
+        "Gật đầu khi người đó đang nói."
+    ],
+    correct: ["Thể hiện tư thế sẵn sàng phản hồi.","Mỉm cười với người nói.","Gật đầu khi người đó đang nói."]
+    },
+    {
+    type: "single",
+    q: "Hành động ngồi ngả người về phía trước ám chỉ điều gì khi giao tiếp?",
+    options: [
+        "Người đó đang cố kiềm chế.",
+        "Người đó đang có thái độ hạ mình hoặc thái độ hách dịch.",
+        "Người đó rất tự tin.",
+        "Người đó đang rất hứng thú và sẵn sàng hồi đáp."
+    ],
+    correct: ["Người đó đang rất hứng thú và sẵn sàng hồi đáp."]
+    },
+    {
+    type: "single",
+    q: "Truyền thông giao tiếp bằng lời gồm:",
+    options: [
+        "Nói và kèm theo các cử chỉ điệu bộ",
+        "Nói và viết",
+        "Nói, viết, nghe, và đọc",
+        "Nói, viết, nghe"
+    ],
+    correct: ["Nói, viết, nghe, và đọc"]
+    },
+    {
+    type: "single",
+    q: "Truyền thông giao tiếp không lời là hình thức:",
+    options: [
+        "Cơ bản nhất",
+        "Ít phổ biến",
+        "Có muộn nhất",
+        "Dễ học"
+    ],
+    correct: ["Cơ bản nhất"]
+    },
+    {
+    type: "single",
+    q: "Bạn hãy chọn lời phát biểu chính xác nhất sau đây về làm việc nhóm:",
+    options: [
+        "Sự thỏa mãn cá nhân & tinh thần làm việc gia tăng khi đội/ nhóm thành công",
+        "Những nhân viên làm việc trong nhóm báo cáo sự thỏa mãn công việc giảm sút",
+        "Đội/ nhóm có khuynh hướng làm ít hiệu quả hơn cá nhân",
+        "Đội/ nhóm đòi hỏi nhiều nguồn lực hơn cá nhân"
+    ],
+    correct: ["Sự thỏa mãn cá nhân & tinh thần làm việc gia tăng khi đội/ nhóm thành công"]
+    },
+    {
+    type: "single",
+    q: "Theo bạn, kỹ năng giao tiếp tốt sẽ quyết định bao nhiêu sự thành công của bạn?",
+    options: [
+        "85%",
+        "70%",
+        "50%",
+        "20%"
+    ],
+    correct: ["85%"]
+    },
+    {
+    type: "single",
+    q: "Khi trò chuyện với một người nào đó,",
+    options: [
+        "Bạn thường là người nói nhiều nhất",
+        "Cố gắng cân bằng trong suốt cuộc đối thoại.",
+        "Bạn thường để người khác nói nhiều hơn."
+    ],
+    correct: ["Cố gắng cân bằng trong suốt cuộc đối thoại."]
+    },
+    {
+    type: "single",
+    q: "Nét mặt trong truyền thông không lời diễn tả:",
+    options: [
+        "Sự suy nghĩ",
+        "Sự trấn áp",
+        "Cảm xúc",
+        "Điều chỉnh sự giao tiếp"
+    ],
+    correct: ["Cảm xúc"]
+    },
+    {
+    type: "single",
+    q: "Dịch 1 thông điệp từ hình thức biểu tượng thành có ý nghĩa là:",
+    options: [
+        "Mã hóa",
+        "Chuyển kênh",
+        "Giải mã",
+        "Phản hồi"
+    ],
+    correct: ["Giải mã"]
+    },
+    {
+    type: "single",
+    q: "Hãy chọn định nghĩa về “Truyền thông giao tiếp' thích hợp nhất",
+    options: [
+        "Truyền thông giao tiếp là truyền thông tin và ý nghĩa từ một cá nhân hoặc nhóm đến 1 người khác",
+        "Truyền thông giao tiếp là truyền ý tưởng từ 1 cá nhân hoặc nhóm đến 1 người khác",
+        "Truyền thông giao tiếp là truyền ý nghĩa từ 1 cá nhân hay một nhóm đến 1 người khác",
+        "Truyền thông giao tiếp là truyền thông tin từ một cá nhân hoặc nhóm đến một người khác"
+    ],
+    correct: ["Truyền thông giao tiếp là truyền thông tin và ý nghĩa từ một cá nhân hoặc nhóm đến 1 người khác",]
+    },
+    {
+    type: "single",
+    q: "Những người biết điều hành doanh nghiệp thì thường dành nhiều thời gian giao tiếp của mình vào việc:",
+    options: [
+        "Lắng nghe",
+        "Nói",
+        "Đọc",
+        "Viết"
+    ],
+    correct: ["Lắng nghe"]
+    },
+    {
+    type: "single",
+    q: "Cử điệu và dáng điệu trong truyền thông không lời thể hiện bằng:",
+    options: [
+        "Cử chỉ bằng tay hoặc cách đi đứng",
+        "Nụ cười, cái nheo mắt",
+        "Cách đi đứng",
+        "Cái vẩy tay"
+    ],
+    correct: ["Cử chỉ bằng tay hoặc cách đi đứng"]
+    },
+    {
+    type: "single",
+    q: "Khi bắt tay trong giao tiếp, bạn nên đứng ở khoảng cách bao xa?",
+    options: [
+        "1 Sải tay",
+        "Tùy mỗi trường hợp",
+        "50 cm",
+        "1 cánh tay của người cao hơn"
+    ],
+    correct: ["1 cánh tay của người cao hơn"]
+    },
+    {
+    type: "single",
+    q: "Để giao tiếp hiệu quả, chúng ta thường.........",
+    options: [
+        "Tránh những sự kiện trong ngày đi vào vấn đề quan trọng ngay.",
+        "Tránh né việc mở đầu một cuộc trò chuyện",
+        "Mở đầu bằng việc bàn về những sự kiện trong ngày hoặc chuyện nhỏ."
+    ],
+    correct: ["Mở đầu bằng việc bàn về những sự kiện trong ngày hoặc chuyện nhỏ."]
+    },
+    {
+    type: "single",
+    q: "Ngôn ngữ cơ thể thể hiện điều gì nếu một người siết chặt tay và gõ chân xuống sàn?",
+    options: [
+        "Thách thức",
+        "Suy tư",
+        "Trốn tránh",
+        "Sẵn sàng phản hồi"
+    ],
+    correct: ["Thách thức"]
+    },
+    {
+    type: "single",
+    q: "Cách tốt nhất để chuẩn bị cho một cuộc giao tiếp qua điện thoại là gì?",
+    options: [
+        "Nghĩ trước một vài câu hỏi người giao tiếp có thể sẽ hỏi.",
+        "Nghĩ trước hoặc chuẩn bị trước nội dung cuộc gọi.",
+        "Không chuẩn bị gì cả."
+    ],
+    correct: ["Nghĩ trước hoặc chuẩn bị trước nội dung cuộc gọi."]
+    },
+    {
+    type: "single",
+    q: "Để giao tiếp hiệu quả, chúng ta nên:",
+    options: [
+        "Cố gắng nhớ và gọi tên khi trò chuyện với người khác.",
+        "Không chú ý đến tên và có khuynh hướng quên chúng.",
+        "Chỉ nhớ tên những người quan trọng."
+    ],
+    correct: ["Cố gắng nhớ và gọi tên khi trò chuyện với người khác."]
+    },
+    {
+    type: "single",
+    q: "Để giao tiếp hiệu quả, chúng ta thường:",
+    options: [
+        "Dựa xuống khi nói chuyện với người đang ngồi.",
+        "Đứng khi nói chuyện với người đang ngồi.",
+        "Ngồi khi nói chuyện với một người đang ngồi."
+    ],
+    correct: ["Ngồi khi nói chuyện với một người đang ngồi."]
+    },
+    {
+    type: "single",
+    q: "Sara đang cần tổ chức 1 cuộc họp nhân viên để thảo luận cách mà nội quy mới nên được thưc hiện. Sara liên quan đến phần nào của tiến trình giao tiếp.",
+    options: [
+        "Chọn kênh truyền thông (truyền thông điệp)",
+        "Giải mã thông điệp (chuyển thông điệp)",
+        "Hình thành ý tưởng (có ý tưởng)",
+        "Mã hoá thông điệp (chuyển ý tưởng thành thông điệp)"
+    ],
+    correct: ["Chọn kênh truyền thông (truyền thông điệp)"]
+    },
+    {
+    type: "single",
+    q: "Đâu là những hình thức và dấu hiệu biểu hiện của ngữ điệu?",
+    options: [
+        "Những biểu hiện trên khuôn mặt.",
+        "Những biến đổi của âm điệu.",
+        "Sự co giãn của đồng tử.",
+        "Những cử động của tay."
+    ],
+    correct: ["Những biến đổi của âm điệu."]
+    },
+    {
+    type: "single",
+    q: "Truyền thông giao tiếp không lời khác với giao tiếp bằng lời ở chỗ:",
+    options: [
+        "Dễ học",
+        "Cấu trúc không chặt, tự phát và vô ý thức",
+        "Không tự phát",
+        "Ý thức được"
+    ],
+    correct: ["Cấu trúc không chặt, tự phát và vô ý thức"]
+    },
+    {
+    type: "single",
+    q: "Ánh mắt trong truyền thông không lời là nguồn diễn tả:",
+    options: ["Sự đáng tin cậy và cảm xúc", "Thái độ", "Cường độ cảm nghĩ", "Cá tính con người"],
+    correct: ["Sự đáng tin cậy và cảm xúc"]
+  },
+  {
+    type: "single",
+    q: "Cách tốt nhất để kiểm tra xem thông tin có được hiểu đúng nghĩa không là?",
+    options: [
+      "Quan sát ngôn ngữ cơ thể của người nghe.",
+      "Chỉ khi nào người nghe đặt câu hỏi, bạn mới biết họ hiểu bạn.",
+      "Đặt các câu hỏi mở cho người nghe",
+      "Hỏi người nghe xem họ có hiểu bạn không."
+    ],
+    correct: ["Đặt các câu hỏi mở cho người nghe"]
+  },
+  {
+    type: "single",
+    q: "Những hình thức căn bản của truyền thông giao tiếp bao gồm:",
+    options: [
+      "Truyền thông giao tiếp không lời",
+      "Truyền thông giao tiếp bằng lời",
+      "Truyền thông giao tiếp không lời vả bằng lời",
+      "Tất cả đều sai"
+    ],
+    correct: ["Truyền thông giao tiếp không lời vả bằng lời"]
+  },
+  {
+    type: "single",
+    q: "Khi bạn nhận được ý kiến phản đối từ người khác, bạn sẽ:",
+    options: [
+      "Đơn giản nói với họ rằng bạn đã làm đúng.",
+      "Tập trung vào những điều bạn không thích ở họ.",
+      "Quan tâm đến những gì họ nói và xin lời khuyên từ họ."
+    ],
+    correct: ["Quan tâm đến những gì họ nói và xin lời khuyên từ họ."]
+  },
+  {
+    type: "multiple",
+    q: "Ưu điểm của việc giao tiếp qua điện thoại là gì?",
+    options: [
+      "Tránh việc gặp mặt trực tiếp.",
+      "Tiếp cận nhiều người trong thời gian ngắn.",
+      "Tiết kiệm thời gian và công sức đi lại."
+    ],
+    correct: ["Tiết kiệm thời gian và công sức đi lại.","Tiếp cận nhiều người trong thời gian ngắn.","Tiết kiệm thời gian và công sức đi lại."]
+  },
+  {
+    type: "single",
+    q: "Tư thế ngồi thể hiện bạn là người lắng nghe chuyên nghiệp?",
+    options: [
+      "Mắt nhìn thẳng, người ngả về phía trước",
+      "Mắt nhìn thẳng, tay để trên bàn",
+      "Mắt nhìn thẳng, lưng tựa vào ghế, chân vắt chéo",
+      "Mắt nhìn thẳng, người hướng về phía trước, tay trên bàn, đầu gật theo lời kể"
+    ],
+    correct: ["Mắt nhìn thẳng, người hướng về phía trước, tay trên bàn, đầu gật theo lời kể"]
+  },
+  {
+    type: "single",
+    q: "Giao tiếp trực tiếp có lợi ích gì hơn so với điện thoại?",
+    options: [
+      "Thông tin phức tạp được truyền tải chính xác hơn.",
+      "Thông tin được truyền tải tại một thời điểm và không gian cụ thể.",
+      "Người giao tiếp không bị mất tập trung.",
+      "Tất cả đều đúng"
+    ],
+    correct: ["Tất cả đều đúng"]
+  },
+  {
+    type: "single",
+    q: "Bạn hãy chọn lời phát bịểu chính xác nhất sau đây:",
+    options: ["Các giám đốc nên thẩm định, phán xét khi lắng nghe các nhân viên", 
+    "Để tiết kiệm thời gian, các giám đốc không nên quá chăm chú lắng nghe khi nhân viên nói",
+    "Tất cả các tổ chức bị buộc phải lắng nghe nhân viên của họ",
+    "Những tổ chức biết lắng nghe nhân viên thường thu được nhiều lợi điểm, chẳng hạn như tinh thần và năng suất cao hơn"],
+    correct: ["Những tổ chức biết lắng nghe nhân viên thường thu được nhiều lợi điểm, chẳng hạn như tinh thần và năng suất cao hơn"]
+  },
+  //câu 40
+  {
+    type: "single",
+    q: "Bạn cần bao nhiêu giây để thu hút sự chú ý qua điện thoại?",
+    options: ["3 giây", "4 giây", "5 giây", "6 giây"],
+    correct: ["4 giây"]
+  },
+  {
+    type: "single",
+    q: "Ấn tượng đầu tiên bạn ghi điểm với người giao tiếp là yếu tố nào sau đây?",
+    options: [
+      "Cách mở đầu câu chuyện của bạn",
+      "Lời chào thân ái",
+      "Cách nói chuyện hài hước",
+      "Dáng điệu, cử chỉ và trang phục"
+    ],
+    correct: ["Dáng điệu, cử chỉ và trang phục"]
+  },
+  {
+    type: "single",
+    q: "Đâu là cách tốt nhất để chắc chắn rằng bạn đã hoàn toàn hiểu thông điệp của một ai đó?",
+    options: [
+      "Xem xét ngữ cảnh mà người đó đang nói.",
+      "Xem xét giọng điệu của người nói.",
+      "Ghi chép hết những gì người nói trình bày",
+      "Sử dụng ngữ điệu phù hợp để trình bày lại thông điệp của người nói."
+    ],
+    correct: ["Sử dụng ngữ điệu phù hợp để trình bày lại thông điệp của người nói."]
+  },
+  {
+    type: "single",
+    q: "Kỹ năng lắng nghe hiệu quả sẽ giúp bạn điều gì trong quá trình giao tiếp?",
+    options: [
+      "Giúp bạn thấu hiểu thông điệp một cách trọn vẹn",
+      "Khiến người nghe nghĩ rằng bạn hiểu những gì họ đang nói",
+      "Chủ động hơn trong giao tiếp",
+      "Giúp bạn gây ấn tượng với mọi người nhờ kiến thức sâu rộng của mình"
+    ],
+    correct: ["Giúp bạn thấu hiểu thông điệp một cách trọn vẹn"]
+  },
+  {
+    type: "single",
+    q: "Khi bạn thảo luận về một chủ đề, bạn nên:",
+    options: [
+      "Tập trung vào những mặt xấu của vấn đề.",
+      "Tập trung vào những lời phê bình.",
+      "Tập trung vào những mặt tốt của vấn đề."
+    ],
+    correct: ["Tập trung vào những mặt tốt của vấn đề."]
+  },
+  {
+    type: "single",
+    q: "Truyền thông giao tiếp là tiến trình có mấy chiều?",
+    options: ["Một chiều", "Hai chiều", "Ba chiều", "Bốn chiều"],
+    correct: ["Hai chiều"]
+  },
+  {
+    type: "single",
+    q: "Nếu đồng nghiệp của bạn càng ngày càng mập, bạn sẽ:",
+    options: [
+      "Nói với người khác rằng anh/chị ấy trông quá mập.",
+      "Nói với người khác rằng anh/chị ấy thay đổi nhiều kể từ lúc gặp.",
+      "Không nói gì cả."
+    ],
+    correct: ["Không nói gì cả."]
+  },
+  {
+    type: "single",
+    q: "Muốn truyền đạt thông tin tốt, bạn cần phải:",
+    options: [
+      "Phát triển các loại kỹ năng, chuẩn bị toàn diện, thể hiện sự tự tin vào đề tài của bạn và tự tin vào chính bạn",
+      "Phát triển các loại kỹ năng. chuẩn bị toàn diện, và hãy là chính mình",
+      "Phát triển các loại kỹ năng. chuẩn bị toàn diện, thể hiện sự tự tin vào đề tài của bạn & tự tin vào chính bạn, và hãy là chính mình",
+      "Phát triển các loại kỹ năng, chuẩn bị toàn diện, và thể hiện sự tự tin vào mình"
+    ],
+    correct: ["Phát triển các loại kỹ năng. chuẩn bị toàn diện, thể hiện sự tự tin vào đề tài của bạn & tự tin vào chính bạn, và hãy là chính mình"]
+  },
+  {
+    type: "single",
+    q: "Khi đang lắng nghe người khác nói, bạn thường:",
+    options: [
+      "Đứng tựa lưng, cách xa người nói.",
+      "Hơi nghiêng người về phía trước và đứng đối diện với người nói.",
+      "Khoanh tay trước ngực."
+    ],
+    correct: ["Hơi nghiêng người về phía trước và đứng đối diện với người nói."]
+  },
+  {
+    type: "single",
+    q: "Những ý tưởng quan trọng cần nhấn mạnh nhất thường được đặt ở đâu?",
+    options: ["Ở đầu câu", "Ở giữa câu", "Ở cuối câu", "Ở giữa đoạn văn"],
+    correct: ["Ở đầu câu"]
+  },
+  //câu 50
+  {
+    type: "single",
+    q: "Khi nhận được những ý kiến phản hồi tiêu cực, bạn sẽ:",
+    options: [
+      "Nổi giận và bảo vệ quan điểm của mình.",
+      "Phủ nhận vấn đề, xin lỗi hoặc biện hộ.",
+      "Ghi nhận và tìm cách cải thiện vấn đề."
+    ],
+    correct: ["Ghi nhận và tìm cách cải thiện vấn đề."]
+  },
+  {
+    type: "single",
+    q: "Khi bạn gặp một người lần đầu, chúng ta nên:",
+    options: [
+      "Đợi người khác giới thiệu.",
+      "Vui mừng và ôm chặt người đó.",
+      "Mỉm cười, tự giới thiệu và chủ động bắt tay."
+    ],
+    correct: ["Mỉm cười, tự giới thiệu và chủ động bắt tay."]
+  },
+  {
+    type: "single",
+    q: "Tại sao khi giao tiếp bạn nên tập trung vào ngôn ngữ hành vi?",
+    options: [
+      "Ngôn ngữ hành vi phụ thuộc vào văn hóa",
+      "Rất ít thông điệp được truyền đạt qua hành vi",
+      "Ngôn ngữ hành vi thường khó hiểu",
+      "Cử chỉ và hành vi truyền đạt thông điệp quan trọng"
+    ],
+    correct: ["Cử chỉ và hành vi truyền đạt thông điệp quan trọng"]
+  },
+  {
+    type: "single",
+    q: "Để tăng khả năng nhớ thông tin người nghe nên:",
+    options: [
+      "Kiên nhẫn với người nói",
+      "Giữ thái độ tin cậy về thông tin",
+      "Diễn giải ý tưởng then chốt trong thông tin đó",
+      "Khoan dung với những ý tưởng của người nói"
+    ],
+    correct: ["Giữ thái độ tin cậy về thông tin"]
+  },
+  {
+    type: "single",
+    q: "Trong khi nghe:",
+    options: [
+      "Bạn nghe và giữ bình tĩnh trước mọi tình huống.",
+      "Bạn lắng nghe để hiểu rõ ý nghĩa và hỏi lại nếu cần",
+      "Bạn nhìn chăm chú, vờ như đang nghe."
+    ],
+    correct: ["Bạn lắng nghe để hiểu rõ ý nghĩa và hỏi lại nếu cần"]
+  },
+  {
+    type: "single",
+    q: " ….. là hoạt động xác lập và vận hành các mối quan hệ xã hội giữa người với người, hoặc giữa người với các yếu tố xã hội nhằm thỏa mãn những nhu cầu nhất định:",
+    options: ["Giao tiếp", "Truyền thông", "Thuyết phục", "Thương lượng"],
+    correct: ["Giao tiếp"]
+  },
+  {
+    type: "multiple",
+    q: "Khi giao tiếp với cấp dưới, bạn nên tuân thủ nguyên tắc nào?",
+    options: [
+      "Không cần thực hiện lời hứa",
+      "Khen, chê kịp thời",
+      "Lắng nghe ý kiến của họ"
+    ],
+    correct: ["Khen, chê kịp thời","Lắng nghe ý kiến của họ"]
+  },
+  {
+    type: "single",
+    q: "Yếu tố nào sau đây không ảnh hưởng đến quá trình giao dịch trực tiếp?",
+    options: ["Điệu bộ", "Cú pháp", "Giọng nói", "Cách lựa chọn từ ngữ"],
+    correct: ["Cú pháp"]
+  },
+  {
+    type: "single",
+    q: "Cách tư duy nào sau đây giúp bạn thành công hơn trong giao tiếp?",
+    options: [
+      "Hãy đơn giản hóa vấn đề",
+      "Luôn xem mình có thể học được gì từ người khác",
+      "Xem người khác sai gì để trách",
+      "Luôn nhìn người khác với con mắt tích cực"
+    ],
+    correct: ["Luôn xem mình có thể học được gì từ người khác"]
+  },
+  {
+    type: "single",
+    q: "Lựa chọn thời gian truyền thông giao tiếp để:",
+    options: ["Thuận tiện khán thính giả", "Thuận tiện cấp trên", "Tuỳ theo mục tiêu giao tiếp", "Thuận tiện cho mình"],
+    correct: ["Thuận tiện khán thính giả"]
+  },
+  //câu 60
+  {
+    type: "single",
+    q: "Bạn nên tuân theo chỉ dẫn nào sau đây khi truyền tải thông tin?",
+    options: [
+      "Giải thích lý do thông tin này quan trọng.",
+      "Giải thích các thông tin cần thiết tạo ngữ cảnh.",
+      "Trình bày khái quát nội dung.",
+      "Tất cả đều đúng"
+    ],
+    correct: ["Tất cả đều đúng"]
+  },
+  {
+    type: "single",
+    q: "Lisa đang tham sự 1 cuộc họp quan trọng thay cho sếp của cô ta. Những bước nào sau đây cô nên dùng để giúp cô ghi nhớ những điểm quan trọng ở cuộc họp",
+    options: [
+      "Lisa nên xem xét các thông tin mà cô đã được nghe",
+      "Lisa nên cố gắng liên quan thông tin đó tới 1 điều gì khác",
+      "Lisa nên quyết định trước hết điều gì mà cô ta muốn nhớ",
+      "Tất cả các bước trên"
+    ],
+    correct: ["Tất cả các bước trên"]
+  },
+  {
+    type: "single",
+    q: "Truyền thông không lời bao gồm:",
+    options: [
+      "Diễn tả trên nét mặt, cử điệu, dáng điệu, diễn đạt bằng lời nói, tính chất của giọng nói và dáng vẻ bề ngoài",
+      "Diễn tả trên nét mặt, cử điệu, dáng điệu, diễn đạt bằng lời nói, và tính chát của giọng nói",
+      "Diễn tả trên nét mặt, cử điệu, dáng điệu, diễn đạt bằng lời nói, tính chất của giọng nói, dáng vẻ bề ngoài, ngôn ngữ thân thể và khoảng trống không gian",
+      "Diễn tả trên nét mặt, cử điệu, dáng điệu, tính chất của giọng nói và dáng vẻ bề ngoài, ngôn ngữ thân thể và khoảng trống không gian"
+    ],
+    correct: ["Diễn tả trên nét mặt, cử điệu, dáng điệu, diễn đạt bằng lời nói, tính chất của giọng nói, dáng vẻ bề ngoài, ngôn ngữ thân thể và khoảng trống không gian"]
+  },
+  {
+    type: "single",
+    q: "Để giao tiếp hiệu quả, nên …………… sử dụng những từ và cụm từ - “vuilòng”; “cám ơn”; “rất vui”; “xin lỗi”",
+    options: [
+      "Không bao giờ",
+      "Thường xuyên",
+      "Thỉnh thoảng"
+    ],
+    correct: [ "Thường xuyên"]
+  },
+  {
+    type: "single",
+    q: "Quy trình lắng nghe chuẩn xác nhất là:",
+    options: [
+      "Tập trung – Tham dự - Hiểu – Ghi nhớ - Hồi đáp – Phát triển",
+      "Tập trung – Hiểu – Hồi đáp",
+      "Tập trung – Quan sát – Hiểu – Hồi đáp"
+    ],
+    correct: ["Tập trung – Tham dự - Hiểu – Ghi nhớ - Hồi đáp – Phát triển"]
+  },
+   {
+    type: "single",
+    q: "Khi người khác nói với bạn về những điều bất hạnh hoặc những kinh nghiệm buồn, bạn sẽ:",
+    options: 
+    ["Không bình luận gì thêm về điều đó.", 
+    "Cố gắng cảm thông với cảm giác của người đó và chứng tỏ rằng họ quá nhạy cảm với tình huống, mọi việc không tồi tệ đến mức như thế", 
+    "Cố gắng thay đổi chủ đề cuộc nói chuyện"],
+    correct: ["Cố gắng cảm thông với cảm giác của người đó và chứng tỏ rằng họ quá nhạy cảm với tình huống, mọi việc không tồi tệ đến mức như thế"]
+  },
+  {
+    type: "single",
+    q: "Đâu là đặc điểm của tính quyết đoán trong giao tiếp?",
+    options: ["Thái độ kể cả", "Tự tin", "Khoe khoang", "Thích cạnh tranh"],
+    correct: ["Tự tin"]
+  },
+  {
+    type: "multiple",
+    q: "Theo bạn các yếu tố nào sau đây sẽ quyết định đến sự thành công của bạn trong quá trình giao tiếp?",
+    options: ["Sự khéo léo trong xử lý tình huống giao tiếp", 
+    "Thông điệp truyền tải rõ ràng", 
+    "Kỹ năng lắng nghe hiệu quả"],
+    correct: ["Sự khéo léo trong xử lý tình huống giao tiếp", "Thông điệp truyền tải rõ ràng", "Kỹ năng lắng nghe hiệu quả"]
+  },
+  {
+    type: "single",
+    q: "Nói khác với viết vì nó:",
+    options: ["Suy nghĩ lâu", "Phổ biến hơn", "Nhanh hơn", "Nhiều người sử dụng hơn"],
+    correct: ["Nhanh hơn"]
+  },
+  {
+    type: "single",
+    q: "Trong các hiện tượng dưới đây, hiện tượng nào là tâm lí?",
+    options: ["Thần kinh căng thẳng", "Tim đập nhanh", "Ăn ngủ kém", "Bồn chồn như có hẹn với ai"],
+    correct: ["Bồn chồn như có hẹn với ai"]
+  },
+  //câu 70
+  {
+    type: "single",
+    q: "Tâm lí người là:",
+    options: [
+      "Do lực lượng siêu nhiên",
+      "Do não sản sinh ra như mật",
+      "Sự phản ánh hiện thực khách quan vào não thông qua lăng kính chủ quan"
+    ],
+    correct: ["Sự phản ánh hiện thực khách quan vào não thông qua lăng kính chủ quan"]
+  },
+  {
+    type: "single",
+    q: "Muốn biết tâm lí của con người, chủ thể cần nhìn vào “con mắt của người ấy”. Điều đó đúng hay sai?",
+    options: [
+      "Điều đó đúng.",
+      "Điều đó sai.",
+      "Có khi đúng, có khi sai.",
+      "Không có phương án trả lời."
+    ],
+    correct: ["Điều đó đúng."]
+  },
+  {
+    type: "single",
+    q: "Hiện tượng nào dưới đây cho thấy tâm lí tác động đến sinh lý?",
+    options: ["Lo lắng đến mất ngủ", "Mệt mỏi không minh mẫn", "Mắt kém tri giác kém", "Ăn uống đầy đủ giúp cơ thể khỏe mạnh"],
+    correct: ["Lo lắng đến mất ngủ"]
+  },
+  {
+    type: "multiple",
+    q: "Khi mâu thuẫn nhóm xảy ra, kiểu phản ứng \"Tuân theo\" có biểu hiện:",
+    options: [
+        "Trong những tình huống không quen thuộc, tôi để những người tự tin hơn làm lãnh đạo",
+        "Tránh tiếp xúc với người có quan điểm vững vàng",
+        "Tôi sẵn sàng để mọi người làm theo cách của họ nếu nó không gây bất tiện cho tôi",
+        "Cách tốt nhất để tránh bị phản đối là không đưa ra ý kiến của mình"
+    ],
+    correct: ["Trong những tình huống không quen thuộc, tôi để những người tự tin hơn làm lãnh đạo","Tôi sẵn sàng để mọi người làm theo cách của họ nếu nó không gây bất tiện cho tôi"]
+  },
+  {
+    type: "single",
+    q: "Hành động tích cực đến họp đúng giờ thể hiện cá nhân có:",
+    options: ["Hợp tác tốt", "Có trách nhiệm", "Giao tiếp tốt"],
+    correct: ["Có trách nhiệm"]
+  },
+  {
+    type: "single",
+    q: "Đặc điểm của người phản biện",
+    options: [
+        "Chuyên gia phân tích giải pháp để tìm những yếu kém trong các giải pháp đó",
+        "Có tính cách tự tin và quyết đoán",
+        "Có khả năng tập hợp sự ủng hộ và khắc phục tư tưởng chủ bại"
+    ],
+    correct: ["Chuyên gia phân tích giải pháp để tìm những yếu kém trong các giải pháp đó"]
+  },
+  {
+    type: "single",
+    q: "Tiêu chuẩn đánh giá làm việc nhóm liên quan đến chuyên môn thuộc loại:",
+    options: ["Tiêu chuẩn về kĩ năng", "Tiêu chuẩn về kết quả làm việc"],
+    correct: ["Tiêu chuẩn về kĩ năng"]
+  },
+  {
+    type: "single",
+    q: "Những đặc trưng của giai đoạn hoàn thiện",
+    options: [
+      "Các thành viên hoạt động tự do",
+      "Hợp tác, cởi mở",
+      "Giao tiếp giữa các thành viên trong nhóm không nhiều",
+      "Nảy sinh những kỳ vọng không thực tế"
+    ],
+    correct: ["Các thành viên hoạt động tự do","Giao tiếp giữa các thành viên trong nhóm không nhiều"]
+  },
+  {
+    type: "single",
+    q: "Để thuyết phục hiệu quả cần đảm bảo những yêu cầu nào dưới đây",
+    options: [
+      "Tất cả những lý do nêu trên",
+      "Ngôn ngữ rõ ràng, mạch lạc, phù hợp đối tượng",
+      "Nhấn mạnh đến quyền lợi, lợi ích của đối tượng",
+      "Tạo sự tin tưởng, hòa đồng với đối tượng"
+    ],
+    correct: ["Tất cả những lý do nêu trên"]
+  },
+  {
+    type: "multiple",
+    q: "Những đặc trưng của giai đoạn xung đột",
+    options: [
+      "Đặt câu hỏi về mục đích của nhóm",
+      "Mọi người ít trao đổi",
+      "Bắt đầu hình thành các phe phái",
+      "Muốn đẩy vấn đề cho cấp trên"
+    ],
+    correct: ["Bắt đầu hình thành các phe phái","Muốn đẩy vấn đề cho cấp trên"]
+  },
+
+  {
+    type: "single",
+    q: "Bản chất của lắng nghe thấu hiểu là gì?",
+    options: [
+      "Nghe bằng tai, bằng mắt và bằng cả con tim",
+      "Chỉ nghe một phần cuộc đối thoại",
+      "Tập trung toàn bộ vào lời đang nói",
+      "Xen vào câu chuyện của người khác những lời cảm thán như Vâng, à, hay đấy,…"
+    ],
+    correct: ["Nghe bằng tai, bằng mắt và bằng cả con tim"]
+  },
+  {
+  type: "match",
+  q: "Ghép đôi thứ tự ưu tiên phù hợp với các loại công việc",
+  left: [
+    "Việc quan trọng – khẩn cấp",
+    "Việc quan trọng – không khẩn cấp",
+    "Việc không quan trọng – khẩn cấp",
+    "Việc không quan trọng – không khẩn cấp"
+  ],
+  right: [
+    "Số 1",
+    "Số 2",
+    "Số 3",
+    "Số 4"
+  ],
+  correct: [
+    ["Việc quan trọng – khẩn cấp", "Số 1"],
+    ["Việc quan trọng – không khẩn cấp", "Số 2"],
+    ["Việc không quan trọng – khẩn cấp", "Số 3"],
+    ["Việc không quan trọng – không khẩn cấp", "Số 4"]
+  ]
+  },
+  {
+    type: "single",
+    q: "Hành động tích cực viết tiêu đề của email rõ ràng, ngắn gọn thể hiện cá nhân có",
+    options: [
+      "Hợp tác tốt",
+      "Có trách nhiệm",
+      "Giao tiếp tốt"
+    ],
+    correct: ["Giao tiếp tốt"]
+  },
+  {
+    type: "single",
+    q: "Trong một số trường hợp, hãy ứng phó với những \"Vũ khí\" gây ảnh hưởng trong thuyết phục khi bạn cảm thấy",
+    options: [
+      "Bạn cần chắc chắn rằng, mình thật sự thích và mong muốn có nó (sản phẩm, vật phẩm...)",
+      "Tất cả những lý do nêu trên",
+      "Đối tượng làm tất cả vì mục đích trục lợi từ bạn",
+      "Bạn cần có bằng chứng của riêng mình để tránh sự \"ngu dốt đa nguyên\""
+    ],
+    correct: ["Tất cả những lý do nêu trên"]
+  },
+  {
+    type: "multiple",
+    q: "Rèn luyện những kỹ năng nào để giúp chúng ta đạt được thành tích cá nhân?",
+    options: ["Quản lý thời gian", "Tư duy tích cực", "Kỹ năng đọc, viết thành thạo", "Xác định mục tiêu cuộc sống"],
+    correct: ["Quản lý thời gian","Tư duy tích cực", "Xác định mục tiêu cuộc sống"]
+  },
+  {
+    type: "single",
+    q: "Những điều nên làm khi chọn cá nhân vào các vai trò cụ thể trong nhóm",
+    options: [
+      "Khẳng định rằng mọi người sẽ phù hợp với vai trò của họ trong nhóm",
+      "Phác thảo nội dung công việc trước khi trao đổi",
+      "Dựa vào những lời giới thiệu về năng lực của các thành viên"
+    ],
+    correct: ["Phác thảo nội dung công việc trước khi trao đổi"]
+  },
+  {
+    type: "single",
+    q: "Trong nghệ thuật thu hút người nghe, để tạo ấn tượng từ cái nhìn đầu tiên, người diễn thuyết cần lưu ý đến:",
+    options: [
+      "Ngoại hình, Năng lực chuyên môn, Tính cách",
+      "Ngoại hình, Năng lực diễn thuyết, Tính cách",
+      "Ngoại hình, Năng lực chuyên môn, Phong cách",
+      "Ngoại hình, Năng lực diễn thuyết, Tác phong"
+    ],
+    correct: ["Ngoại hình, Năng lực chuyên môn, Phong cách"]
+  },
+  {
+    type: "single",
+    q: "Trước buổi phỏng vấn tuyển dụng, ứng viên cần làm những gì?",
+    options: [
+      "Chuẩn bị hồ sơ; Tìm hiểu công ty; Chuẩn bị câu hỏi chuyên môn",
+      "Chuẩn bị hồ sơ; Tìm hiểu công ty; Chuẩn bị cho buổi phỏng vấn",
+      "Chuẩn bị hồ sơ; Tìm đường; Chuẩn bị phỏng vấn"
+    ],
+    correct: ["Chuẩn bị hồ sơ; Tìm hiểu công ty; Chuẩn bị cho buổi phỏng vấn"]
+  },
+  {
+    type: "single",
+    q: "Giảng viên giao cho lớp trong 2 ngày phải hoàn thành một bài tiểu luận khoảng 40 trang về đề tài Phân tích hoạt động kinh doanh của một ngành dịch vụ bất kỳ tại Việt Nam. Ngoài kiến thức chuyên môn, bài làm đòi hỏi khả năng phân tích chỉ số và kỹ năng Excel. Nếu là em, em sẽ chọn phương án nào để hoàn thành bài tiểu luận này:",
+    options: [
+        "Làm theo nhóm",
+        "Không làm vì thời gian quá gấp",
+        "Làm một mình"
+    ],
+    correct: ["Làm theo nhóm"]
+  },
+  {
+    type: "single",
+    q: "Theo bạn nguyên tắc cơ bản trong nghệ thuật thuyết phục là:",
+    options: [
+      "Chân thành và đáp ứng mọi nhu cầu",
+      "Chân thành và Chú ý đến giá trị đối tượng quan tâm",
+      "Chú ý đến nhu cầu, thói quen, sở thích của đối tượng",
+      "Chú ý đến giá trị mà đối tượng quan tâm"
+    ],
+    correct: ["Chân thành và Chú ý đến giá trị đối tượng quan tâm"]
+  },
+  {
+    type: "multiple",
+    q: "Xác định mục tiêu của nhóm khi thành lập nhóm cần:",
+    options: [
+      "Tất cả các thành viên trong nhóm thống nhất mục tiêu",
+      "Thảo luận tất cả các phương thức để thực hiện nhiệm vụ",
+      "Đặt ra các chỉ tiêu đầy thách thức"
+    ],
+    correct: ["Tất cả các thành viên trong nhóm thống nhất mục tiêu","Thảo luận tất cả các phương thức để thực hiện nhiệm vụ"]
+  },
+  {
+    type: "multiple",
+    q: "Những thông tin cần có trong bản lý lịch cá nhân (CV) là:",
+    options: [
+      "Sở thích và xu hướng cá nhân",
+      "Thông tin cá nhân",
+      "Thông tin về các thành viên trong gia đình",
+      "Kinh nghiệm làm việc",
+      "Quá trình đào tạo và thành tích cá nhân",
+      "Thông tin tham khảo"
+    ],
+    correct: ["Sở thích và xu hướng cá nhân","Thông tin cá nhân", "Kinh nghiệm làm việc", "Quá trình đào tạo và thành tích cá nhân", "Thông tin tham khảo"]
+  },
+  {
+    type: "multiple",
+    q: "Để tạo ấn tượng trước nhà tuyển dụng, ứng viên cần chuẩn bị những gì?",
+    options: [
+      "Xác định năng lực của bản thân",
+      "Công bố mức lương cao nhất mà mình từng được hưởng trước đây",
+      "Tìm hiểu thông tin về công ty",
+      "Nhận diện những thành tích và kinh nghiệm của bản thân"
+    ],
+    correct: ["Xác định năng lực của bản thân", "Tìm hiểu thông tin về công ty", "Nhận diện những thành tích và kinh nghiệm của bản thân"]
+  },
+  {
+    type: "single",
+    q: "Để thuyết phục hiệu quả cần tuân thủ quy trình nào dưới đây",
+    options: [
+      "Tạo sự thích thú - Chọn đúng thời điểm - Khơi gợi tính tư lợi",
+      "Tạo sự tin tưởng - Tạo sự nhất trí - Tâng bốc có chiến lược",
+      "Tạo sự tin tưởng - Tạo sự thích thú - Tăng sức thuyết phục",
+      "Tìm điểm tương đồng - Tăng sức thuyết phục - Tăng sự thú vị"
+    ],
+    correct: ["Tạo sự tin tưởng - Tạo sự thích thú - Tăng sức thuyết phục"]
+  },
+  {
+    type: "single",
+    q: "Khi trình bày thông tin bằng chữ (text) trên PowerPoint cần đảm bảo",
+    options: [
+      "Tất cả yêu cầu trên",
+      "Mỗi Slide không quá 6 dòng chữ",
+      "Chọn chữ tròn (không chân), đậm, cỡ lớn hơn 24",
+      "Chỉ dùng cụm từ, câu chính để diễn đạt"
+    ],
+    correct: ["Tất cả yêu cầu trên"]
+  },
+  {
+    type: "multiple",
+    q: "Những đặc trưng của giai đoạn ổn định",
+    options: [
+      "Nảy sinh những kỳ vọng không thực tế",
+      "Hợp tác, cởi mở",
+      "Lắng nghe nhau",
+      "Mọi người ít trao đổi"
+    ],
+    correct: ["Hợp tác, cởi mở", "Lắng nghe nhau"]
+  },
+  {
+    type: "single",
+    q: "Khi thiết kế các slide, bạn cần phải đảm bảo:",
+    options: [
+      "Mỗi slide gồm 2 phần: Đề mục và nội dung",
+      "Màu sắc: Màu nền bổ trợ làm nổi hình chữ",
+      "Tất cả các yêu cầu nêu trên",
+      "Không dùng quá nhiều hiệu ứng"
+    ],
+    correct: ["Tất cả các yêu cầu nêu trên"]
+  },
+  {
+    type: "single",
+    q: "Người chủ động tập trung nỗ lực của mình vào vòng tròn nào?",
+    options: [
+      "Ngoài vòng tròn ảnh hưởng và trong vòng tròn quan tâm",
+      "Vòng tròn ảnh hưởng",
+      "Vòng tròn quan tâm"
+    ],
+    correct: ["Vòng tròn ảnh hưởng"]
+  },
+  {
+  type: "match",
+  q: "Ghép đôi thích hợp khái niệm mô thức với tên gọi chính xác của khái niệm",
+  left: [
+    "Phụ thuộc",
+    "Tương thuộc",
+    "Độc lập"
+  ],
+  right: [
+    "Mô hình nhận thức thuộc về người khác",
+    "Mô hình nhận thức thuộc về chúng ta",
+    "Mô hình nhận thức thuộc về chính tôi"
+  ],
+  correct: [
+    ["Phụ thuộc", "Mô hình nhận thức thuộc về người khác"],
+    ["Tương thuộc", "Mô hình nhận thức thuộc về chúng ta"],
+    ["Độc lập", "Mô hình nhận thức thuộc về chính tôi"]
+  ]
+  },
+  {
+    type: "multiple",
+    q: "Những đặc trưng của giai đoạn hình thành nhóm",
+    options: [
+      "Lòng tin và sự tận tâm thấp",
+      "Bắt đầu hình thành các phe phái",
+      "Mọi người ít trao đổi",
+      "Đặt câu hỏi về mục đích của nhóm"
+    ],
+    correct: ["Lòng tin và sự tận tâm thấp", "Mọi người ít trao đổi","Đặt câu hỏi về mục đích của nhóm"]
+  },
+  {
+    type: "single",
+    q: "Nếu trong trạng thái stress, số suy nghĩ được tạo ra trong não bộ khoảng",
+    options: [
+      "50.000",
+      "30.000",
+      "80.000"
+    ],
+    correct: ["80.000"]
+  },
+  {
+    type: "single",
+    q: "Việc lập kế hoạch của mỗi cá nhân thường là loại công việc có tính chất như thế nào?",
+    options: [
+      "Quan trọng - Không khẩn cấp",
+      "Quan trọng - Khẩn cấp",
+      "Không quan trọng - Không khẩn cấp",
+      "Không quan trọng - Khẩn cấp"
+    ],
+    correct: ["Quan trọng - Không khẩn cấp"]
+  },
+  {
+    type: "single",
+    q: "Đặc điểm của trưởng nhóm",
+    options: [
+      "Không bao giờ hài lòng với giải pháp không đạt tới mức độ tốt nhất",
+      "Lập bảng tiến độ theo phương pháp khoa học",
+      "Có óc phán xét tuyệt vời về tài năng và tính cách của các cá nhân trong nhóm"
+    ],
+    correct: ["Có óc phán xét tuyệt vời về tài năng và tính cách của các cá nhân trong nhóm"]
+  },
+  {
+    type: "single",
+    q: "Khi trò chuyện với một người nào đó",
+    options: [
+      "Bạn thường là người nói nhiều nhất",
+      "Bạn thường để người khác nói nhiều hơn",
+      "Cố gắng cân bằng trong suốt cuộc đối thoại"
+    ],
+    correct: ["Cố gắng cân bằng trong suốt cuộc đối thoại"]
+  },
+  {
+    type: "match",
+    q: "Hãy ghép đôi chính xác vùng não bộ và chức năng tương ứng",
+    left: ["Não trung tâm", "Vỏ não", "Não giữa"],
+    right: ["Điều khiển phản xạ nhanh và tức thời", "Điều khiển sáng tạo, logic", "Điều khiển cảm xúc"],
+    correct: [
+      ["Não trung tâm", "Điều khiển phản xạ nhanh và tức thời"],
+      ["Vỏ não", "Điều khiển sáng tạo, logic"],
+      ["Não giữa", "Điều khiển cảm xúc"]
+    ]
+  },
+  {
+    type: "match",
+    q: "Ghép đôi phù hợp các cách lắng nghe hiệu quả",
+    left: ["Đánh giá", "Giải thích", "Tiếp nhận", "Phản hồi", "Ghi nhớ"],
+    right: [
+      "Chú trọng vào nội dung và áp dụng các kỹ năng suy nghĩ có phê phán",
+      "Xác định xem ý của người nói thực sự là gì",
+      "Nghe thông điệp và cố gắng hiểu những điều muốn nói",
+      "Đưa ra phản hồi mang tính xây dựng",
+      "Ghi chép hoặc vạch ra những điểm chính"
+    ],
+    correct: [
+      ["Đánh giá", "Chú trọng vào nội dung và áp dụng các kỹ năng suy nghĩ có phê phán"],
+      ["Giải thích", "Xác định xem ý của người nói thực sự là gì"],
+      ["Tiếp nhận", "Nghe thông điệp và cố gắng hiểu những điều muốn nói"],
+      ["Phản hồi", "Đưa ra phản hồi mang tính xây dựng"],
+      ["Ghi nhớ", "Ghi chép hoặc vạch ra những điểm chính"]
+    ]
+  },
+  {
+    type: "match",
+    q: "Ghép đôi phù hợp các mức độ phản hồi trong lắng nghe thấu hiểu với câu nói tương ứng: \"Bố, con thấy thế là đủ rồi. Học hành chẳng có gì là quan trọng cả!\"",
+    left: ["Bày tỏ cảm xúc", "Cố gắng tìm hiểu bản chất vấn đề", "Lặp lại nội dung theo kiểu suy diễn", "Nhắc lại nguyên văn"],
+    right: [
+      "Con cảm thấy chán à?",
+      "Con thực sự thấy chán học à?",
+      "Con không muốn học nữa à?",
+      "Con cho là đủ rồi sao? Con nghĩ trường học chẳng có gì quan trọng ư?"
+    ],
+    correct: [
+      ["Bày tỏ cảm xúc", "Con cảm thấy chán à?"],
+      ["Cố gắng tìm hiểu bản chất vấn đề", "Con thực sự thấy chán học à?"],
+      ["Lặp lại nội dung theo kiểu suy diễn", "Con không muốn học nữa à?"],
+      ["Nhắc lại nguyên văn", "Con cho là đủ rồi sao? Con nghĩ trường học chẳng có gì quan trọng ư?"]
+    ]
+  },
+  {
+    type: "match",
+    q: "Theo Albert Mehrabian, tổng tác dụng của một thông điệp được phân bố như thế nào giữa các yếu tố?",
+    left: ["Lời nói (từ ngữ)", "Thanh âm (giọng nói, ngữ điệu)", "Ngôn ngữ không lời (hình thể)"],
+    right: ["7%", "38%", "55%"],
+    correct: [
+      ["Lời nói (từ ngữ)", "7%"],
+      ["Thanh âm (giọng nói, ngữ điệu)", "38%"],
+      ["Ngôn ngữ không lời (hình thể)", "55%"]
+    ]
+  },
+  {
+    type: "multiple",
+    q: "Lập kế hoạch giúp cho nhóm:",
+    options: [
+      "Đánh giá tiến độ làm việc của mỗi cá nhân",
+      "Phối hợp mọi nguồn lực của tổ chức hữu hiệu hơn",
+      "Tập trung vào mục tiêu và chính sách của tổ chức",
+      "Xác định hệ thống các vấn đề, công việc cần thực hiện để đưa ra các cách quản lý"
+    ],
+    correct: ["Phối hợp mọi nguồn lực của tổ chức hữu hiệu hơn","Tập trung vào mục tiêu và chính sách của tổ chức","Xác định hệ thống các vấn đề, công việc cần thực hiện để đưa ra các cách quản lý"]
+  },
+  {
+    type: "single",
+    q: "Hãy chọn đáp án đúng để mô tả phạm vi của vòng tròn ảnh hưởng:",
+    options: [
+      "Những điều quan tâm và có thể kiểm soát",
+      "Những điều quan tâm",
+      "Những điều quan tâm và không thể kiểm soát"
+    ],
+    correct: ["Những điều quan tâm và có thể kiểm soát"]
+  },
+  {
+    type: "single",
+    q: "Để thu hút người nghe thông qua ngôn ngữ hình thể khi thuyết trình, bạn cần chú ý tới các yếu tố nào dưới đây:",
+    options: [
+      "Ánh mắt - Cử chỉ - Dáng đứng - Dáng đi - Độ gần",
+      "Ánh mắt - Cử chỉ - Trang phục - Di chuyển - Độ gần",
+      "Ánh mắt - Cử chỉ - Dáng đứng - Di chuyển - Độ gần",
+      "Ánh mắt - Động tác - Dáng đứng - Di chuyển - Độ gần"
+    ],
+    correct: ["Ánh mắt - Cử chỉ - Dáng đứng - Di chuyển - Độ gần"]
+  },
+  {
+    type: "single",
+    q: "Nếu đồng nghiệp của bạn ngày càng mập, theo phép lịch sự trong giao tiếp bạn sẽ:",
+    options: [
+      "Không nói gì cả",
+      "Nói với người khác rằng anh/chị ấy thay đổi nhiều kể từ lúc gặp",
+      "Nói với người khác rằng anh/chị ấy trông quá mập"
+    ],
+    correct: ["Không nói gì cả"]
+  },
+  {
+    type: "fill",
+    q: "Trong mối quan hệ giữa bốn yếu tố căn bản của cuộc sống: An toàn và ___ sẽ đem lại khôn ngoan thực sự, là chất xúc tác để giải phóng năng lực.",
+    correct: ["định hướng"]
+  },
+  {
+    type: "match",
+    q: "Ghép đôi phù hợp với các nội dung/mục tiêu của buổi phỏng vấn:",
+    left: [
+      "Trình bày về bản thân",
+      "Chỉ ra điểm mạnh, điểm cần hoàn thiện",
+      "Trao đổi về lương, chính sách đãi ngộ",
+      "Giao tiếp với hội đồng phỏng vấn"
+    ],
+    right: [
+      "Tóm tắt các thành tựu cá nhân",
+      "Nhấn mạnh các kinh nghiệm, kỹ năng, kiến thức liên quan tới công việc",
+      "Tìm hiểu về mức lương trên thị trường",
+      "Lịch sự, quan sát ứng xử của hội đồng"
+    ],
+    correct: [
+      ["Trình bày về bản thân", "Tóm tắt các thành tựu cá nhân"],
+      ["Chỉ ra điểm mạnh, điểm cần hoàn thiện", "Nhấn mạnh các kinh nghiệm, kỹ năng, kiến thức liên quan tới công việc"],
+      ["Trao đổi về lương, chính sách đãi ngộ", "Tìm hiểu về mức lương trên thị trường"],
+      ["Giao tiếp với hội đồng phỏng vấn", "Lịch sự, quan sát ứng xử của hội đồng"]
+    ]
+  },
+  {
+    type: "single",
+    q: "Chứng bệnh thuộc về thể chất có nguồn gốc từ tinh thần chiếm khoảng bao nhiêu phần trăm?",
+    options: [
+      "75% - 90%",
+      "30% - 50%",
+      "65% - 80%"
+    ],
+    correct: ["75% - 90%"]
+  },
+  {
+    type: "multiple",
+    q: "Mục đích của đánh giá nhóm:",
+    options: [
+      "Thấy được kiến thức, kỹ năng, thái độ làm việc của mỗi thành viên để điều chỉnh công việc cho phù hợp",
+      "Thấy được ưu điểm (nhược điểm) của từng thành viên; từ đó phát huy (hoặc cải thiện)",
+      "Tạo cơ hội để thành viên nhóm bày tỏ quan điểm, suy nghĩ và đề xuất cho bản thân",
+      "Giúp các thành viên hiểu nhau hơn"
+    ],
+    correct: [
+      "Thấy được kiến thức, kỹ năng, thái độ làm việc của mỗi thành viên để điều chỉnh công việc cho phù hợp",
+      "Thấy được ưu điểm (nhược điểm) của từng thành viên; từ đó phát huy (hoặc cải thiện)",
+      "Tạo cơ hội để thành viên nhóm bày tỏ quan điểm, suy nghĩ và đề xuất cho bản thân"
+    ]
+  },
+  {
+    type: "match",
+    q: "Ghép đôi tỷ lệ phân bổ thời gian hợp lý với các loại công việc theo ma trận quản lý thời gian:",
+    left: [
+      "Việc quan trọng – khẩn cấp",
+      "Việc quan trọng – không khẩn cấp",
+      "Việc không quan trọng – khẩn cấp",
+      "Việc không quan trọng – không khẩn cấp"
+    ],
+    right: ["20%", "60%", "10-15%", "5%"],
+    correct: [
+      ["Việc quan trọng – khẩn cấp", "20%"],
+      ["Việc quan trọng – không khẩn cấp", "60%"],
+      ["Việc không quan trọng – khẩn cấp", "10-15%"],
+      ["Việc không quan trọng – không khẩn cấp", "5%"]
+    ]
+  },
+  {
+    type: "single",
+    q: "Đặc điểm của người thực hiện trong nhóm là:",
+    options: [
+      "Nắm bắt tốt bức tranh tổng thể công việc của nhóm",
+      "Có khả năng thông tin hai chiều xuất sắc",
+      "Lập bảng tiến độ theo phương pháp khoa học"
+    ],
+    correct: ["Lập bảng tiến độ theo phương pháp khoa học"]
+  },
+  {
+    type: "single",
+    q: "Hành động tích cực 'Làm rõ những điểm chưa rõ trong phân công công việc của mình' thể hiện cá nhân có:",
+    options: ["Có trách nhiệm", "Giao tiếp tốt", "Hợp tác tốt"],
+    correct: ["Có trách nhiệm"]
+  },
+  {
+    type: "single",
+    q: "Hãy chọn đáp án đúng để mô tả phạm vi của vòng tròn quan tâm:",
+    options: [
+      "những điều quan tâm và có thể kiểm soát",
+      "những điều quan tâm và không thể kiểm soát",
+      "những điều quan tâm"
+    ],
+    correct: ["những điều quan tâm"]
+  },
+  {
+    type: "multiple",
+    q: "Xác định mục tiêu cần đảm bảo nguyên tắc SMART, đó là những nội dung gì:",
+    options: ["Cụ thể", "Khả thi", "Đo lường được", "Thích hợp", "Hiệu quả", "Thời hạn"],
+    correct: ["Cụ thể", "Khả thi", "Đo lường được", "Thích hợp", "Thời hạn"]
+  },
+  {
+    type: "single",
+    q: "Bạn hãy chọn lời phát biểu chính xác nhất sau đây về làm việc nhóm:",
+    options: [
+      "Sự thỏa mãn cá nhân và tinh thần làm việc gia tăng khi đội/nhóm thành công",
+      "Đội/nhóm có khuynh hướng làm ít có hiệu quả trong việc giải quyết vấn đề hơn là cá nhân",
+      "Đội/nhóm đòi hỏi nhiều nguồn lực để hoàn thành nhiệm vụ hơn từng cá nhân",
+      "Những nhân viên làm việc trong đội/nhóm báo cáo sự thỏa mãn công việc giảm sút đi"
+    ],
+    correct: ["Sự thỏa mãn cá nhân và tinh thần làm việc gia tăng khi đội/nhóm thành công"]
+  },
+  {
+    type: "multiple",
+    q: "Khi mâu thuẫn nhóm xảy ra, kiểu phản ứng \"Cộng tác\" có biểu hiện:",
+    options: [
+      "Tránh tiếp xúc với người có quan điểm vững vàng.",
+      "Khi mọi người cùng đóng góp ý tưởng sẽ xuất hiện ý tưởng hay nhất.",
+      "Cách tốt nhất để tránh bị phản đối là không đưa ra ý kiến của mình",
+      "Những mâu thuẫn lành mạnh sẽ tạo ra những ý tưởng hay hơn"
+    ],
+    correct: [
+      "Khi mọi người cùng đóng góp ý tưởng sẽ xuất hiện ý tưởng hay nhất.",
+      "Những mâu thuẫn lành mạnh sẽ tạo ra những ý tưởng hay hơn"
+    ]
+  },
+  {
+    type: "fill",
+    q: "Hãy điền vào chỗ trống để hoàn thành khái niệm làm việc nhóm: Nhóm là một tập hợp từ 2 người trở lên có cùng _____ (nhiệm vụ, chí hướng, nhu cầu, đam mê, sở thích, thói quen, …)",
+    correct: ["mục tiêu"]
+  },
+  {
+    type: "single",
+    q: "Mô thức nào giúp chúng ta đạt được thành tích cá nhân?",
+    options: [
+      "Mô thức phụ thuộc",
+      "Mô thức độc lập",
+      "Mô thức tương thuộc"
+    ],
+    correct: ["Mô thức độc lập"]
+  },
+  {
+    type: "single",
+    q: "Hành động tích cực 'Hỏi kĩ lại khi không hiểu rõ ý người trình bày' thể hiện cá nhân có:",
+    options: [
+      "Hợp tác tốt",
+      "Giao tiếp tốt",
+      "Có trách nhiệm"
+    ],
+    correct: ["Giao tiếp tốt"]
+  },
+  {
+    type: "multiple",
+    q: "Hậu quả của việc không lắng nghe là:",
+    options: [
+      "Hiểu sai vấn đề",
+      "Kiềm chế cảm xúc của người nói",
+      "Không tiếp thu được hoặc tiếp thu được rất ít những thông tin mới",
+      "Không kích thích được hứng thú của người nói",
+      "Không nắm được thông tin, lãng phí thời gian của mình và của mọi người"
+    ],
+    correct: [
+      "Hiểu sai vấn đề",
+      "Không tiếp thu được hoặc tiếp thu được rất ít những thông tin mới",
+      "Không kích thích được hứng thú của người nói",
+      "Không nắm được thông tin, lãng phí thời gian của mình và của mọi người"
+    ]
+  },
+  {
+    type: "multiple",
+    q: "Những điều cần lưu ý khi viết lý lịch cá nhân (CV) là gì?",
+    options: [
+      "Chú ý đến hình thức của bản lý lịch",
+      "Cần trung thực khi viết CV",
+      "Hãy viết bản lý lịch một cách cẩn thận",
+      "Xác định trước mục tiêu nghề nghiệp của mình",
+      "Trình bày vắn tắt những kinh nghiệm có liên quan",
+      "Có nhiều hình ảnh đẹp"
+    ],
+    correct: [
+      "Chú ý đến hình thức của bản lý lịch",
+      "Cần trung thực khi viết CV",
+      "Hãy viết bản lý lịch một cách cẩn thận",
+      "Xác định trước mục tiêu nghề nghiệp của mình",
+      "Trình bày vắn tắt những kinh nghiệm có liên quan"
+    ]
+  },
+  {
+    type: "multiple",
+    q: "Khi đánh giá nhóm, các vấn đề cần quan tâm là:",
+    options: [
+      "Kĩ năng cần đào tạo sau đánh giá",
+      "Phương pháp đánh giá",
+      "Ai chịu trách nhiệm đánh giá",
+      "Chu trình đánh giá"
+    ],
+    correct: [
+      "Kĩ năng cần đào tạo sau đánh giá",
+      "Phương pháp đánh giá",
+      "Chu trình đánh giá"
+    ]
+  },
+  {
+    type: "fill",
+    q: "Điều lý tưởng là tạo ra một trọng tâm rõ ràng để bạn có thể đạt được an toàn, định hướng, khôn ngoan và năng lực ở _____ nhằm luôn giúp _____ cũng như kết hợp _____ mọi mặt của cuộc sống.",
+    correct: ["mức độ cao, chủ động, hài hòa"]
+  },
+  {
+    type: "single",
+    q: "Hành động tích cực 'Nói rõ cho đối tác biết việc họ không hoàn thành đúng hạn ảnh hưởng thế nào đến kết quả chung' thể hiện cá nhân có:",
+    options: [
+      "Có trách nhiệm",
+      "Hợp tác tốt",
+      "Giao tiếp tốt"
+    ],
+    correct: ["Hợp tác tốt"]
+  },
+  {
+    type: "single",
+    q: "Người bị động tập trung nỗ lực của mình vào vòng tròn nào?",
+    options: [
+      "Vòng tròn ảnh hưởng",
+      "Ngoài vòng tròn ảnh hưởng và trong vòng tròn quan tâm",
+      "Vòng tròn quan tâm"
+    ],
+    correct: ["Vòng tròn quan tâm"]
+  },
+  {
+    type: "match",
+    q: "Ghép đôi phù hợp các thế hệ quản trị thời gian",
+    left: [
+      "Thế hệ quản trị thời gian thứ nhất",
+      "Thế hệ quản trị thời gian thứ hai",
+      "Thế hệ quản trị thời gian thứ ba",
+      "Thế hệ quản trị thời gian thứ hai"
+    ],
+    right: [
+      "Các mảnh giấy ghi chú hay các bảng liệt kê công việc",
+      "Lịch công tác và sổ ghi chép các cuộc hẹn",
+      "Xác định thứ tự ưu tiền, các giá trị của mọi hoạt động",
+      "Lấy nguyên tắc làm trọng tâm và quản lý bản thân"
+    ],
+    correct: [
+      ["Thế hệ quản trị thời gian thứ nhất", "Các mảnh giấy ghi chú hay các bảng liệt kê công việc"],
+      ["Thế hệ quản trị thời gian thứ hai", "Lịch công tác và sổ ghi chép các cuộc hẹn"],
+      ["Thế hệ quản trị thời gian thứ ba", "Xác định thứ tự ưu tiền, các giá trị của mọi hoạt động"],
+      ["Thế hệ quản trị thời gian thứ tư", "Lấy nguyên tắc làm trọng tâm và quản lý bản thân"]
+    ]
+  },
+  {
+    type: "single",
+    q: "Kỹ năng nào sau đây chỉ có được khi cá nhân có mô thức độc lập:",
+    options: [
+      "Lắng nghe & Thấu hiểu",
+      "Chủ động - tích cực",
+      "Thuyết phục",
+      "Hợp tác cộng sinh"
+    ],
+    correct: ["Chủ động - tích cực"]
+  },
+  {
+    type: "single",
+    q: "Phương pháp nào sau đây là của công cụ Kiểm soát suy nghĩ",
+    options: [
+      "Quan sát tách rời",
+      "Lắng nghe tiếng nói bên trong",
+      "Xem khó khăn là bài học"
+    ],
+    correct: ["Quan sát tách rời"]
+  },
+  {
+    type: "single",
+    q: "Sắp xếp trình tự đúng để mô tả dòng năng lượng tâm trí chạy trong não bộ",
+    options: [
+      "Não trung tâm -> Não giữa -> Vỏ não",
+      "Vỏ não -> Não giữa -> Não trung tâm",
+      "Não trung tâm -> Vỏ não -> Não giữa"
+    ],
+    correct: ["Não trung tâm -> Não giữa -> Vỏ não"]
+  },
+  {
+    type: "multiple",
+    q: "Những điều gì nên làm để lắng nghe hiệu quả?",
+    options: [
+      "Có ngôn ngữ cử chỉ phù hợp",
+      "Nghe đầy đủ",
+      "Nhìn người nói",
+      "Ngắt lời",
+      "Đưa ra nhiều lời khuyên",
+      "Lắng nghe bằng trái tim"
+    ],
+    correct: [
+      "Có ngôn ngữ cử chỉ phù hợp",
+      "Nghe đầy đủ",
+      "Nhìn người nói",
+      "Lắng nghe bằng trái tim"
+    ]
+  },
+  {
+    type: "multiple",
+    q: "Khi mâu thuẫn nhóm xảy ra, kiểu phản ứng \"Đương đầu\" có biểu hiện:",
+    options: [
+      "Cách tốt nhất để tránh bị phản đối là không đưa ra ý kiến của mình",
+      "Điều quan trọng là cần phải đấu tranh để đưa ra ý kiến của mình",
+      "Sẵn sàng để mọi người làm theo cách của họ nếu nó không gây bất tiện cho tôi.",
+      "Không ngại trình bày dứt khoát quan điểm nếu tôi cảm nhận rõ ràng về vấn đề đó"
+    ],
+    correct: [
+      "Điều quan trọng là cần phải đấu tranh để đưa ra ý kiến của mình",
+      "Không ngại trình bày dứt khoát quan điểm nếu tôi cảm nhận rõ ràng về vấn đề đó"
+    ]
+  },
+  {
+    type: "multiple",
+    q: "Khi mâu thuẫn nhóm xảy ra, kiểu phản ứng \"Né tránh\" có biểu hiện:",
+    options: [
+      "Giải quyết công việc của mình hơn là cố gắng thay đổi mọi thứ.",
+      "Cách tốt nhất để tránh bị phản đối là không đưa ra ý kiến của mình",
+      "Tránh tiếp xúc với người có quan điểm vững vàng",
+      "Sẵn sàng để mọi người làm theo cách của họ nếu nó không gây bất tiện cho tôi"
+    ],
+    correct: [
+      "Giải quyết công việc của mình hơn là cố gắng thay đổi mọi thứ.",
+      "Cách tốt nhất để tránh bị phản đối là không đưa ra ý kiến của mình",
+      "Tránh tiếp xúc với người có quan điểm vững vàng"
+    ]
+  },
+  {
+    type: "match",
+    q: "Trình tự các giai đoạn phát triển nhóm",
+    left: ["Giai đoạn 1", "Giai đoạn 2", "Giai đoạn 3", "Giai đoạn 4"],
+    right: ["Hình thành", "Xung đột", "Ổn định", "Hoàn thiện"],
+    correct: [
+      ["Giai đoạn 1", "Hình thành"],
+      ["Giai đoạn 2", "Xung đột"],
+      ["Giai đoạn 3", "Ổn định"],
+      ["Giai đoạn 4", "Hoàn thiện"]
+    ]
+  }
+];
+
+/* ====== TIỆN ÍCH ====== */
+function shuffle(a){
+ for(let i=a.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [a[i],a[j]]=[a[j],a[i]];
+ }
+}
+shuffle(questions);
+
+let idx=0, score=0, submitted=false;
+let correctCount = 0;
+let wrongCount = 0;
+
+const qEl=document.getElementById("question");
+const aEl=document.getElementById("answers");
+const info=document.getElementById("info");
+const submitBtn=document.getElementById("submitBtn");
+const nextBtn=document.getElementById("nextBtn");
+
+load();
+
+/* ====== LOAD ====== */
+function load(){
+ submitted=false;
+ submitBtn.style.display="inline-block";
+ nextBtn.style.display="none";
+ info.innerHTML="";
+ aEl.innerHTML="";
+
+ if(idx>=questions.length){
+   qEl.innerHTML=`🎉 Hoàn thành – Đúng ${score}/${questions.length}`;
+   submitBtn.style.display="none";
+   return;
+ }
+
+ const q=questions[idx];
+ setQuestionMeta(q.type);
+ qEl.innerHTML=`Câu ${idx+1}: ${q.q}`;
+
+ if(q.type==="single") renderSingle(q);
+ if(q.type==="multiple") renderMultiple(q);
+ if(q.type==="fill") renderFill();
+ if(q.type==="match") renderMatch(q);
+}
+
+function setQuestionMeta(type){
+    const badge=document.getElementById("badge");
+    const ins=document.getElementById("instruction");
+
+    badge.className="badge " + type;
+
+    if(type==="single"){
+        badge.innerText="1 ĐÁP ÁN";
+        ins.innerText="";
+    }
+    if(type==="multiple"){
+        badge.innerText="NHIỀU ĐÁP ÁN";
+        ins.innerText="";
+    }
+    if(type==="fill"){
+        badge.innerText="ĐIỀN TỪ";
+        ins.innerText="Nhập đáp án vào ô trống";
+    }
+    if(type==="match"){
+        badge.innerText="NỐI CẶP";
+        ins.innerText="";
+    }
+}
+
+/* ====== RENDER ====== */
+function renderSingle(q){
+    shuffle(q.options);
+    document.getElementById("totalCount").innerText = questions.length;
+    document.getElementById("totalCount2").innerText = questions.length;
+    q.options.forEach(op=>{
+        const div=document.createElement("div");
+        div.className="answer-card";
+        div.innerText=op;
+
+        div.onclick=()=>{
+            if(submitted) return;
+
+            // bỏ cam tất cả đáp án khác
+            document.querySelectorAll(".answer-card")
+                .forEach(c=>c.classList.remove("chosen"));
+
+            // đánh dấu cam đáp án đang chọn
+            div.classList.add("chosen");
+        };
+
+        aEl.appendChild(div);
+    });
+}
+
+function renderMultiple(q){
+    shuffle(q.options);
+
+    q.options.forEach(op=>{
+        const div = document.createElement("div");
+        div.className = "answer-card";
+        div.innerText = op;
+
+        div.onclick = () => {
+            if(submitted) return;
+
+            // toggle cam (chọn / bỏ chọn)
+            div.classList.toggle("chosen");
+        };
+
+        aEl.appendChild(div);
+    });
+}
+
+function renderFill(){
+ aEl.innerHTML=`<input id="fillAns" type="text" placeholder="Nhập đáp án">`;
+}
+
+function renderMatch(q){
+ q.left.forEach((l,i)=>{
+  let row=document.createElement("div");
+  let sel=document.createElement("select");
+  q.right.forEach(r=>{
+    let o=document.createElement("option");
+    o.text=r;
+    sel.add(o);
+  });
+  row.innerHTML=l+" → ";
+  row.appendChild(sel);
+  aEl.appendChild(row);
+ });
+}
+
+/* ====== SUBMIT ====== */
+submitBtn.onclick = () => {
+    if (submitted) return;
+    submitted = true;
+
+    const q = questions[idx];
+    let ok = true;
+
+    /* ===== SINGLE ===== */
+    if (q.type === "single") {
+        let chosen = document.querySelector(".chosen");
+        ok = false;
+
+        document.querySelectorAll(".answer-card").forEach(c => {
+            if (c.innerText === q.correct[0]) {
+                c.classList.remove("chosen");
+                c.classList.add("correct");
+            } else if (c === chosen) {
+                c.classList.remove("chosen");
+                c.classList.add("wrong");
+            }
+        });
+
+        if (chosen && chosen.innerText === q.correct[0]) {
+            ok = true;
+        }
+    }
+
+    /* ===== MULTIPLE ===== */
+    if (q.type === "multiple") {
+        let chosen = [];
+        document.querySelectorAll(".answer-card.chosen")
+            .forEach(c => chosen.push(c.innerText.trim()));
+
+        ok = chosen.length === q.correct.length &&
+             chosen.every(c => q.correct.includes(c));
+
+        document.querySelectorAll(".answer-card").forEach(c => {
+            let text = c.innerText.trim();
+            c.classList.remove("chosen");
+
+            if (q.correct.includes(text)) {
+                c.classList.add("correct");
+            } else if (chosen.includes(text)) {
+                c.classList.add("wrong");
+            }
+        });
+    }
+
+    /* ===== FILL ===== */
+    if (q.type === "fill") {
+        let v = document.getElementById("fillAns").value.trim().toLowerCase();
+        ok = q.correct.map(c => c.toLowerCase()).includes(v);
+        info.innerHTML = ok ? "✅ Đúng" : "❌ Đúng: " + q.correct[0];
+    }
+
+    /* ===== MATCH ===== */
+    if (q.type === "match") {
+        ok = true;
+        let sels = document.querySelectorAll("select");
+        sels.forEach((s, i) => {
+            if (s.value !== q.correct[i][1]) ok = false;
+        });
+    }
+
+    /* ===== ĐẾM ĐÚNG / SAI ===== */
+    if (ok) {
+        score++;
+        correctCount++;
+    } else {
+        wrongCount++;
+    }
+
+    document.getElementById("correctCount").innerText = correctCount;
+    document.getElementById("wrongCount").innerText = wrongCount;
+
+    /* ===== KHÓA ĐÁP ÁN + HIỆN NEXT ===== */
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "inline-block";
+
+    document.querySelectorAll(".answer-card")
+        .forEach(c => c.onclick = null);
+};
+
+/* ====== NEXT ====== */
+nextBtn.onclick=()=>{
+ idx++;
+ load();
+};
+</script>
+</body>
+</html>
