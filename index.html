@@ -5,6 +5,10 @@
 <title>Ứng dụng ôn tập trắc nghiệm</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body{
     margin:0;
     height:100vh;
@@ -16,10 +20,12 @@ body{
     color:#fff;
 }
 .app{
-    width:820px;
+    width: 100%;
+    max-width: 900px;
+    padding: 28px;
+    margin: 20px;
     background:rgba(0,0,0,.85);
     border-radius:18px;
-    padding:30px;
     box-shadow:0 0 40px rgba(0,0,0,.7);
 }
 
@@ -36,7 +42,11 @@ body{
     border-radius:12px;
     font-size:20px;
     margin-bottom:20px;
+    width: 100%;
+    overflow: visible;   /* QUAN TRỌNG */
+    position: relative;
 }
+
 .answers{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -149,7 +159,37 @@ select{
     color:#7a0f1b;
     border-radius:8px;
 }
+.match-row{
+    display: grid;
+    grid-template-columns: minmax(180px, 1.3fr) 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: center;
+}
 
+.match-left{
+    font-weight: 500;
+    word-break: break-word;
+    background: rgba(255,255,255,0.08);
+    padding: 10px 12px;
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+.match-row select{
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+@media (max-width: 700px){
+    .match-row{
+        grid-template-columns: 1fr;
+    }
+}
 
 </style>
 </head>
@@ -1791,18 +1831,25 @@ function renderFill(){
 }
 
 function renderMatch(q){
- q.left.forEach((l,i)=>{
-  let row=document.createElement("div");
-  let sel=document.createElement("select");
-  q.right.forEach(r=>{
-    let o=document.createElement("option");
-    o.text=r;
-    sel.add(o);
-  });
-  row.innerHTML=l+" → ";
-  row.appendChild(sel);
-  aEl.appendChild(row);
- });
+    q.left.forEach((l,i)=>{
+        const row = document.createElement("div");
+        row.className = "match-row";
+
+        const left = document.createElement("div");
+        left.className = "match-left";
+        left.innerText = l;
+
+        const sel = document.createElement("select");
+        q.right.forEach(r=>{
+            const o = document.createElement("option");
+            o.text = r;
+            sel.add(o);
+        });
+
+        row.appendChild(left);
+        row.appendChild(sel);
+        aEl.appendChild(row);
+    });
 }
 
 /* ====== SUBMIT ====== */
