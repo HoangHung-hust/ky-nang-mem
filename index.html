@@ -1909,6 +1909,23 @@ nextBtn.onclick=()=>{
  idx++;
  load();
 };
+
+document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    // Nếu đang nhập text (fill blank) thì cho Enter hoạt động bình thường
+    if (document.activeElement.tagName === "INPUT") return;
+
+    // Chưa submit → Enter = SUBMIT
+    if (!submitted && submitBtn.style.display !== "none") {
+        submitBtn.click();
+    }
+    // Đã submit → Enter = NEXT
+    else if (submitted && nextBtn.style.display !== "none") {
+        nextBtn.click();
+    }
+});
+
 </script>
 </body>
 </html>
