@@ -138,6 +138,18 @@ select{
 .stat span{
     font-weight:bold;
 }
+.match-correct{
+    background:#b7e4c7 !important;
+    color:#065f46;
+    border-radius:8px;
+}
+
+.match-wrong{
+    background:#ffccd5 !important;
+    color:#7a0f1b;
+    border-radius:8px;
+}
+
 
 </style>
 </head>
@@ -1322,8 +1334,8 @@ let questions=[
   },
   {
     type: "fill",
-    q: "Trong mối quan hệ giữa bốn yếu tố căn bản của cuộc sống: An toàn và ___ sẽ đem lại khôn ngoan thực sự, là chất xúc tác để giải phóng năng lực.",
-    correct: ["định hướng"]
+    q: "Trong mối quan hệ giữa bốn yếu tố căn bản của cuộc sống: ___ và ___ sẽ đem lại ___ thực sự, là chất xúc tác để giải phóng ___.",
+    correct: ["An toàn, định hướng, khôn ngoan, năng lực"]
   },
   {
     type: "match",
@@ -1722,7 +1734,7 @@ function setQuestionMeta(type){
     }
     if(type==="fill"){
         badge.innerText="ĐIỀN TỪ";
-        ins.innerText="Nhập đáp án vào ô trống";
+        ins.innerText="Nhập đáp án vào ô trống theo form:A, b, c";
     }
     if(type==="match"){
         badge.innerText="NỐI CẶP";
@@ -1851,12 +1863,27 @@ submitBtn.onclick = () => {
 
     /* ===== MATCH ===== */
     if (q.type === "match") {
-        ok = true;
-        let sels = document.querySelectorAll("select");
-        sels.forEach((s, i) => {
-            if (s.value !== q.correct[i][1]) ok = false;
-        });
-    }
+    ok = true;
+    let sels = document.querySelectorAll("select");
+
+    sels.forEach((s, i) => {
+        let correctValue = q.correct[i][1];
+
+        if (s.value === correctValue) {
+            s.classList.add("match-correct");
+        } else {
+            ok = false;
+            s.classList.add("match-wrong");
+
+            // sửa lại về đáp án đúng
+            s.value = correctValue;
+        }
+
+        // khóa không cho sửa
+        s.disabled = true;
+    });
+}
+
 
     /* ===== ĐẾM ĐÚNG / SAI ===== */
     if (ok) {
