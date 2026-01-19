@@ -263,6 +263,8 @@ select{
         <button id="nextBtn" class="next">NEXT</button>
     </div>
 
+    <div id="reviewArea" style="text-align:center; margin-top:20px;"></div>
+
     <div id="stat" class="stat">
     ✔ Đúng: <span id="correctCount">0</span> /
     <span id="totalCount">0</span>
@@ -1704,6 +1706,10 @@ shuffle(questions);
 let idx=0, score=0, submitted=false;
 let correctCount = 0;
 let wrongCount = 0;
+const reviewArea = document.getElementById("reviewArea");
+let wrongQuestions = [];
+let reviewMode = false;
+
 
 const qEl=document.getElementById("question");
 const aEl=document.getElementById("answers");
@@ -1715,17 +1721,29 @@ load();
 
 /* ====== LOAD ====== */
 function load(){
+  reviewArea.innerHTML = "";
  submitted=false;
  submitBtn.style.display="inline-block";
  nextBtn.style.display="none";
  info.innerHTML="";
  aEl.innerHTML="";
 
- if(idx>=questions.length){
-   qEl.innerHTML=`🎉 Hoàn thành – Đúng ${score}/${questions.length}`;
-   submitBtn.style.display="none";
-   return;
- }
+ if (idx >= questions.length) {
+    qEl.innerHTML = `🎉 Hoàn thành – Đúng ${score}/${questions.length}`;
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "none";
+
+    if (wrongQuestions.length > 0 && !reviewMode) {
+        reviewArea.innerHTML = `
+            <button id="reviewBtn" class="next" style="display:inline-block">
+                🔁 Xem lại ${wrongQuestions.length} câu sai
+            </button>
+        `;
+
+        document.getElementById("reviewBtn").onclick = startReview;
+    }
+    return;
+}
 
  const q=questions[idx];
  setQuestionMeta(q.type);
@@ -1814,30 +1832,36 @@ function renderFill(){
 function renderMatch(q){
     aEl.innerHTML = "";
 
-    // clone để không phá dữ liệu gốc
     const pairs = JSON.parse(JSON.stringify(q.pairs));
-
-    // random thứ tự bên trái
     shuffle(pairs);
 
-    // tạo danh sách bên phải và random
     const rightOptions = pairs.map(p => p.right);
     shuffle(rightOptions);
 
-    pairs.forEach((pair, index) => {
+    pairs.forEach(pair => {
         const row = document.createElement("div");
         row.className = "match-row";
-        row.dataset.correct = pair.right; // lưu đáp án đúng
+        row.dataset.correct = pair.right;
 
         const left = document.createElement("div");
         left.className = "match-left";
         left.innerText = pair.left;
 
         const select = document.createElement("select");
+
+        // ===== OPTION MẶC ĐỊNH =====
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.innerText = "Select";
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        select.appendChild(placeholder);
+
+        // ===== CÁC ĐÁP ÁN =====
         rightOptions.forEach(r => {
             const op = document.createElement("option");
             op.value = r;
-            op.text = r;
+            op.innerText = r;
             select.appendChild(op);
         });
 
@@ -1926,10 +1950,11 @@ submitBtn.onclick = () => {
 
     /* ===== ĐẾM ĐÚNG / SAI ===== */
     if (ok) {
-        score++;
-        correctCount++;
+      score++;
+      correctCount++;
     } else {
-        wrongCount++;
+      wrongCount++;
+      wrongQuestions.push(questions[idx]);
     }
 
     document.getElementById("correctCount").innerText = correctCount;
@@ -1964,6 +1989,28 @@ document.addEventListener("keydown", (e) => {
         nextBtn.click();
     }
 });
+
+function startReview() {
+    questions = [...wrongQuestions];
+    shuffle(questions);
+
+    idx = 0;
+    score = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    submitted = false;
+    reviewMode = true;
+
+    wrongQuestions = [];
+    reviewArea.innerHTML = "";
+
+    document.getElementById("correctCount").innerText = 0;
+    document.getElementById("wrongCount").innerText = 0;
+    document.getElementById("totalCount").innerText = questions.length;
+    document.getElementById("totalCount2").innerText = questions.length;
+
+    load();
+}
 
 </script>
 </body>
