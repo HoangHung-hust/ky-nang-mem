@@ -69,6 +69,20 @@ body{
     color: #000;
 }
 
+/* MULTIPLE CHOICE – KHUNG VUÔNG */
+.answer-card.multiple{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 4px;
+    border: 2px solid #3a5ba0;
+    background: #0f1f3d;
+}
+
+.answer-card.multiple:hover{
+    background: #152a55;
+}
+
 .correct{ background:#2ecc71 !important; }
 .wrong{ background:#e74c3c !important; }
 
@@ -109,11 +123,6 @@ select{
     padding:8px;
     border-radius:8px;
     margin-left:10px;
-}
-
-.answer-card input:checked + span,
-.answer-card input:checked{
-    accent-color: orange;
 }
 
 .badge{
@@ -183,6 +192,50 @@ select{
     border: none;
     outline: none;
     font-size: 14px;
+}
+
+/* ===== MULTIPLE CHECKBOX UI ===== */
+/* ô vuông */
+.answer-card.multiple .box{
+    width: 22px;
+    height: 22px;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: transparent;
+    transition: .2s;
+}
+
+/* dấu tick khi chọn */
+.answer-card.multiple.chosen .box{
+    border-color: #ff9800;
+    background: #ff9800;
+    color: #000;
+}
+
+.answer-card.multiple.chosen .box::before{
+    content: "✓";
+}
+
+/* đúng sau submit */
+.answer-card.multiple.correct .box{
+    background: #2ecc71;
+    border-color: #2ecc71;
+    color: #000;
+}
+
+.answer-card.multiple.correct .box::before{
+    content: "✓";
+}
+
+/* sai sau submit */
+.answer-card.multiple.wrong .box{
+    border-color: #e74c3c;
+    background: transparent;
+    color: transparent;
 }
 
 @media (max-width: 700px){
@@ -599,7 +652,7 @@ let questions=[
       "Tiếp cận nhiều người trong thời gian ngắn.",
       "Tiết kiệm thời gian và công sức đi lại."
     ],
-    correct: ["Tiết kiệm thời gian và công sức đi lại.","Tiếp cận nhiều người trong thời gian ngắn.","Tiết kiệm thời gian và công sức đi lại."]
+    correct: ["Tránh việc gặp mặt trực tiếp.","Tiếp cận nhiều người trong thời gian ngắn.","Tiết kiệm thời gian và công sức đi lại."]
   },
   {
     type: "single",
@@ -1812,13 +1865,15 @@ function renderMultiple(q){
 
     q.options.forEach(op=>{
         const div = document.createElement("div");
-        div.className = "answer-card";
-        div.innerText = op;
+        div.className = "answer-card multiple";
+
+        div.innerHTML = `
+            <span class="box"></span>
+            <span class="text">${op}</span>
+        `;
 
         div.onclick = () => {
             if(submitted) return;
-
-            // toggle cam (chọn / bỏ chọn)
             div.classList.toggle("chosen");
         };
 
@@ -1882,24 +1937,24 @@ submitBtn.onclick = () => {
 
     /* ===== MULTIPLE ===== */
     if (q.type === "multiple") {
-        let chosen = [];
-        document.querySelectorAll(".answer-card.chosen")
-            .forEach(c => chosen.push(c.innerText.trim()));
+    let chosen = [];
+    document.querySelectorAll(".answer-card.multiple.chosen")
+        .forEach(c => chosen.push(c.querySelector(".text").innerText.trim()));
 
-        ok = chosen.length === q.correct.length &&
-             chosen.every(c => q.correct.includes(c));
+    ok = chosen.length === q.correct.length &&
+         chosen.every(c => q.correct.includes(c));
 
-        document.querySelectorAll(".answer-card").forEach(c => {
-            let text = c.innerText.trim();
-            c.classList.remove("chosen");
+    document.querySelectorAll(".answer-card.multiple").forEach(c => {
+        let text = c.querySelector(".text").innerText.trim();
+        c.classList.remove("chosen");
 
-            if (q.correct.includes(text)) {
-                c.classList.add("correct");
-            } else if (chosen.includes(text)) {
-                c.classList.add("wrong");
-            }
-        });
-    }
+        if (q.correct.includes(text)) {
+            c.classList.add("correct"); // ✓ hiện
+        } else if (chosen.includes(text)) {
+            c.classList.add("wrong");   // không ✓
+        }
+    });
+}
 
     /* ===== FILL ===== */
     if (q.type === "fill") {
