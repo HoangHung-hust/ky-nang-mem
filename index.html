@@ -1066,25 +1066,13 @@ let questions=[
     correct: ["Nghe bằng tai, bằng mắt và bằng cả con tim"]
   },
   {
-  type: "match",
-  q: "Ghép đôi thứ tự ưu tiên phù hợp với các loại công việc",
-  left: [
-    "Việc quan trọng – khẩn cấp",
-    "Việc quan trọng – không khẩn cấp",
-    "Việc không quan trọng – khẩn cấp",
-    "Việc không quan trọng – không khẩn cấp"
-  ],
-  right: [
-    "Số 1",
-    "Số 2",
-    "Số 3",
-    "Số 4"
-  ],
-  correct: [
-    ["Việc quan trọng – khẩn cấp", "Số 1"],
-    ["Việc quan trọng – không khẩn cấp", "Số 2"],
-    ["Việc không quan trọng – khẩn cấp", "Số 3"],
-    ["Việc không quan trọng – không khẩn cấp", "Số 4"]
+  "type": "match",
+  "q": "Ghép đôi thứ tự ưu tiên phù hợp với các loại công việc",
+  "pairs": [
+    { "left": "Việc quan trọng – khẩn cấp", "right": "Số 1" },
+    { "left": "Việc quan trọng – không khẩn cấp", "right": "Số 2" },
+    { "left": "Việc không quan trọng – khẩn cấp", "right": "Số 3" },
+    { "left": "Việc không quan trọng – không khẩn cấp", "right": "Số 4" }
   ]
   },
   {
@@ -1255,22 +1243,12 @@ let questions=[
     correct: ["Vòng tròn ảnh hưởng"]
   },
   {
-  type: "match",
-  q: "Ghép đôi thích hợp khái niệm mô thức với tên gọi chính xác của khái niệm",
-  left: [
-    "Phụ thuộc",
-    "Tương thuộc",
-    "Độc lập"
-  ],
-  right: [
-    "Mô hình nhận thức thuộc về người khác",
-    "Mô hình nhận thức thuộc về chúng ta",
-    "Mô hình nhận thức thuộc về chính tôi"
-  ],
-  correct: [
-    ["Phụ thuộc", "Mô hình nhận thức thuộc về người khác"],
-    ["Tương thuộc", "Mô hình nhận thức thuộc về chúng ta"],
-    ["Độc lập", "Mô hình nhận thức thuộc về chính tôi"]
+  "type": "match",
+  "q": "Ghép đôi thích hợp khái niệm mô thức với tên gọi chính xác của khái niệm",
+  "pairs": [
+    { "left": "Phụ thuộc", "right": "Mô hình nhận thức thuộc về người khác" },
+    { "left": "Tương thuộc", "right": "Mô hình nhận thức thuộc về chúng ta" },
+    { "left": "Độc lập", "right": "Mô hình nhận thức thuộc về chính tôi" }
   ]
   },
   {
@@ -1326,61 +1304,42 @@ let questions=[
     correct: ["Cố gắng cân bằng trong suốt cuộc đối thoại"]
   },
   {
-    type: "match",
-    q: "Hãy ghép đôi chính xác vùng não bộ và chức năng tương ứng",
-    left: ["Não trung tâm", "Vỏ não", "Não giữa"],
-    right: ["Điều khiển phản xạ nhanh và tức thời", "Điều khiển sáng tạo, logic", "Điều khiển cảm xúc"],
-    correct: [
-      ["Não trung tâm", "Điều khiển phản xạ nhanh và tức thời"],
-      ["Vỏ não", "Điều khiển sáng tạo, logic"],
-      ["Não giữa", "Điều khiển cảm xúc"]
+    "type": "match",
+    "q": "Hãy ghép đôi chính xác vùng não bộ và chức năng tương ứng",
+    "pairs": [
+      { "left": "Não trung tâm", "right": "Điều khiển phản xạ nhanh và tức thời" },
+      { "left": "Vỏ não", "right": "Điều khiển sáng tạo, logic" },
+      { "left": "Não giữa", "right": "Điều khiển cảm xúc" }
     ]
   },
   {
-    type: "match",
-    q: "Ghép đôi phù hợp các cách lắng nghe hiệu quả",
-    left: ["Đánh giá", "Giải thích", "Tiếp nhận", "Phản hồi", "Ghi nhớ"],
-    right: [
-      "Chú trọng vào nội dung và áp dụng các kỹ năng suy nghĩ có phê phán",
-      "Xác định xem ý của người nói thực sự là gì",
-      "Nghe thông điệp và cố gắng hiểu những điều muốn nói",
-      "Đưa ra phản hồi mang tính xây dựng",
-      "Ghi chép hoặc vạch ra những điểm chính"
-    ],
-    correct: [
-      ["Đánh giá", "Chú trọng vào nội dung và áp dụng các kỹ năng suy nghĩ có phê phán"],
-      ["Giải thích", "Xác định xem ý của người nói thực sự là gì"],
-      ["Tiếp nhận", "Nghe thông điệp và cố gắng hiểu những điều muốn nói"],
-      ["Phản hồi", "Đưa ra phản hồi mang tính xây dựng"],
-      ["Ghi nhớ", "Ghi chép hoặc vạch ra những điểm chính"]
+    "type": "match",
+    "q": "Ghép đôi phù hợp các cách lắng nghe hiệu quả",
+    "pairs": [
+      { "left": "Đánh giá", "right": "Chú trọng vào nội dung và áp dụng các kỹ năng suy nghĩ có phê phán" },
+      { "left": "Giải thích", "right": "Xác định xem ý của người nói thực sự là gì" },
+      { "left": "Tiếp nhận", "right": "Nghe thông điệp và cố gắng hiểu những điều muốn nói" },
+      { "left": "Phản hồi", "right": "Đưa ra phản hồi mang tính xây dựng" },
+      { "left": "Ghi nhớ", "right": "Ghi chép hoặc vạch ra những điểm chính" }
     ]
   },
   {
-    type: "match",
-    q: "Ghép đôi phù hợp các mức độ phản hồi trong lắng nghe thấu hiểu với câu nói tương ứng: \"Bố, con thấy thế là đủ rồi. Học hành chẳng có gì là quan trọng cả!\"",
-    left: ["Bày tỏ cảm xúc", "Cố gắng tìm hiểu bản chất vấn đề", "Lặp lại nội dung theo kiểu suy diễn", "Nhắc lại nguyên văn"],
-    right: [
-      "Con cảm thấy chán à?",
-      "Con thực sự thấy chán học à?",
-      "Con không muốn học nữa à?",
-      "Con cho là đủ rồi sao? Con nghĩ trường học chẳng có gì quan trọng ư?"
-    ],
-    correct: [
-      ["Bày tỏ cảm xúc", "Con cảm thấy chán à?"],
-      ["Cố gắng tìm hiểu bản chất vấn đề", "Con thực sự thấy chán học à?"],
-      ["Lặp lại nội dung theo kiểu suy diễn", "Con không muốn học nữa à?"],
-      ["Nhắc lại nguyên văn", "Con cho là đủ rồi sao? Con nghĩ trường học chẳng có gì quan trọng ư?"]
+    "type": "match",
+    "q": "Ghép đôi phù hợp các mức độ phản hồi trong lắng nghe thấu hiểu với câu nói tương ứng: \"Bố, con thấy thế là đủ rồi. Học hành chẳng có gì là quan trọng cả!\"",
+    "pairs": [
+      { "left": "Bày tỏ cảm xúc", "right": "Con cảm thấy chán à?" },
+      { "left": "Cố gắng tìm hiểu bản chất vấn đề", "right": "Con thực sự thấy chán học à?" },
+      { "left": "Lặp lại nội dung theo kiểu suy diễn", "right": "Con không muốn học nữa à?" },
+      { "left": "Nhắc lại nguyên văn", "right": "Con cho là đủ rồi sao? Con nghĩ trường học chẳng có gì quan trọng ư?" }
     ]
   },
   {
-    type: "match",
-    q: "Theo Albert Mehrabian, tổng tác dụng của một thông điệp được phân bố như thế nào giữa các yếu tố?",
-    left: ["Lời nói (từ ngữ)", "Thanh âm (giọng nói, ngữ điệu)", "Ngôn ngữ không lời (hình thể)"],
-    right: ["7%", "38%", "55%"],
-    correct: [
-      ["Lời nói (từ ngữ)", "7%"],
-      ["Thanh âm (giọng nói, ngữ điệu)", "38%"],
-      ["Ngôn ngữ không lời (hình thể)", "55%"]
+    "type": "match",
+    "q": "Theo Albert Mehrabian, tổng tác dụng của một thông điệp được phân bố như thế nào giữa các yếu tố?",
+    "pairs": [
+      { "left": "Lời nói (từ ngữ)", "right": "7%" },
+      { "left": "Thanh âm (giọng nói, ngữ điệu)", "right": "38%" },
+      { "left": "Ngôn ngữ không lời (hình thể)", "right": "55%" }
     ]
   },
   {
@@ -1431,25 +1390,13 @@ let questions=[
     correct: ["An toàn, định hướng, khôn ngoan, năng lực"]
   },
   {
-    type: "match",
-    q: "Ghép đôi phù hợp với các nội dung/mục tiêu của buổi phỏng vấn:",
-    left: [
-      "Trình bày về bản thân",
-      "Chỉ ra điểm mạnh, điểm cần hoàn thiện",
-      "Trao đổi về lương, chính sách đãi ngộ",
-      "Giao tiếp với hội đồng phỏng vấn"
-    ],
-    right: [
-      "Tóm tắt các thành tựu cá nhân",
-      "Nhấn mạnh các kinh nghiệm, kỹ năng, kiến thức liên quan tới công việc",
-      "Tìm hiểu về mức lương trên thị trường",
-      "Lịch sự, quan sát ứng xử của hội đồng"
-    ],
-    correct: [
-      ["Trình bày về bản thân", "Tóm tắt các thành tựu cá nhân"],
-      ["Chỉ ra điểm mạnh, điểm cần hoàn thiện", "Nhấn mạnh các kinh nghiệm, kỹ năng, kiến thức liên quan tới công việc"],
-      ["Trao đổi về lương, chính sách đãi ngộ", "Tìm hiểu về mức lương trên thị trường"],
-      ["Giao tiếp với hội đồng phỏng vấn", "Lịch sự, quan sát ứng xử của hội đồng"]
+    "type": "match",
+    "q": "Ghép đôi phù hợp với các nội dung/mục tiêu của buổi phỏng vấn:",
+    "pairs": [
+      { "left": "Trình bày về bản thân", "right": "Tóm tắt các thành tựu cá nhân" },
+      { "left": "Chỉ ra điểm mạnh, điểm cần hoàn thiện", "right": "Nhấn mạnh các kinh nghiệm, kỹ năng, kiến thức liên quan tới công việc" },
+      { "left": "Trao đổi về lương, chính sách đãi ngộ", "right": "Tìm hiểu về mức lương trên thị trường" },
+      { "left": "Giao tiếp với hội đồng phỏng vấn", "right": "Lịch sự, quan sát ứng xử của hội đồng" }
     ]
   },
   {
@@ -1478,20 +1425,13 @@ let questions=[
     ]
   },
   {
-    type: "match",
-    q: "Ghép đôi tỷ lệ phân bổ thời gian hợp lý với các loại công việc theo ma trận quản lý thời gian:",
-    left: [
-      "Việc quan trọng – khẩn cấp",
-      "Việc quan trọng – không khẩn cấp",
-      "Việc không quan trọng – khẩn cấp",
-      "Việc không quan trọng – không khẩn cấp"
-    ],
-    right: ["20%", "60%", "10-15%", "5%"],
-    correct: [
-      ["Việc quan trọng – khẩn cấp", "20%"],
-      ["Việc quan trọng – không khẩn cấp", "60%"],
-      ["Việc không quan trọng – khẩn cấp", "10-15%"],
-      ["Việc không quan trọng – không khẩn cấp", "5%"]
+    "type": "match",
+    "q": "Ghép đôi tỷ lệ phân bổ thời gian hợp lý với các loại công việc theo ma trận quản lý thời gian:",
+    "pairs": [
+      { "left": "Việc quan trọng – khẩn cấp", "right": "20%" },
+      { "left": "Việc quan trọng – không khẩn cấp", "right": "60%" },
+      { "left": "Việc không quan trọng – khẩn cấp", "right": "10-15%" },
+      { "left": "Việc không quan trọng – không khẩn cấp", "right": "5%" }
     ]
   },
   {
@@ -1650,28 +1590,16 @@ let questions=[
       "Ngoài vòng tròn ảnh hưởng và trong vòng tròn quan tâm",
       "Vòng tròn quan tâm"
     ],
-    correct: ["Vòng tròn quan tâm"]
+    correct: ["Ngoài vòng tròn ảnh hưởng và trong vòng tròn quan tâm"]
   },
   {
-    type: "match",
-    q: "Ghép đôi phù hợp các thế hệ quản trị thời gian",
-    left: [
-      "Thế hệ quản trị thời gian thứ nhất",
-      "Thế hệ quản trị thời gian thứ hai",
-      "Thế hệ quản trị thời gian thứ ba",
-      "Thế hệ quản trị thời gian thứ hai"
-    ],
-    right: [
-      "Các mảnh giấy ghi chú hay các bảng liệt kê công việc",
-      "Lịch công tác và sổ ghi chép các cuộc hẹn",
-      "Xác định thứ tự ưu tiền, các giá trị của mọi hoạt động",
-      "Lấy nguyên tắc làm trọng tâm và quản lý bản thân"
-    ],
-    correct: [
-      ["Thế hệ quản trị thời gian thứ nhất", "Các mảnh giấy ghi chú hay các bảng liệt kê công việc"],
-      ["Thế hệ quản trị thời gian thứ hai", "Lịch công tác và sổ ghi chép các cuộc hẹn"],
-      ["Thế hệ quản trị thời gian thứ ba", "Xác định thứ tự ưu tiền, các giá trị của mọi hoạt động"],
-      ["Thế hệ quản trị thời gian thứ tư", "Lấy nguyên tắc làm trọng tâm và quản lý bản thân"]
+    "type": "match",
+    "q": "Ghép đôi phù hợp các thế hệ quản trị thời gian",
+    "pairs": [
+      { "left": "Thế hệ quản trị thời gian thứ nhất", "right": "Các mảnh giấy ghi chú hay các bảng liệt kê công việc" },
+      { "left": "Thế hệ quản trị thời gian thứ hai", "right": "Lịch công tác và sổ ghi chép các cuộc hẹn" },
+      { "left": "Thế hệ quản trị thời gian thứ ba", "right": "Xác định thứ tự ưu tiên, các giá trị của mọi hoạt động" },
+      { "left": "Thế hệ quản trị thời gian thứ tư", "right": "Lấy nguyên tắc làm trọng tâm và quản lý bản thân" }
     ]
   },
   {
@@ -1753,15 +1681,13 @@ let questions=[
     ]
   },
   {
-    type: "match",
-    q: "Trình tự các giai đoạn phát triển nhóm",
-    left: ["Giai đoạn 1", "Giai đoạn 2", "Giai đoạn 3", "Giai đoạn 4"],
-    right: ["Hình thành", "Xung đột", "Ổn định", "Hoàn thiện"],
-    correct: [
-      ["Giai đoạn 1", "Hình thành"],
-      ["Giai đoạn 2", "Xung đột"],
-      ["Giai đoạn 3", "Ổn định"],
-      ["Giai đoạn 4", "Hoàn thiện"]
+    "type": "match",
+    "q": "Trình tự các giai đoạn phát triển nhóm",
+    "pairs": [
+      { "left": "Giai đoạn 1", "right": "Hình thành" },
+      { "left": "Giai đoạn 2", "right": "Xung đột" },
+      { "left": "Giai đoạn 3", "right": "Ổn định" },
+      { "left": "Giai đoạn 4", "right": "Hoàn thiện" }
     ]
   }
 ];
@@ -1886,23 +1812,37 @@ function renderFill(){
 }
 
 function renderMatch(q){
-    q.left.forEach((l,i)=>{
+    aEl.innerHTML = "";
+
+    // clone để không phá dữ liệu gốc
+    const pairs = JSON.parse(JSON.stringify(q.pairs));
+
+    // random thứ tự bên trái
+    shuffle(pairs);
+
+    // tạo danh sách bên phải và random
+    const rightOptions = pairs.map(p => p.right);
+    shuffle(rightOptions);
+
+    pairs.forEach((pair, index) => {
         const row = document.createElement("div");
         row.className = "match-row";
+        row.dataset.correct = pair.right; // lưu đáp án đúng
 
         const left = document.createElement("div");
         left.className = "match-left";
-        left.innerText = l;
+        left.innerText = pair.left;
 
-        const sel = document.createElement("select");
-        q.right.forEach(r=>{
-            const o = document.createElement("option");
-            o.text = r;
-            sel.add(o);
+        const select = document.createElement("select");
+        rightOptions.forEach(r => {
+            const op = document.createElement("option");
+            op.value = r;
+            op.text = r;
+            select.appendChild(op);
         });
 
         row.appendChild(left);
-        row.appendChild(sel);
+        row.appendChild(select);
         aEl.appendChild(row);
     });
 }
@@ -1965,27 +1905,24 @@ submitBtn.onclick = () => {
 
     /* ===== MATCH ===== */
     if(q.type === "match"){
-    ok = true;
-    const rows = document.querySelectorAll(".match-row");
+      ok = true;
+      const rows = document.querySelectorAll(".match-row");
 
-    rows.forEach((row, i) => {
-        const select = row.querySelector("select");
-        const correctValue = q.correct[i][1];
+      rows.forEach(row => {
+          const select = row.querySelector("select");
+          const correct = row.dataset.correct;
 
-        // disable để không sửa nữa
-        select.disabled = true;
+          select.disabled = true;
 
-        if(select.value === correctValue){
-            // đúng → xanh
-            select.classList.add("match-correct");
-        }else{
-            // sai → sửa lại thành đúng nhưng tô đỏ
-            select.value = correctValue;
-            select.classList.add("match-wrong");
-            ok = false;
-        }
-    });
-}
+          if(select.value === correct){
+              select.classList.add("match-correct");
+          }else{
+              select.value = correct;          // sửa lại đáp án đúng
+              select.classList.add("match-wrong");
+              ok = false;
+          }
+      });
+    }
 
     /* ===== ĐẾM ĐÚNG / SAI ===== */
     if (ok) {
