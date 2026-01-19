@@ -1827,7 +1827,7 @@ function setQuestionMeta(type){
     }
     if(type==="fill"){
         badge.innerText="ĐIỀN TỪ";
-        ins.innerText="Nhập đáp án vào ô trống theo form:A, b, c";
+        ins.innerText="Nhập đáp án vào ô trống theo form:A(đầu câu), b, c";
     }
     if(type==="match"){
         badge.innerText="NỐI CẶP";
@@ -1964,28 +1964,28 @@ submitBtn.onclick = () => {
     }
 
     /* ===== MATCH ===== */
-    if (q.type === "match") {
+    if(q.type === "match"){
     ok = true;
-    let sels = document.querySelectorAll("select");
+    const rows = document.querySelectorAll(".match-row");
 
-    sels.forEach((s, i) => {
-        let correctValue = q.correct[i][1];
+    rows.forEach((row, i) => {
+        const select = row.querySelector("select");
+        const correctValue = q.correct[i][1];
 
-        if (s.value === correctValue) {
-            s.classList.add("match-correct");
-        } else {
+        // disable để không sửa nữa
+        select.disabled = true;
+
+        if(select.value === correctValue){
+            // đúng → xanh
+            select.classList.add("match-correct");
+        }else{
+            // sai → sửa lại thành đúng nhưng tô đỏ
+            select.value = correctValue;
+            select.classList.add("match-wrong");
             ok = false;
-            s.classList.add("match-wrong");
-
-            // sửa lại về đáp án đúng
-            s.value = correctValue;
         }
-
-        // khóa không cho sửa
-        s.disabled = true;
     });
 }
-
 
     /* ===== ĐẾM ĐÚNG / SAI ===== */
     if (ok) {
