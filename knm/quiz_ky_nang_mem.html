@@ -2067,12 +2067,7 @@ function startReview() {
 }
 
 function goBack() {
-    if (document.referrer &&
-        document.referrer.startsWith(location.origin)) {
-        history.back();
-    } else {
-        window.location.href = "./index.html";
-    }
+    window.location.href = "../";
 }
     
 </script>
