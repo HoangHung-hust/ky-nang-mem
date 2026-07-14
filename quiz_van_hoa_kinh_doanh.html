@@ -2788,8 +2788,13 @@ function startReview() {
     load();
 }
 
-function goBack(){
-    window.location.href = "index.html";
+function goBack() {
+    if (document.referrer &&
+        document.referrer.startsWith(location.origin)) {
+        history.back();
+    } else {
+        window.location.href = "./index.html";
+    }
 }
 
 </script>
