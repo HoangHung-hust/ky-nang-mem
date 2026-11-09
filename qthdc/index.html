@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Ứng dụng ôn tập trắc nghiệm</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body{
+    margin:0;
+    height:100vh;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    font-family: "Segoe UI", sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+}
+.app{
+    width: 100%;
+    max-width: 900px;
+    padding: 28px;
+    margin: 20px;
+    background:rgba(0,0,0,.85);
+    border-radius:18px;
+    box-shadow:0 0 40px rgba(0,0,0,.7);
+}
+
+.header{
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+    color:#ffd369;
+    margin-bottom:20px;
+}
+.question-card{
+    background:#1b2a4e;
+    padding:20px;
+    border-radius:12px;
+    font-size:20px;
+    margin-bottom:20px;
+    width: 100%;
+    overflow: visible;   /* QUAN TRỌNG */
+    position: relative;
+}
+
+.answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+.answer-card{
+    background:#162447;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.2s;
+}
+.answer-card:hover{
+    background:#1f4068;
+    transform:scale(1.03);
+}
+
+.chosen{
+    background: linear-gradient(145deg, #ff9800, #f57c00) !important;
+    color: #000;
+}
+
+/* MULTIPLE CHOICE – KHUNG VUÔNG */
+.answer-card.multiple{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 4px;
+    border: 2px solid #3a5ba0;
+    background: #0f1f3d;
+}
+
+.answer-card.multiple:hover{
+    background: #152a55;
+}
+
+.correct{ background:#2ecc71 !important; }
+.wrong{ background:#e74c3c !important; }
+
+.controls{
+    margin-top:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+button{
+    padding:12px 30px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+.submit{
+    background:#00adb5;
+    color:#000;
+}
+.next{
+    background:#ffd369;
+    color:#000;
+    display:none;
+}
+.info{
+    margin-top:15px;
+    font-size:16px;
+}
+input[type=text]{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    font-size:16px;
+}
+select{
+    padding:8px;
+    border-radius:8px;
+    margin-left:10px;
+}
+
+.badge{
+    position:absolute;
+    top:-12px;
+    right:15px;
+    padding:6px 12px;
+    font-size:12px;
+    border-radius:20px;
+    font-weight:bold;
+    color:#000;
+}
+.badge.single{ background:#4da3ff; }
+.badge.multiple{ background:#ff9800; }
+.badge.fill{ background:#2ecc71; }
+.badge.match{ background:#9b59b6; }
+
+.instruction{
+    font-size:14px;
+    color:#ccc;
+    margin-top:8px;
+}
+.question-wrapper{
+    position:relative;
+}
+.stat{
+    margin-top:15px;
+    font-size:16px;
+    text-align:center;
+    color:#eee;
+}
+.stat span{
+    font-weight:bold;
+}
+.match-correct{
+    background:#b7e4c7 !important;
+    color:#065f46;
+    border-radius:8px;
+}
+
+.match-wrong{
+    background:#ffccd5 !important;
+    color:#7a0f1b;
+    border-radius:8px;
+}
+.match-row{
+    display: grid;
+    grid-template-columns: minmax(180px, 1.3fr) 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+.match-left{
+    font-weight: 500;
+    word-break: break-word;
+    background: rgba(255,255,255,0.08);
+    padding: 10px 12px;
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+.match-row select{
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+/* ===== MULTIPLE CHECKBOX UI ===== */
+/* ô vuông */
+.answer-card.multiple .box{
+    width: 22px;
+    height: 22px;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: transparent;
+    transition: .2s;
+}
+
+/* dấu tick khi chọn */
+.answer-card.multiple.chosen .box{
+    border-color: #ff9800;
+    background: #ff9800;
+    color: #000;
+}
+
+.answer-card.multiple.chosen .box::before{
+    content: "✓";
+}
+
+/* đúng sau submit */
+.answer-card.multiple.correct .box{
+    background: #2ecc71;
+    border-color: #2ecc71;
+    color: #000;
+}
+
+.answer-card.multiple.correct .box::before{
+    content: "✓";
+}
+
+/* sai sau submit */
+.answer-card.multiple.wrong .box{
+    border-color: #e74c3c;
+    background: transparent;
+    color: transparent;
+}
+
+@media (max-width: 700px){
+    .match-row{
+        grid-template-columns: 1fr;
+    }
+}
+
+.back-btn{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+
+    padding: 0 !important;
+    margin: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #ffd369;
+    color: #000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,.35);
+    transition: .2s;
+    z-index: 9999;
+}
+
+.back-btn svg{
+    display: block;
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.back-btn:hover{
+    transform: scale(1.08);
+    background: #ffca45;
+}
+
+</style>
+</head>
+
+<body>
+  <button type="button" class="back-btn" onclick="goBack()" aria-label="Quay lại">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+            d="M15 18L9 12L15 6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.8"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+        </path>
+    </svg>
+  </button>
+
+<div class="app">
+    <div class="header">ÔN TẬP</div>
+    <div id="questionWrapper" class="question-card question-wrapper">
+    <div id="badge" class="badge"></div>
+    <div id="question"></div>
+    <div id="instruction" class="instruction"></div>
+</div>
+
+    <div id="answers" class="answers"></div>
+
+    <div class="controls">
+        <button id="submitBtn" class="submit">SUBMIT</button>
+        <button id="nextBtn" class="next">NEXT</button>
+    </div>
+
+    <div id="reviewArea" style="text-align:center; margin-top:20px;"></div>
+
+    <div id="stat" class="stat">
+    ✔ Đúng: <span id="correctCount">0</span> /
+    <span id="totalCount">0</span>
+    &nbsp;&nbsp;&nbsp;
+    ✖ Sai: <span id="wrongCount">0</span> /
+    <span id="totalCount2">0</span>
+    </div>
+
+    <div id="info" class="info"></div>
+</div>
+
+<script>
+/* ====== DỮ LIỆU ====== */
+let questions=[
+    {
+        "type": "single",
+        "q": "Quản trị được thực hiện trong một tổ chức nhằm",
+        "options": [
+            "Tối đa hóa lợi nhuận",
+            "Đạt mục tiêu của tổ chức",
+            "Sử dụng có hiệu quả cao nhất các nguồn lực",
+            "Đạt được mục tiêu của tổ chức với hiệu suất cao"
+        ],
+        "correct": [
+            "Đạt được mục tiêu của tổ chức với hiệu suất cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Quản trị là những hoạt động cần thiết khi có nhiều người kết hợp với nhau trong một tổ chức nhằm thực hiện chung...\"",
+        "options": [
+            "Mục tiêu",
+            "Lợi nhuận",
+            "Kế hoạch",
+            "Lợi ích"
+        ],
+        "correct": [
+            "Mục tiêu"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Hoạt động quản trị chịu sự tác động của... đang biến động không ngừng.\"",
+        "options": [
+            "Kỹ thuật",
+            "Công nghệ",
+            "Kinh tế",
+            "Môi trường"
+        ],
+        "correct": [
+            "Môi trường"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quản trị cần thiết cho",
+        "options": [
+            "Các tổ chức vì lợi nhuận và tổ chức phi lợi nhuận",
+            "Các doanh nghiệp hoạt động sản xuất kinh doanh",
+            "Các đơn vị hành chính sự nghiệp",
+            "Các công ty lớn"
+        ],
+        "correct": [
+            "Các tổ chức vì lợi nhuận và tổ chức phi lợi nhuận"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Quản trị hướng tổ chức đạt mục tiêu với... cao nhất và chi phí thấp nhất.\"",
+        "options": [
+            "Sự thỏa mãn",
+            "Lợi ích",
+            "Kết quả",
+            "Lợi nhuận"
+        ],
+        "correct": [
+            "Kết quả"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Để tăng hiệu suất quản trị, các nhà quản trị có thể thực hiện bằng cách",
+        "options": [
+            "Giảm chi phí ở đầu vào và doanh thu ở đầu ra không thay đổi",
+            "Chi phí ở đầu vào không thay đổi và tăng doanh thu ở đầu ra",
+            "Vừa giảm chi phí ở đầu vào và vừa tăng doanh thu ở đầu ra",
+            "Tất cả những cách trên"
+        ],
+        "correct": [
+            "Tất cả những cách trên"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quản trị viên trung cấp thường tập trung vào việc ra các loại quyết định",
+        "options": [
+            "Chiến lược",
+            "Tác nghiệp",
+            "Chiến thuật",
+            "Tất cả các loại quyết định trên"
+        ],
+        "correct": [
+            "Chiến thuật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Càng xuống cấp thấp hơn, thời gian dành cho chức năng quản trị nào sẽ càng quan trọng?",
+        "options": [
+            "Hoạch định",
+            "Tổ chức và kiểm tra",
+            "Điều khiển",
+            "Tất cả các chức năng trên"
+        ],
+        "correct": [
+            "Điều khiển"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Càng lên cấp cao hơn, thời gian dành cho chức năng quản trị nào sẽ càng quan trọng?",
+        "options": [
+            "Hoạch định",
+            "Tổ chức",
+            "Điều khiển",
+            "Kiểm tra"
+        ],
+        "correct": [
+            "Hoạch định"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị phân bố thời gian nhiều nhất cho việc thực hiện chức năng",
+        "options": [
+            "Hoạch định",
+            "Điều khiển và kiểm tra",
+            "Tổ chức",
+            "Tất cả phương án trên đều không chính xác"
+        ],
+        "correct": [
+            "Tất cả phương án trên đều không chính xác"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị cấp cao cần thiết nhất kỹ năng",
+        "options": [
+            "Nhân sự",
+            "Tư duy",
+            "Kỹ thuật",
+            "Kỹ năng tư duy + nhân sự"
+        ],
+        "correct": [
+            "Kỹ năng tư duy + nhân sự"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mối quan hệ giữa các cấp bậc quản trị và các kỹ năng của nhà quản trị là",
+        "options": [
+            "Ở bậc quản trị càng cao kỹ năng kỹ thuật càng có tầm quan trọng",
+            "Ở bậc quản trị càng cao kỹ năng nhân sự càng có tầm quan trọng",
+            "Kỹ năng nhân sự có tầm quan trọng như nhau đối với các cấp bậc quản trị",
+            "Tất cả các phương án trên đều sai"
+        ],
+        "correct": [
+            "Kỹ năng nhân sự có tầm quan trọng như nhau đối với các cấp bậc quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hoạt động quản trị được thực hiện thông qua 4 chức năng",
+        "options": [
+            "Hoạch định, tổ chức, điều khiển, kiểm tra",
+            "Hoạch định, nhân sự, chỉ huy, phối hợp",
+            "Hoạch định, tổ chức, phối hợp, báo cáo",
+            "Kế hoạch, chỉ đạo, tổ chức, kiểm tra"
+        ],
+        "correct": [
+            "Hoạch định, tổ chức, điều khiển, kiểm tra"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong một tổ chức, các cấp bậc quản trị thường được chia thành",
+        "options": [
+            "2 cấp quản trị",
+            "3 cấp quản trị",
+            "4 cấp quản trị",
+            "5 cấp quản trị"
+        ],
+        "correct": [
+            "3 cấp quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Cố vấn cho ban giám đốc của một doanh nghiệp thuộc cấp quản trị",
+        "options": [
+            "Cấp cao",
+            "Cấp giữa",
+            "Cấp thấp (cơ sở)",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Tất cả đều sai"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Chức năng hoạch định nhằm xác định mục tiêu cần đạt được và đề ra ... hành động để đạt mục tiêu trong từng khoảng thời gian nhất định.\"",
+        "options": [
+            "Quan điểm",
+            "Chương trình",
+            "Giới hạn",
+            "Cách thức"
+        ],
+        "correct": [
+            "Chương trình"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quan hệ giữa cấp bậc quản trị và các kỹ năng:",
+        "options": [
+            "Chức vụ càng thấp thì kĩ năng về kỹ thuật càng quan trọng",
+            "Chức vụ càng cao thì kỹ năng về tư duy càng quan trọng",
+            "Nhà quản trị cần tất cả các kỹ năng, tuy nhiên chức vụ càng cao thì kỹ năng tư duy càng quan trọng",
+            "Tất cả những tuyên bố nêu trên đều sai"
+        ],
+        "correct": [
+            "Nhà quản trị cần tất cả các kỹ năng, tuy nhiên chức vụ càng cao thì kỹ năng tư duy càng quan trọng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kỹ năng nào cần thiết ở mức độ như nhau đối với các nhà quản trị?",
+        "options": [
+            "Tư duy",
+            "Kỹ thuật",
+            "Nhân sự",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Nhân sự"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Vai trò nào đã được thực hiện khi nhà quản trị đưa ra một quyết định để phát triển kinh doanh?",
+        "options": [
+            "Vai trò người lãnh đạo",
+            "Vai trò người đại diện",
+            "Vai trò người phân bố tài nguyên",
+            "Vai trò người doanh nhân"
+        ],
+        "correct": [
+            "Vai trò người doanh nhân"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Nhà quản trị cấp thấp thì kỹ năng ... càng quan trọng.\"",
+        "options": [
+            "Nhân sự",
+            "Chuyên môn",
+            "Tư duy",
+            "Giao tiếp"
+        ],
+        "correct": [
+            "Chuyên môn"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mục tiêu của quản trị trong một tổ chức là",
+        "options": [
+            "Đạt được hiệu quả và hiệu suất cao",
+            "Sử dụng hợp lý các nguồn lực hiện có",
+            "Tìm kiếm lợi nhuận",
+            "Tạo sự ổn định để phát triển"
+        ],
+        "correct": [
+            "Đạt được hiệu quả và hiệu suất cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phát biểu nào sau đây đúng?",
+        "options": [
+            "Quản trị cần thiết đối với bệnh viện",
+            "Quản trị cần thiết đối với trường đại học",
+            "Quản trị chỉ cần thiết đối với tổ chức có quy mô lớn",
+            "Quản trị cần thiết đối với doanh nghiệp"
+        ],
+        "correct": [
+            "Quản trị cần thiết đối với doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quản trị cần thiết trong các tổ chức để",
+        "options": [
+            "Đạt được lợi nhuận",
+            "Giảm chi phí",
+            "Đạt được mục tiêu với hiệu suất cao",
+            "Tạo trật tự trong một tổ chức"
+        ],
+        "correct": [
+            "Đạt được mục tiêu với hiệu suất cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Để tăng hiệu quả, các nhà quản trị có thể thực hiện bằng cách",
+        "options": [
+            "Giảm chi phí ở đầu vào và kết quả ở đầu ra không thay đổi",
+            "Chi phí ở đầu vào không đổi và tăng kết quả đầu ra",
+            "Vừa giảm chi phí ở đầu vào và tăng kết quả đầu ra",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Tất cả đều sai"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Để đạt hiệu quả, các nhà quản trị cần phải",
+        "options": [
+            "Xác định và hoàn thành đúng mục tiêu",
+            "Giảm chi phí đầu vào",
+            "Tăng doanh thu ở đầu ra",
+            "Tất cả đều chưa chính xác"
+        ],
+        "correct": [
+            "Xác định và hoàn thành đúng mục tiêu"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong quản trị doanh nghiệp quan trọng nhất là",
+        "options": [
+            "Xác định đúng lĩnh vực hoạt động tổ chức",
+            "Xác định đúng quy mô của tổ chức",
+            "Xác định đúng trình độ và số lượng đội ngũ nhân viên",
+            "Xác định đúng chiến lược phát triển của doanh nghiệp"
+        ],
+        "correct": [
+            "Xác định đúng chiến lược phát triển của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị cấp thấp cần tập trung thời gian nhiều nhất cho chức năng nào sau đây?",
+        "options": [
+            "Hoạch định",
+            "Tổ chức và kiểm tra",
+            "Điều khiển",
+            "Tất cả các chức năng trên"
+        ],
+        "correct": [
+            "Điều khiển"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Thời gian dành cho chức năng hoạch định sẽ cần nhiều hơn đối với nhà quản trị",
+        "options": [
+            "Cấp cao",
+            "Cấp trung",
+            "Cấp thấp",
+            "Tất cả các nhà quản trị"
+        ],
+        "correct": [
+            "Cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị cần phân bố thời gian nhiều nhất cho việc thực hiện chức năng",
+        "options": [
+            "Hoạch định và kiểm tra",
+            "Điều khiển và kiểm tra",
+            "Hoạch định và tổ chức",
+            "Tất cả phương án trên đều không chính xác"
+        ],
+        "correct": [
+            "Tất cả phương án trên đều không chính xác"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị cấp thấp cần thiết nhất",
+        "options": [
+            "Kỹ năng nhân sự",
+            "Kỹ năng nhân sự + kỹ năng kỹ thuật",
+            "Kỹ năng kỹ thuật",
+            "Kỹ năng kỹ thuật + kỹ năng tư duy"
+        ],
+        "correct": [
+            "Kỹ năng nhân sự + kỹ năng kỹ thuật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các chức năng cơ bản theo quản trị học hiện đại gồm",
+        "options": [
+            "4 chức năng",
+            "6 chức năng",
+            "3 chức năng",
+            "5 chức năng"
+        ],
+        "correct": [
+            "4 chức năng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Theo Henry Mintzberg, các nhà quản trị phải thực hiện bao nhiêu vai trò?",
+        "options": [
+            "7",
+            "14",
+            "10",
+            "4"
+        ],
+        "correct": [
+            "10"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nghiên cứu của Henry Mintzberg đã nhận dạng 10 vai trò của nhà quản trị và phân loại thành 3 nhóm vai trò, đó là",
+        "options": [
+            "Nhóm vai trò lãnh đạo, vai trò thông tin, vai trò ra quyết định",
+            "Nhóm vai trò tương quan nhân sự, vai trò xử lý các xung đột, vai trò ra quyết định",
+            "Nhóm vai trò tương quan nhân sự, vai trò thông tin, vai trò ra quyết định",
+            "Nhóm vai trò liên lạc, vai trò phân bố tài nguyên, vai trò thương thuyết"
+        ],
+        "correct": [
+            "Nhóm vai trò tương quan nhân sự, vai trò thông tin, vai trò ra quyết định"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hiệu suất của quản trị chỉ có được khi",
+        "options": [
+            "Làm đúng việc",
+            "Làm việc đúng cách",
+            "Chi phí thấp",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Làm việc đúng cách"
+        ]
+    },
+    // {
+    //     "type": "single",
+    //     "q": "Trong quản trị tổ chức, quan trọng nhất là",
+    //     "options": [
+    //         "Làm đúng việc",
+    //         "Làm việc đúng cách",
+    //         "Đạt được lợi nhuận",
+    //         "Chi phí thấp"
+    //     ],
+    //     "correct": [
+    //         "Làm đúng việc"
+    //     ]
+    // },
+    // {
+    //     "type": "single",
+    //     "q": "Trong quản trị tổ chức, quan trọng nhất là",
+    //     "options": [
+    //         "Thực hiện mục tiêu đúng với hiệu suất cao",
+    //         "Làm đúng việc",
+    //         "Đạt được lợi nhuận",
+    //         "Chi phí thấp nhất"
+    //     ],
+    //     "correct": [
+    //         "Làm đúng việc"
+    //     ]
+    // },
+    {
+        "type": "single",
+        "q": "Hiệu quả và hiệu suất của quản trị chỉ có được khi",
+        "options": [
+            "Làm đúng việc",
+            "Làm đúng cách",
+            "Tỷ lệ giữa kết quả đạt được/chi phí bỏ ra cao",
+            "Làm đúng cách để đạt được mục tiêu"
+        ],
+        "correct": [
+            "Làm đúng cách để đạt được mục tiêu"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị thực hiện vai trò gì khi đưa ra quyết định áp dụng công nghệ mới vào sản xuất?",
+        "options": [
+            "Vai trò người thực hiện",
+            "Vai trò người đại diện",
+            "Vai trò người phân bổ tài nguyên",
+            "Vai trò nhà kinh doanh"
+        ],
+        "correct": [
+            "Vai trò nhà kinh doanh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị thực hiện vai trò gì khi giải quyết vấn đề bãi công xảy ra trong doanh nghiệp?",
+        "options": [
+            "Vai trò nhà kinh doanh",
+            "Vai trò người giải quyết xáo trộn",
+            "Vai trò người thương thuyết",
+            "Vai trò người lãnh đạo"
+        ],
+        "correct": [
+            "Vai trò người giải quyết xáo trộn"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị thực hiện vai trò gì khi đàm phán với đối tác về việc tăng đơn giá gia công trong quá trình thảo luận hợp đồng với họ?",
+        "options": [
+            "Vai trò người liên lạc",
+            "Vai trò người thương thuyết",
+            "Vai trò người lãnh đạo",
+            "Vai trò người đại diện"
+        ],
+        "correct": [
+            "Vai trò người thương thuyết"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mối quan hệ giữa khoa học và nghệ thuật quản trị được diễn đạt rõ nhất trong câu",
+        "options": [
+            "Khoa học là nền tảng để hình thành nghệ thuật",
+            "Trực giác là quan trọng để thành công trong quản trị",
+            "Cần vận dụng đúng các nguyên tắc khoa học vào quản trị",
+            "Có mối quan hệ biện chứng giữa khoa học và nghệ thuật quản trị"
+        ],
+        "correct": [
+            "Có mối quan hệ biện chứng giữa khoa học và nghệ thuật quản trị"
+        ]
+    },
+    { 
+        "type": "single",
+        "q": "Phát biểu nào sau đây không đúng?",
+        "options": [
+            "Trực giác là quan trọng để thành công trong quản trị",
+            "Có mối quan hệ biện chứng giữa khoa học và nghệ thuật quản trị",
+            "Cần vận dụng đúng các nguyên tắc khoa học vào quản trị",
+            "Khoa học là nền tảng để hình thành nghệ thuật quản trị"
+        ],
+        "correct": [
+            "Trực giác là quan trọng để thành công trong quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nghệ thuật quản trị có được từ",
+        "options": [
+            "Từ cha truyền con nối",
+            "Khả năng bẩm sinh",
+            "Trải nghiệm qua thực hành quản trị",
+            "Các chương trình đào tạo"
+        ],
+        "correct": [
+            "Trải nghiệm qua thực hành quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phát biểu nào sau đây không đúng?",
+        "options": [
+            "Nghệ thuật quản trị không thể học được",
+            "Có được từ di truyền",
+            "Trải nghiệm qua thực hành quản trị",
+            "Khả năng bẩm sinh"
+        ],
+        "correct": [
+            "Nghệ thuật quản trị không thể học được"
+        ]
+    },
+
+
+    //////CHƯƠNG 2
+    {
+        "type": "single",
+        "q": "Quản trị theo học thuyết Z là",
+        "options": [
+            "Quản trị theo cách của Mỹ",
+            "Quản trị theo cách của Nhật Bản",
+            "Quản trị kết hợp theo cách của Mỹ và của Nhật Bản",
+            "Các cách hiểu trên đều sai"
+        ],
+        "correct": [
+            "Quản trị kết hợp theo cách của Mỹ và của Nhật Bản"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Học thuyết Z chú trọng tới",
+        "options": [
+            "Mối quan hệ con người trong tổ chức",
+            "Vấn đề lương bổng cho người lao động",
+            "Sử dụng người dài hạn",
+            "Đào tạo đa năng"
+        ],
+        "correct": [
+            "Mối quan hệ con người trong tổ chức"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác giả của học thuyết Z là",
+        "options": [
+            "Người Mỹ",
+            "Người Nhật",
+            "Người Mỹ gốc Nhật",
+            "Một người khác"
+        ],
+        "correct": [
+            "Người Mỹ gốc Nhật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác giả của học thuyết Z là",
+        "options": [
+            "William Ouchi",
+            "Frederick Herzberg",
+            "Douglas McGregor",
+            "Henry Fayol"
+        ],
+        "correct": [ "William Ouchi" ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Trường phái quản trị khoa học quan tâm đến ... lao động thông qua việc hợp lý hóa các bước công việc.\"",
+        "options": [
+            "Điều kiện",
+            "Năng suất",
+            "Môi trường",
+            "Trình độ"
+        ],
+        "correct": [
+            "Năng suất"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điểm quan tâm chung của các trường phái quản trị là",
+        "options": [
+            "Năng suất lao động",
+            "Con người",
+            "Hiệu quả",
+            "Lợi nhuận"
+        ],
+        "correct": [
+            "Hiệu quả"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điểm quan tâm chung giữa các trường phái Quản trị khoa học, Quản trị Hành chính, Quản trị định lượng là",
+        "options": [
+            "Con người",
+            "Năng suất lao động",
+            "Cách thức quản trị",
+            "Lợi nhuận"
+        ],
+        "correct": [
+            "Năng suất lao động"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Trường phái tâm lý - xã hội trong quản trị nhấn mạnh đến vai trò của yếu tố tâm lý, quan hệ của con người trong ...\"",
+        "options": [
+            "Xã hội",
+            "Bình đẳng",
+            "Đẳng cấp",
+            "Lợi ích"
+        ],
+        "correct": [
+            "Xã hội"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các lý thuyết quản trị cổ điển có hạn chế là",
+        "options": [
+            "a. Quan niệm xí nghiệp là một hệ thống khép kín",
+            "b. Chưa chú trọng đúng mức đến yếu tố con người",
+            "Cả a & b",
+            "Cách nhìn phiến diện"
+        ],
+        "correct": [
+            "Cả a & b"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Lý thuyết \"Quản trị khoa học\" được xếp vào trường phái quản trị nào?",
+        "options": [
+            "Trường phái tâm lý – xã hội",
+            "Trường phái quản trị định lượng",
+            "Trường phái quản trị cổ điển",
+            "Trường phái quản trị hiện đại"
+        ],
+        "correct": [
+            "Trường phái quản trị cổ điển"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra 14 nguyên tắc \"Quản trị tổng quát\" là",
+        "options": [
+            "Frederick W. Taylor (1856-1915)",
+            "Henry Fayol (1814-1925)",
+            "Max Weber (1864-1920)",
+            "Douglas McGregor (1900-1964)"
+        ],
+        "correct": [
+            "Henry Fayol (1814-1925)"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tư tưởng của trường phái quản trị tổng quát (hành chính) thể hiện qua",
+        "options": [
+            "14 nguyên tắc của H. Fayol",
+            "4 nguyên tắc của W. Taylor",
+            "6 phạm trù của công việc quản trị",
+            "Mô hình tổ chức quan liêu bàn giấy"
+        ],
+        "correct": [
+            "14 nguyên tắc của H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Trường phái quản trị quá trình\" được Harold Koontz đề ra trên cơ sở tư tưởng của",
+        "options": [
+            "H. Fayol",
+            "M. Weber",
+            "R. Owen",
+            "W. Taylor"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Theo trường phái định lượng tất cả các vấn đề quản trị đều có thể giải quyết được bằng ...\"",
+        "options": [
+            "Mô tả",
+            "Mô hình toán",
+            "Mô phỏng",
+            "Kỹ thuật khác nhau"
+        ],
+        "correct": [
+            "Mô hình toán"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác giả của \"Trường phái quản trị quá trình\" là",
+        "options": [
+            "Harold Koontz",
+            "Henry Fayol",
+            "R. Owen",
+            "Max Weber"
+        ],
+        "correct": [
+            "Harold Koontz"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trường phái Hội nhập trong quản trị được xây dựng từ",
+        "options": [
+            "Sự tích hợp các lý thuyết quản trị trên cơ sở chọn lọc",
+            "Trường phái quản trị hệ thống và trường phái ngẫu nhiên",
+            "Một số trường phái khác nhau",
+            "Quá trình hội nhập kinh tế toàn cầu"
+        ],
+        "correct": [
+            "Sự tích hợp các lý thuyết quản trị trên cơ sở chọn lọc"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mô hình 7'S theo quan điểm của McKinsey thuộc trường phái quản trị nào?",
+        "options": [
+            "Trường phái quản trị hành chính",
+            "Trường phái quản trị hội nhập",
+            "Trường phái quản trị hiện đại",
+            "Trường phái quản trị khoa học"
+        ],
+        "correct": [
+            "Trường phái quản trị hiện đại"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các tác giả nổi tiếng của trường phái tâm lý – xã hội là",
+        "options": [
+            "Mayo; Maslow; Gregor; Vroom",
+            "Simon; Mayo; Maslow; Mayo; Maslow",
+            "Maslow; Gregor; Vroom; Gantt",
+            "Taylor; Maslow; Gregor; Fayol"
+        ],
+        "correct": [
+            "Mayo; Maslow; Gregor; Vroom"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà nghiên cứu về quản trị đã đưa ra lý thuyết \"tổ chức quan liêu bàn giấy\" là",
+        "options": [
+            "M. Weber",
+            "H. Fayol",
+            "W. Taylor",
+            "E. Mayo"
+        ],
+        "correct": [
+            "M. Weber"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Theo trường phái định lượng tất cả các vấn đề quản trị đều có thể ... được bằng các mô hình toán.\"",
+        "options": [
+            "Mô tả",
+            "Giải quyết",
+            "Mô phỏng",
+            "Trả lời"
+        ],
+        "correct": [
+            "Giải quyết"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc \"tổ chức công việc khoa học\" là",
+        "options": [
+            "W. Taylor",
+            "H. Fayol",
+            "C. Barnard",
+            "Một người khác"
+        ],
+        "correct": [
+            "W. Taylor"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc \"tập trung & phân tán\" là",
+        "options": [
+            "C. Barnard",
+            "H. Fayol",
+            "W. Taylor",
+            "Một người khác"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Năng suất lao động là chìa khóa để đạt hiệu quả quản trị\" là quan điểm của trường phái",
+        "options": [
+            "Tâm lý - xã hội trong quản trị (*)",
+            "Quản trị khoa học (**)",
+            "Cả (*) & (**)",
+            "Quản trị định lượng"
+        ],
+        "correct": ["Cả (*) & (**)"]
+    },
+    {
+        "type": "single",
+        "q": "\"Ra quyết định đúng là chìa khóa để đạt hiệu quả quản trị\" là quan điểm của trường phái",
+        "options": [
+            "Định lượng",
+            "Khoa học",
+            "Tổng quát",
+            "Tâm lý - xã hội"
+        ],
+        "correct": [
+            "Định lượng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các lý thuyết quản trị cổ điển",
+        "options": [
+            "Không còn đúng trong quản trị hiện đại",
+            "Còn đúng trong quản trị hiện đại",
+            "Còn có giá trị trong quản trị hiện đại",
+            "Cần phân tích để vận dụng linh hoạt"
+        ],
+        "correct": [
+            "Cần phân tích để vận dụng linh hoạt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc thống nhất chỉ huy là",
+        "options": [
+            "M. Weber",
+            "H. Fayol",
+            "C. Barnard",
+            "Một người khác"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nguyên tắc thẩm quyền (quyền hạn) và trách nhiệm được đề ra bởi",
+        "options": [
+            "Herbert Simon",
+            "M. Weber",
+            "Winslow Taylor",
+            "Henry Fayol"
+        ],
+        "correct": [
+            "Henry Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trường phái \"quá trình quản trị\" được đề ra bởi",
+        "options": [
+            "Harold Koontz",
+            "Henry Fayol",
+            "Winslow Taylor",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Harold Koontz"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra khái niệm về \"quyền hành thực tế\" là",
+        "options": [
+            "Fayol",
+            "Weber",
+            "Simon",
+            "Một người khác"
+        ],
+        "correct": [
+            "Weber"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các yếu tố trong mô hình 7'S của McKinsey là:",
+        "options": [
+            "Chiến lược; cơ cấu; hệ thống; tài chính; kỹ năng; nhân viên; mục tiêu phối hợp",
+            "Chiến lược; hệ thống; mục tiêu phối hợp; phong cách; công nghệ; tài chính; nhân viên",
+            "Chiến lược; kỹ năng; mục tiêu phối hợp; cơ cấu; hệ thống; nhân viên; phong cách",
+            "Chiến lược; cơ cấu; hệ thống; đào tạo; mục tiêu; kỹ năng; nhân viên"
+        ],
+        "correct": [
+            "Chiến lược; kỹ năng; mục tiêu phối hợp; cơ cấu; hệ thống; nhân viên; phong cách"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Đại diện tiêu biểu của \"Trường phái quản trị quá trình\" là:",
+        "options": [
+            "Harold Koontz",
+            "Henry Fayol",
+            "Robert Owen",
+            "Max Weber"
+        ],
+        "correct": [
+            "Harold Koontz"
+        ]
+    },
+
+
+    ///////CHƯƠNG 3
+    {
+        "type": "single",
+        "q": "Phân tích môi trường hoạt động của tổ chức nhằm:",
+        "options": [
+            "Xác định cơ hội & nguy cơ",
+            "Xác định điểm mạnh & điểm yếu",
+            "Phục vụ cho việc ra quyết định",
+            "Để có thông tin"
+        ],
+        "correct": [
+            "Phục vụ cho việc ra quyết định"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường ảnh hưởng đến hoạt động của một doanh nghiệp bao gồm:",
+        "options": [
+            "Môi trường bên trong và bên ngoài",
+            "Môi trường vĩ mô, vi mô và nội bộ",
+            "Môi trường tổng quát, ngành và nội bộ",
+            "Môi trường toàn cầu, tổng quát, ngành và nội bộ"
+        ],
+        "correct": [
+            "Môi trường toàn cầu, tổng quát, ngành và nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các biện pháp kìm chế lạm phát nền kinh tế là tác động của môi trường:",
+        "options": [
+            "Tổng quát",
+            "Ngành",
+            "Bên ngoài",
+            "Nội bộ"
+        ],
+        "correct": [
+            "Tổng quát"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị cần phân tích môi trường để:",
+        "options": [
+            "Có thông tin",
+            "Lập kế hoạch kinh doanh",
+            "Phát triển thị trường",
+            "Đề ra quyết định kinh doanh"
+        ],
+        "correct": [
+            "Đề ra quyết định kinh doanh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường tác động đến doanh nghiệp và:",
+        "options": [
+            "Tạo các cơ hội cho doanh nghiệp",
+            "Có ảnh hưởng đến quyết định và chiến lược hoạt động của doanh nghiệp",
+            "Tác động đến phạm vi hoạt động của doanh nghiệp",
+            "Tạo các đe dọa đối với doanh nghiệp"
+        ],
+        "correct": [
+            "Có ảnh hưởng đến quyết định và chiến lược hoạt động của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Khoa học và công nghệ phát triển nhanh đem lại cho doanh nghiệp:",
+        "options": [
+            "Nhiều cơ hội",
+            "Nhiều cơ hội hơn là thách thức",
+            "Nhiều thách thức",
+            "Tất cả đều chưa chính xác"
+        ],
+        "correct": [
+            "Tất cả đều chưa chính xác"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nghiên cứu yếu tố dân số là cần thiết để doanh nghiệp:",
+        "options": [
+            "Xác định cơ hội thị trường",
+            "Xác định nhu cầu thị trường",
+            "Ra quyết định kinh doanh",
+            "Xác định chiến lược sản phẩm"
+        ],
+        "correct": [
+            "Ra quyết định kinh doanh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhân viên giỏi rời bỏ doanh nghiệp đến nơi khác, đó là yếu tố nào tác động đến doanh nghiệp?",
+        "options": [
+            "Yếu tố dân số",
+            "Yếu tố xã hội",
+            "Yếu tố nhân lực",
+            "Yếu tố văn hóa"
+        ],
+        "correct": [
+            "Yếu tố nhân lực"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc điều chỉnh trần lãi suất huy động tiết kiệm là yếu tố tác động từ yếu tố:",
+        "options": [
+            "Kinh tế",
+            "Chính trị và luật pháp",
+            "Của môi trường ngành",
+            "Nhà cung cấp"
+        ],
+        "correct": [
+            "Chính trị và luật pháp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chính sách phúc lợi xã hội là yếu tố thuộc:",
+        "options": [
+            "Môi trường tổng quát",
+            "Xã hội",
+            "Yếu tố chính sách và pháp luật",
+            "Yếu tố dân số"
+        ],
+        "correct": [
+            "Yếu tố chính sách và pháp luật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kỹ thuật phân tích SWOT được dùng để:",
+        "options": [
+            "Xác định điểm mạnh yếu của doanh nghiệp",
+            "Xác định cơ hội đe dọa đến doanh nghiệp",
+            "Xác định các phương án kết hợp từ kết quả phân tích môi trường để xây dựng chiến lược",
+            "Tổng hợp các thông tin từ phân tích môi trường"
+        ],
+        "correct": [
+            "Xác định các phương án kết hợp từ kết quả phân tích môi trường để xây dựng chiến lược"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phân tích đối thủ cạnh tranh là phân tích yếu tố của môi trường:",
+        "options": [
+            "Tổng quát",
+            "Ngành",
+            "Bên ngoài",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Ngành"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Giá dầu thô trên thị trường thế giới tăng là ảnh hưởng của môi trường:",
+        "options": [
+            "Toàn cầu",
+            "Ngành",
+            "Tổng quát",
+            "Tất cả đều sai"
+        ],
+        "correct": [
+            "Toàn cầu"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Xu hướng của tỉ giá là yếu tố:",
+        "options": [
+            "Chính phủ và chính trị",
+            "Kinh tế",
+            "Của môi trường tổng quát",
+            "Của môi trường ngành"
+        ],
+        "correct": [
+            "Kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các biến động trên thị trường chứng khoán là yếu tố ảnh hưởng đến doanh nghiệp từ:",
+        "options": [
+            "Môi trường ngành",
+            "Môi trường đặc thù",
+            "Yếu tố kinh tế",
+            "Môi trường tổng quát"
+        ],
+        "correct": [
+            "Yếu tố kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Với doanh nghiệp, việc nghiên cứu môi trường là công việc phải làm của:",
+        "options": [
+            "Giám đốc doanh nghiệp",
+            "Các nhà chuyên môn",
+            "Khách hàng",
+            "Tất cả các nhà quản trị"
+        ],
+        "correct": [
+            "Tất cả các nhà quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Khi nghiên cứu môi trường cần nhận diện các yếu tố tác động và ... của các yếu tố đó.\"",
+        "options": [
+            "Sự nguy hiểm",
+            "Khả năng xuất hiện",
+            "Mức độ ảnh hưởng",
+            "Sự thay đổi"
+        ],
+        "correct": [
+            "Mức độ ảnh hưởng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác động của sở thích theo nhóm tuổi đối với sản phẩm của doanh nghiệp là yếu tố thuộc về:",
+        "options": [
+            "Kinh tế",
+            "Dân số",
+            "Chính trị xã hội",
+            "Văn hóa"
+        ],
+        "correct": [
+            "Dân số"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Sự điều tiết vĩ mô nền kinh tế Việt Nam thông qua các chính sách kinh tế, tài chính. Đó là tác động đến doanh nghiệp từ:",
+        "options": [
+            "Môi trường tổng quát",
+            "Môi trường ngành",
+            "Yếu tố kinh tế",
+            "Yếu tố chính trị và pháp luật"
+        ],
+        "correct": [
+            "Yếu tố chính trị và pháp luật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Mức tăng trưởng của nền kinh tế giảm sút\" ảnh hưởng đến doanh nghiệp là yếu tố:",
+        "options": [
+            "Chính trị",
+            "Kinh tế",
+            "Xã hội",
+            "Của môi trường tổng quát"
+        ],
+        "correct": [
+            "Kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người dân ngày càng quan tâm hơn đến chất lượng cuộc sống là sự tác động từ yếu tố:",
+        "options": [
+            "Kinh tế",
+            "Chính trị-pháp luật",
+            "Xã hội",
+            "Dân số"
+        ],
+        "correct": [
+            "Xã hội"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Lãi suất huy động tiết kiệm của ngân hàng là tác động đến doanh nghiệp từ yếu tố:",
+        "options": [
+            "Chính trị và pháp luật",
+            "Kinh tế",
+            "Nhà cung cấp",
+            "Tài chính"
+        ],
+        "correct": [
+            "Kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chính sách hỗ trợ lãi suất tín dụng cho doanh nghiệp vừa và nhỏ là tác động từ yếu tố:",
+        "options": [
+            "Chính trị và pháp luật",
+            "Kinh tế",
+            "Nhà cung cấp",
+            "Tài chính"
+        ],
+        "correct": [
+            "Chính trị và pháp luật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Sự kiện sữa nhiễm chất melamine của các doanh nghiệp sản xuất sữa, ảnh hưởng đến:",
+        "options": [
+            "Công nghệ",
+            "Xã hội",
+            "Dân số",
+            "Khách hàng"
+        ],
+        "correct": [
+            "Khách hàng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường tác động đến doanh nghiệp và ảnh hưởng mạnh nhất đến:",
+        "options": [
+            "Cơ hội thị trường cho doanh nghiệp",
+            "Quyết định về chiến lược hoạt động của doanh nghiệp",
+            "Đến phạm vi hoạt động của doanh nghiệp",
+            "Đe dọa về doanh số của doanh nghiệp"
+        ],
+        "correct": [
+            "Quyết định về chiến lược hoạt động của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nghiên cứu yếu tố xã hội là cần thiết để doanh nghiệp:",
+        "options": [
+            "Phân tích dự đoán sự thay đổi nhu cầu tiêu dùng",
+            "Nhận ra sự thay đổi thói quen tiêu dùng",
+            "Nhận ra những vấn đề xã hội quan tâm",
+            "Ra quyết định kinh doanh"
+        ],
+        "correct": [
+            "Ra quyết định kinh doanh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các biện pháp nhà nước hỗ trợ doanh nghiệp đầu tư công nghệ mới là tác động của nhóm yếu tố:",
+        "options": [
+            "Tổng quát",
+            "Ngành",
+            "Chính trị và luật pháp",
+            "Kinh tế"
+        ],
+        "correct": [
+            "Chính trị và luật pháp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phân tích môi trường ngành giúp doanh nghiệp:",
+        "options": [
+            "Xác định những thuận lợi và khó khăn đối với doanh nghiệp",
+            "Nhận dạng khách hàng",
+            "Xác định các áp lực cạnh tranh",
+            "Nhận diện đối thủ cạnh tranh"
+        ],
+        "correct": [
+            "Xác định các áp lực cạnh tranh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào thuộc môi trường ngành (vi mô)?",
+        "options": [
+            "Doanh số của công ty bị giảm",
+            "Sự xuất hiện một sản phẩm mới trên thị trường",
+            "Chiến tranh vùng Vịnh",
+            "Bãi công xảy ra trong doanh nghiệp"
+        ],
+        "correct": ["Bãi công xảy ra trong doanh nghiệp"]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường hoạt động của một tổ chức gồm:",
+        "options": [
+            "Môi trường tổng quát",
+            "Môi trường ngành",
+            "Môi trường (hoàn cảnh) nội bộ",
+            "Tất cả các phương án trên"
+        ],
+        "correct": [
+            "Môi trường ngành"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào KHÔNG thuộc môi trường tổng quát?",
+        "options": [
+            "Giá vàng nhập khẩu tăng cao",
+            "Phản ứng của người tiêu dùng đối việc gây ô nhiễm môi trường của công ty Vedan",
+            "Chính sách lãi suất tín dụng ưu đãi cho doanh nghiệp",
+            "Thị trường chứng khoán trong nước đang hồi phục"
+        ],
+        "correct": [
+            "Phản ứng của người tiêu dùng đối việc gây ô nhiễm môi trường của công ty Vedan"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Đại dịch H5N1 và H1N1 là yếu tố thuộc",
+        "options": [
+            "Môi trường công nghệ",
+            "Môi trường tự nhiên",
+            "Môi trường xã hội",
+            "Môi trường kinh tế - xã hội"
+        ],
+        "correct": [
+            "Môi trường tự nhiên"
+        ]
+    }
+];
+
+/* ====== TIỆN ÍCH ====== */
+function shuffle(a){
+ for(let i=a.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [a[i],a[j]]=[a[j],a[i]];
+ }
+}
+shuffle(questions);
+
+let idx=0, score=0, submitted=false;
+let correctCount = 0;
+let wrongCount = 0;
+const reviewArea = document.getElementById("reviewArea");
+let wrongQuestions = [];
+let reviewMode = false;
+
+
+const qEl=document.getElementById("question");
+const aEl=document.getElementById("answers");
+const info=document.getElementById("info");
+const submitBtn=document.getElementById("submitBtn");
+const nextBtn=document.getElementById("nextBtn");
+
+load();
+
+/* ====== LOAD ====== */
+function load(){
+  reviewArea.innerHTML = "";
+ submitted=false;
+ submitBtn.style.display="inline-block";
+ nextBtn.style.display="none";
+ info.innerHTML="";
+ aEl.innerHTML="";
+
+ if (idx >= questions.length) {
+    qEl.innerHTML = `🎉 Hoàn thành – Đúng ${score}/${questions.length}`;
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "none";
+
+    if (wrongQuestions.length > 0 && !reviewMode) {
+        reviewArea.innerHTML = `
+            <button id="reviewBtn" class="next" style="display:inline-block">
+                🔁 Xem lại ${wrongQuestions.length} câu sai
+            </button>
+        `;
+
+        document.getElementById("reviewBtn").onclick = startReview;
+    }
+    return;
+}
+
+ const q=questions[idx];
+ setQuestionMeta(q.type);
+ qEl.innerHTML=`Câu ${idx+1}: ${q.q}`;
+
+ if(q.type==="single") renderSingle(q);
+ if(q.type==="multiple") renderMultiple(q);
+ if(q.type==="fill") renderFill();
+ if(q.type==="match") renderMatch(q);
+}
+
+function setQuestionMeta(type){
+    const badge=document.getElementById("badge");
+    const ins=document.getElementById("instruction");
+
+    badge.className="badge " + type;
+
+    if(type==="single"){
+        badge.innerText="1 ĐÁP ÁN";
+        ins.innerText="";
+    }
+    if(type==="multiple"){
+        badge.innerText="NHIỀU ĐÁP ÁN";
+        ins.innerText="";
+    }
+    if(type==="fill"){
+        badge.innerText="ĐIỀN TỪ";
+        ins.innerText="Nhập đáp án vào ô trống theo form:A(đầu câu), b, c";
+    }
+    if(type==="match"){
+        badge.innerText="NỐI CẶP";
+        ins.innerText="";
+    }
+}
+
+/* ====== RENDER ====== */
+function renderSingle(q){
+    shuffle(q.options);
+    document.getElementById("totalCount").innerText = questions.length;
+    document.getElementById("totalCount2").innerText = questions.length;
+    q.options.forEach(op=>{
+        const div=document.createElement("div");
+        div.className="answer-card";
+        div.innerText=op;
+
+        div.onclick=()=>{
+            if(submitted) return;
+
+            // bỏ cam tất cả đáp án khác
+            document.querySelectorAll(".answer-card")
+                .forEach(c=>c.classList.remove("chosen"));
+
+            // đánh dấu cam đáp án đang chọn
+            div.classList.add("chosen");
+        };
+
+        aEl.appendChild(div);
+    });
+}
+
+function renderMultiple(q){
+    shuffle(q.options);
+
+    q.options.forEach(op=>{
+        const div = document.createElement("div");
+        div.className = "answer-card multiple";
+
+        div.innerHTML = `
+            <span class="box"></span>
+            <span class="text">${op}</span>
+        `;
+
+        div.onclick = () => {
+            if(submitted) return;
+            div.classList.toggle("chosen");
+        };
+
+        aEl.appendChild(div);
+    });
+}
+
+function renderFill(){
+ aEl.innerHTML=`<input id="fillAns" type="text" placeholder="Nhập đáp án">`;
+}
+
+function renderMatch(q){
+    aEl.innerHTML = "";
+
+    const pairs = JSON.parse(JSON.stringify(q.pairs));
+    shuffle(pairs);
+
+    const rightOptions = pairs.map(p => p.right);
+    shuffle(rightOptions);
+
+    pairs.forEach(pair => {
+        const row = document.createElement("div");
+        row.className = "match-row";
+        row.dataset.correct = pair.right;
+
+        const left = document.createElement("div");
+        left.className = "match-left";
+        left.innerText = pair.left;
+
+        const select = document.createElement("select");
+
+        // ===== OPTION MẶC ĐỊNH =====
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.innerText = "Select";
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        select.appendChild(placeholder);
+
+        // ===== CÁC ĐÁP ÁN =====
+        rightOptions.forEach(r => {
+            const op = document.createElement("option");
+            op.value = r;
+            op.innerText = r;
+            select.appendChild(op);
+        });
+
+        row.appendChild(left);
+        row.appendChild(select);
+        aEl.appendChild(row);
+    });
+}
+
+/* ====== SUBMIT ====== */
+submitBtn.onclick = () => {
+    if (submitted) return;
+    submitted = true;
+
+    const q = questions[idx];
+    let ok = true;
+
+    /* ===== SINGLE ===== */
+    if (q.type === "single") {
+        let chosen = document.querySelector(".chosen");
+        ok = false;
+
+        document.querySelectorAll(".answer-card").forEach(c => {
+            if (c.innerText === q.correct[0]) {
+                c.classList.remove("chosen");
+                c.classList.add("correct");
+            } else if (c === chosen) {
+                c.classList.remove("chosen");
+                c.classList.add("wrong");
+            }
+        });
+
+        if (chosen && chosen.innerText === q.correct[0]) {
+            ok = true;
+        }
+    }
+
+    /* ===== MULTIPLE ===== */
+    if (q.type === "multiple") {
+    let chosen = [];
+    document.querySelectorAll(".answer-card.multiple.chosen")
+        .forEach(c => chosen.push(c.querySelector(".text").innerText.trim()));
+
+    ok = chosen.length === q.correct.length &&
+         chosen.every(c => q.correct.includes(c));
+
+    document.querySelectorAll(".answer-card.multiple").forEach(c => {
+        let text = c.querySelector(".text").innerText.trim();
+        c.classList.remove("chosen");
+
+        if (q.correct.includes(text)) {
+            c.classList.add("correct"); // ✓ hiện
+        } else if (chosen.includes(text)) {
+            c.classList.add("wrong");   // không ✓
+        }
+    });
+}
+
+    /* ===== FILL ===== */
+    if (q.type === "fill") {
+        let v = document.getElementById("fillAns").value.trim().toLowerCase();
+        ok = q.correct.map(c => c.toLowerCase()).includes(v);
+        info.innerHTML = ok ? "✅ Đúng" : "❌ Đúng: " + q.correct[0];
+    }
+
+    /* ===== MATCH ===== */
+    if(q.type === "match"){
+      ok = true;
+      const rows = document.querySelectorAll(".match-row");
+
+      rows.forEach(row => {
+          const select = row.querySelector("select");
+          const correct = row.dataset.correct;
+
+          select.disabled = true;
+
+          if(select.value === correct){
+              select.classList.add("match-correct");
+          }else{
+              select.value = correct;          // sửa lại đáp án đúng
+              select.classList.add("match-wrong");
+              ok = false;
+          }
+      });
+    }
+
+    /* ===== ĐẾM ĐÚNG / SAI ===== */
+    if (ok) {
+      score++;
+      correctCount++;
+    } else {
+      wrongCount++;
+      wrongQuestions.push(questions[idx]);
+    }
+
+    document.getElementById("correctCount").innerText = correctCount;
+    document.getElementById("wrongCount").innerText = wrongCount;
+
+    /* ===== KHÓA ĐÁP ÁN + HIỆN NEXT ===== */
+    submitBtn.style.display = "none";
+    nextBtn.style.display = "inline-block";
+
+    document.querySelectorAll(".answer-card")
+        .forEach(c => c.onclick = null);
+};
+
+/* ====== NEXT ====== */
+nextBtn.onclick=()=>{
+ idx++;
+ load();
+};
+
+document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+
+    // Nếu đang nhập text (fill blank) thì cho Enter hoạt động bình thường
+    if (document.activeElement.tagName === "INPUT") return;
+
+    // Chưa submit → Enter = SUBMIT
+    if (!submitted && submitBtn.style.display !== "none") {
+        submitBtn.click();
+    }
+    // Đã submit → Enter = NEXT
+    else if (submitted && nextBtn.style.display !== "none") {
+        nextBtn.click();
+    }
+});
+
+function startReview() {
+    questions = [...wrongQuestions];
+    shuffle(questions);
+
+    idx = 0;
+    score = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    submitted = false;
+    reviewMode = true;
+
+    wrongQuestions = [];
+    reviewArea.innerHTML = "";
+
+    document.getElementById("correctCount").innerText = 0;
+    document.getElementById("wrongCount").innerText = 0;
+    document.getElementById("totalCount").innerText = questions.length;
+    document.getElementById("totalCount2").innerText = questions.length;
+
+    load();
+}
+
+function goBack(){
+    window.location.href = "on_tap.html";
+}
+
+</script>
+</body>
+</html>
