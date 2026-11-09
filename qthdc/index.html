@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Ứng dụng ôn tập trắc nghiệm</title>
+<title>Ôn tập Quản trị học đại cương</title>
 
 <style>
 * {
@@ -289,7 +289,7 @@ select{
 </head>
 
 <body>
-  <button type="button" class="back-btn" onclick="goBack()" aria-label="Quay lại">
+    <button type="button" class="back-btn" onclick="goBack()" aria-label="Quay lại">
     <svg viewBox="0 0 24 24" aria-hidden="true">
         <path
             d="M15 18L9 12L15 6"
@@ -333,6 +333,7 @@ select{
 <script>
 /* ====== DỮ LIỆU ====== */
 let questions=[
+    
     {
         "type": "single",
         "q": "Quản trị được thực hiện trong một tổ chức nhằm",
@@ -775,32 +776,6 @@ let questions=[
             "Làm việc đúng cách"
         ]
     },
-    // {
-    //     "type": "single",
-    //     "q": "Trong quản trị tổ chức, quan trọng nhất là",
-    //     "options": [
-    //         "Làm đúng việc",
-    //         "Làm việc đúng cách",
-    //         "Đạt được lợi nhuận",
-    //         "Chi phí thấp"
-    //     ],
-    //     "correct": [
-    //         "Làm đúng việc"
-    //     ]
-    // },
-    // {
-    //     "type": "single",
-    //     "q": "Trong quản trị tổ chức, quan trọng nhất là",
-    //     "options": [
-    //         "Thực hiện mục tiêu đúng với hiệu suất cao",
-    //         "Làm đúng việc",
-    //         "Đạt được lợi nhuận",
-    //         "Chi phí thấp nhất"
-    //     ],
-    //     "correct": [
-    //         "Làm đúng việc"
-    //     ]
-    // },
     {
         "type": "single",
         "q": "Hiệu quả và hiệu suất của quản trị chỉ có được khi",
@@ -866,7 +841,7 @@ let questions=[
             "Có mối quan hệ biện chứng giữa khoa học và nghệ thuật quản trị"
         ]
     },
-    { 
+    {
         "type": "single",
         "q": "Phát biểu nào sau đây không đúng?",
         "options": [
@@ -1557,19 +1532,6 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Điền vào chỗ trống: \"Nhà quản trị cấp thấp thì kỹ năng ... càng quan trọng.\"",
-        "options": [
-            "Tư duy",
-            "Nhân sự",
-            "Giao tiếp",
-            "Chuyên môn"
-        ],
-        "correct": [
-            "Chuyên môn"
-        ]
-    },
-    {
-        "type": "single",
         "q": "Nhà quản trị cấp cao có nhiệm vụ đề ra chiến lược đồng thời triển khai các mục tiêu chiến lược đó không?",
         "options": [
             "Sai vì nhà quản trị cấp trung gian và cấp cơ sở sẽ triển khai các chiến lược đó",
@@ -1687,19 +1649,6 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Mối quan hệ giữa các cấp bậc quản trị và các kỹ năng của nhà quản trị là:",
-        "options": [
-            "Ở bậc quản trị càng cao kỹ năng kỹ thuật càng có tầm quan trọng",
-            "Tất cả các phương án trên đều sai",
-            "Kỹ năng nhân sự có tầm quan trọng như nhau đối với các cấp bậc quản trị",
-            "Ở bậc quản trị càng cao kỹ năng nhân sự càng có tầm quan trọng"
-        ],
-        "correct": [
-            "Kỹ năng nhân sự có tầm quan trọng như nhau đối với các cấp bậc quản trị"
-        ]
-    },
-    {
-        "type": "single",
         "q": "Nhà Quản trị là người có ... điều khiển công việc của người khác nhằm đạt được mục tiêu chung của sản xuất.",
         "options": [
             "Quyền và trách nhiệm",
@@ -1755,7 +1704,7 @@ let questions=[
         "q": "Vì sao quản trị là hoạt động cần thiết với mọi tổ chức?",
         "options": [
             "Vì quản trị giúp con người gắn kết lại với nhau",
-            "Vì con người kết hợp với nhau trong các tổ chức nhằm đạt được những mục tiêu chung phải thôngผ่าน hoạt động quản trị",
+            "Vì con người kết hợp với nhau trong các tổ chức nhằm đạt được những mục tiêu chung phải thông qua hoạt động quản trị",
             "Vì quản trị không tốt thì tổ chức sẽ hoạt động kém hiệu quả",
             "Vì chỉ có quản trị thì tổ chức mới phát triển"
         ],
@@ -1839,19 +1788,6 @@ let questions=[
         ],
         "correct": [
             "Kỹ năng tư duy"
-        ]
-    },
-    {
-        "type": "single",
-        "q": "Quản trị cần thiết cho:",
-        "options": [
-            "Các tổ chức lợi nhuận và các tổ chức phi lợi nhuận",
-            "Tất cả các tổ chức",
-            "Các công ty lớn",
-            "Các doanh nghiệp hoạt động sản xuất kinh doanh"
-        ],
-        "correct": [
-            "Tất cả các tổ chức"
         ]
     },
     {
@@ -2038,19 +1974,6 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Quản trị viên cấp trung thường tập trung vào việc ra các loại quyết định nào?",
-        "options": [
-            "Tác nghiệp",
-            "Tất cả các phương án trên",
-            "Chiến lược",
-            "Chiến thuật"
-        ],
-        "correct": [
-            "Chiến thuật"
-        ]
-    },
-    {
-        "type": "single",
         "q": "Kỹ năng nào là khả năng thiết lập các mối quan hệ tốt đẹp với các đối tác, khả năng cùng làm việc, động viên và điều khiển nhân sự?",
         "options": [
             "Kỹ năng giải quyết vấn đề",
@@ -2112,19 +2035,6 @@ let questions=[
         ],
         "correct": [
             "Kỹ năng tư duy"
-        ]
-    },
-    {
-        "type": "single",
-        "q": "Kỹ năng nào cần thiết ở mức độ như nhau đối với các nhà quản trị?",
-        "options": [
-            "Tất cả các phương án trên",
-            "Kỹ thuật",
-            "Tư duy",
-            "Quan hệ con người"
-        ],
-        "correct": [
-            "Quan hệ con người"
         ]
     },
     {
@@ -2415,32 +2325,6 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "\"Quản trị hướng tổ chức đạt được mục tiêu với ... cao nhất và chi phí thấp nhất\"",
-        "options": [
-            "Sự thỏa mãn",
-            "Lợi nhuận",
-            "Kết quả",
-            "Lợi ích"
-        ],
-        "correct": [
-            "Kết quả"
-        ]
-    },
-    {
-        "type": "single",
-        "q": "Nhà quản lý là người chịu trách nhiệm trực tiếp điều hành, phối hợp và kiểm tra công việc của nhân viên dưới quyền, đây là mô tả cho vai trò quản lý nào?",
-        "options": [
-            "Vai trò truyền thông.",
-            "Vai trò liên kết.",
-            "Vai trò lãnh đạo.",
-            "Vai trò đại diện."
-        ],
-        "correct": [
-            "Vai trò lãnh đạo."
-        ]
-    },
-    {
-        "type": "single",
         "q": "Mệnh đề nào KHÔNG phải là một trong những vai trò của hoạt động quản trị?",
         "options": [
             "Bù đắp sự thiếu hụt về tài nguyên.",
@@ -2505,7 +2389,580 @@ let questions=[
         ]
     },
 
-    //////CHƯƠNG 2
+
+    //////////////////CHƯƠNG 2
+    {
+        "type": "single",
+        "q": "Các tổ chức cung cấp các sản phẩm, dịch vụ cùng loại với sản phẩm, dịch vụ mà doanh nghiệp đang cung cấp trên thị trường được gọi là",
+        "options": [
+            "Đối thủ cạnh tranh trực tiếp",
+            "Các nhà phân phối",
+            "Các khách hàng",
+            "Đối thủ cạnh tranh tiềm năng"
+        ],
+        "correct": [
+            "Đối thủ cạnh tranh trực tiếp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào sau đây không thuộc môi trường quản trị vi mô",
+        "options": [
+            "Khoa học công nghệ",
+            "Đối thủ cạnh tranh",
+            "Nhà cung cấp",
+            "Khách hàng"
+        ],
+        "correct": [
+            "Khoa học công nghệ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phân loại kế hoạch thành kế hoạch chiến lược và kế hoạch tác nghiệp là dựa trên tiêu chí:",
+        "options": [
+            "Thời gian",
+            "Phạm vi hoạt động",
+            "Mức độ cụ thể",
+            "Tần suất sử dụng"
+        ],
+        "correct": [
+            "Phạm vi hoạt động"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người ta thường sử dụng kế hoạch chiến lược nhằm",
+        "options": [
+            "Thực hiện kế hoạch hoạt động hàng quý",
+            "Giải quyết công việc hàng ngày",
+            "Xây dựng quy trình làm việc hàng ngày",
+            "Xác định tương lai lâu dài của doanh nghiệp"
+        ],
+        "correct": [
+            "Xác định tương lai lâu dài của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường nội bộ của doanh nghiệp",
+        "options": [
+            "Triết lý kinh doanh, nhân sự, nhà cung cấp, khách hàng, mục tiêu",
+            "Cơ sở vật chất, triết lý kinh doanh, nhân sự, nhà cung cấp, mục tiêu",
+            "Cơ sở vật chất, mục tiêu, triết lý kinh doanh, chiến lược, nhân sự",
+            "Cơ sở vật chất, triết lý kinh doanh, khách hàng, nhân sự, mục tiêu"
+        ],
+        "correct": [
+            "Cơ sở vật chất, mục tiêu, triết lý kinh doanh, chiến lược, nhân sự"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các phương án dưới đây là nguyên tắc lập kế hoạch, trừ",
+        "options": [
+            "Tạo môi trường làm việc có kế hoạch trong tổ chức",
+            "Kế hoạch cần được lập càng nhanh càng tốt",
+            "Cần có sự phối hợp giữa các loại kế hoạch",
+            "Kế hoạch cần linh hoạt"
+        ],
+        "correct": [
+            "Kế hoạch cần linh hoạt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Loại kế hoạch nào xác định vị thế của doanh nghiệp trong môi trường hoạt động?",
+        "options": [
+            "Thường trực",
+            "Cụ thể",
+            "Tác nghiệp",
+            "Chiến lược"
+        ],
+        "correct": [
+            "Chiến lược"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch tác nghiệp có",
+        "options": [
+            "Rủi ro lớn",
+            "Môi trường xác định",
+            "Kết quả lâu dài",
+            "Mục tiêu cụ thể, rõ ràng"
+        ],
+        "correct": [
+            "Mục tiêu cụ thể, rõ ràng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Tất cả nhân viên phải nghiêm túc tuân thủ các tiêu chuẩn về an toàn lao động\" là một ví dụ của",
+        "options": [
+            "Thủ tục",
+            "Chính sách",
+            "Quy tắc",
+            "Chương trình"
+        ],
+        "correct": [
+            "Quy tắc"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Một phương pháp quản trị bằng mục tiêu (MBO) là:",
+        "options": [
+            "Xác định các mục tiêu cụ thể của đơn vị",
+            "Việc hoàn thành mục tiêu được thúc đẩy bởi hệ thống mục tiêu đã đề ra và phần thưởng dựa trên thành tích",
+            "Kiểm tra thường xuyên tiến trình thực hiện các mục tiêu, thông tin phản hồi được cung cấp",
+            "Xác định mục tiêu tổng thể và chiến lược"
+        ],
+        "correct": [
+            "Việc hoàn thành mục tiêu được thúc đẩy bởi hệ thống mục tiêu đã đề ra và phần thưởng dựa trên thành tích"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong chiến lược chi phí thấp, yếu tố nào được ưu tiên nhiều nhất",
+        "options": [
+            "Đổi mới",
+            "Khả năng đáp ứng nhu cầu khách hàng",
+            "Hiệu suất",
+            "Chất lượng"
+        ],
+        "correct": [
+            "Hiệu suất"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà cung cấp và khách hàng là yếu tố thuộc:",
+        "options": [
+            "Môi trường quản trị vĩ mô",
+            "Môi trường quản trị vi mô",
+            "Môi trường xã hội",
+            "Môi trường nội bộ"
+        ],
+        "correct": [
+            "Môi trường quản trị vi mô"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào tác động trực tiếp tới doanh nghiệp",
+        "options": [
+            "Vai trò của chính phủ",
+            "Người tiêu dùng sản phẩm của doanh nghiệp",
+            "Tăng trưởng kinh tế",
+            "Văn hóa xã hội"
+        ],
+        "correct": [
+            "Người tiêu dùng sản phẩm của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây thể hiện thách thức của công ty?",
+        "options": [
+            "Tỷ lệ sản phẩm sai hỏng của bộ phận sản xuất cao",
+            "Nhu cầu của khách hàng về sản phẩm của công ty ngày càng tăng",
+            "Hoạt động nghiên cứu và phát triển sản phẩm mới của công ty có kết quả tốt",
+            "Nguồn nguyên liệu ngày càng khan hiếm"
+        ],
+        "correct": [
+            "Nguồn nguyên liệu ngày càng khan hiếm"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là những hoạt động cần thiết được sắp xếp theo trình tự thời gian và nhờ đó, hoạt động của các bộ phận được diễn ra một cách hiệu quả",
+        "options": [
+            "Quy trình",
+            "Quy tắc",
+            "Chính sách",
+            "Thủ tục"
+        ],
+        "correct": [
+            "Thủ tục"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây thể hiện điểm mạnh của công ty?",
+        "options": [
+            "Thị trường chưa được khai thác hết",
+            "Năng suất lao động của công ty cao",
+            "Chính sách thuế ưu đãi của cơ quan quản lý nhà nước với nguyên vật liệu của công ty",
+            "Cơ quan quản lý nhà nước tăng cường kiểm tra hoạt động của công ty"
+        ],
+        "correct": [
+            "Năng suất lao động của công ty cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hoạch định là :",
+        "options": [
+            "Công việc của các nhà quản trị cấp cao",
+            "Một công việc mang tính cứng nhắc",
+            "Công việc của mọi nhà quản trị các cấp",
+            "Kiểm tra quá trình thực hiện"
+        ],
+        "correct": [
+            "Công việc của các nhà quản trị cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc mở rộng sản lượng tiềm năng của một quốc gia trong một giai đoạn nhất định là",
+        "options": [
+            "Tăng trưởng GNP",
+            "Phát triển kinh tế",
+            "Tăng trưởng GDP",
+            "Tăng trưởng kinh tế"
+        ],
+        "correct": [
+            "Tăng trưởng GNP"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Văn hóa tổ chức thuộc yếu tố môi trường",
+        "options": [
+            "Nội bộ",
+            "Vĩ mô",
+            "Vi mô",
+            "Bên ngoài"
+        ],
+        "correct": [
+            "Nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào là những yếu tố của môi trường bên ngoài có tác động tích cực đến hoạt động của tổ chức?",
+        "options": [
+            "Các nguy cơ",
+            "Các điểm mạnh",
+            "Các điểm yếu",
+            "Các cơ hội"
+        ],
+        "correct": [
+            "Các cơ hội"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hoạch định do các nhà quản trị cấp cao đưa ra",
+        "options": [
+            "Hoạch định tác nghiệp",
+            "Hoạch định kế hoạch, hoạch định chiến lược",
+            "Hoạch định chiến lược",
+            "Hoạch định chiến lược, hoạch định tác nghiệp"
+        ],
+        "correct": [
+            "Hoạch định chiến lược"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch chiến lược có",
+        "options": [
+            "Mục tiêu cụ thể, rõ ràng",
+            "Kết quả có thể điều chỉnh",
+            "Môi trường biến đổi",
+            "Rủi ro hạn chế"
+        ],
+        "correct": [
+            "Môi trường biến đổi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Lạm phát năm nay tăng hơn so với năm ngoái khiến người tiêu dùng thắt chặt chi tiêu, ảnh hưởng đến hoạt động của doanh nghiệp, đó là ảnh hưởng của yếu tố",
+        "options": [
+            "Kinh tế",
+            "Xã hội",
+            "Khách hàng",
+            "Dân số"
+        ],
+        "correct": [
+            "Kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Bước đầu tiên của quá trình hoạch định chiến lược là:",
+        "options": [
+            "Phân tích môi trường bên ngoài",
+            "Xác định sứ mạng, mục tiêu và các chiến lược hiện tại của doanh nghiệp",
+            "Phân tích những gì đối thủ cạnh tranh đang làm",
+            "Hình thành các chiến lược"
+        ],
+        "correct": [
+            "Xác định sứ mạng, mục tiêu và các chiến lược hiện tại của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Đối với công ty điện tử Samsung, các siêu thị điện máy, các cửa hàng giới thiệu sản phẩm điện máy, các đại lý bán hàng của Samsung là các ví dụ minh họa cho yếu tố nào dưới đây",
+        "options": [
+            "Các đối thủ cạnh tranh",
+            "Các khách hàng tiềm ẩn",
+            "Các nhà cung cấp",
+            "Các nhà phân phối"
+        ],
+        "correct": [
+            "Các nhà phân phối"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào là các đảm bảo vật chất cho việc thực hiện kế hoạch, đồng thời nó cũng là công cụ giúp cho nhà quản lý có thể kiểm tra được tiến độ thực hiện kế hoạch thông qua việc kiểm tra các nguồn thu và chi?",
+        "options": [
+            "Chương trình",
+            "Chính sách",
+            "Quy tắc",
+            "Ngân quỹ"
+        ],
+        "correct": [
+            "Ngân quỹ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc tìm kiếm cơ hội phát triển trong các thị trường mà doanh nghiệp đang hoạt động với những hàng hoá hay dịch vụ hiện có là",
+        "options": [
+            "Chiến lược phát triển sản phẩm",
+            "Chiến lược đa dạng hoá trong kinh doanh",
+            "Chiến lược mở rộng thị trường",
+            "Chiến lược thâm nhập thị trường"
+        ],
+        "correct": [
+            "Chiến lược thâm nhập thị trường"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch chiến lược của doanh nghiệp thường do người quản lý cấp nào lập ra",
+        "options": [
+            "Cấp cơ sở",
+            "Cấp cao",
+            "Tất cả các phương án trên không đúng",
+            "Cấp trung"
+        ],
+        "correct": [
+            "Cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Không có đặc điểm nào dưới đây khi thiết lập một mục tiêu",
+        "options": [
+            "Thách thức và mang tính khả thi",
+            "Phải trình bày bằng văn bản",
+            "Mang tính dài hạn",
+            "Được phổ biến cho mọi đối tượng có liên quan"
+        ],
+        "correct": [
+            "Mang tính dài hạn"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chiến lược khác biệt hóa đòi hỏi",
+        "options": [
+            "Sản phẩm được thiết kế đặc biệt",
+            "Sản phẩm được thiết kế để sản xuất hàng loạt",
+            "Đẩy mạnh kênh phân phối",
+            "Đẩy mạnh chiến lược Marketing"
+        ],
+        "correct": [
+            "Sản phẩm được thiết kế đặc biệt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc lựa chọn chiến lược để đạt được mục tiêu của tổ chức là một phần của",
+        "options": [
+            "Chức năng tổ chức",
+            "Chức năng hoạch định",
+            "Chức năng lãnh đạo",
+            "Chức năng kiểm soát"
+        ],
+        "correct": [
+            "Chức năng hoạch định"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây là căn cứ lập kế hoạch",
+        "options": [
+            "Tổng số nhân công",
+            "Xu hướng thị trường",
+            "Hệ thống phân phối của doanh nghiệp",
+            "Tất cả các phương án trên đều đúng"
+        ],
+        "correct": [
+            "Tất cả các phương án trên đều đúng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các kế hoạch được áp dụng cho từng bộ phận trong tổ chức, chỉ ra cách thức đạt được mục tiêu và liên quan tới công việc hàng ngày của tổ chức, được gọi là kế hoạch gì?",
+        "options": [
+            "Kế hoạch định hướng",
+            "Kế hoạch dài hạn",
+            "Kế hoạch tác nghiệp",
+            "Kế hoạch chiến lược"
+        ],
+        "correct": [
+            "Kế hoạch tác nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc tìm kiếm những thị trường mới cho những sản phẩm hiện có là",
+        "options": [
+            "Chiến lược mở rộng thị trường",
+            "Chiến lược thâm nhập thị trường",
+            "Chiến lược đa dạng hoá trong kinh doanh",
+            "Chiến lược phát triển sản phẩm"
+        ],
+        "correct": [
+            "Chiến lược mở rộng thị trường"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào không nằm trong môi trường nội bộ của doanh nghiệp",
+        "options": [
+            "Khách hàng",
+            "Nhân sự",
+            "Chiến lược",
+            "Sứ mệnh"
+        ],
+        "correct": [
+            "Khách hàng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường hoạt động của tổ chức là:",
+        "options": [
+            "Môi trường nội bộ",
+            "Môi trường ngành",
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ",
+            "Môi trường vĩ mô"
+        ],
+        "correct": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tồn trữ vật tư để dự phòng biến động giá cả, Bảo trì phòng ngừa những chi tiết vật tư đã đến kỳ bảo dưỡng, thay thế; Tuyển và huấn luyện nhân viên mới vào những mùa vụ hay có biến động nhân sự là các ví dụ minh họa cho giải pháp quản trị biến động môi trường nào dưới đây",
+        "options": [
+            "Hợp đồng",
+            "Dùng đệm (phòng ngừa)",
+            "Kết nạp",
+            "Cấp hạn chế"
+        ],
+        "correct": [
+            "Dùng đệm (phòng ngừa)"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong quản lý kế hoạch chiến lược, yếu tố nào xác định mục đích của tổ chức và trả lời câu hỏi: \"lý do tồn tại, hoạt động của tổ chức là gì\"",
+        "options": [
+            "Sứ mệnh.",
+            "Chiến lược.",
+            "Mục tiêu.",
+            "Đánh giá."
+        ],
+        "correct": [
+            "Sứ mệnh."
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường quản trị trong một tổ chức bao gồm",
+        "options": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ",
+            "Môi trường vĩ mô, môi trường vi mô, môi trường văn hóa – xã hội",
+            "Môi trường bên trong và môi trường vĩ mô",
+            "Môi trường cạnh tranh, môi trường văn hóa – xã hội, môi trường nội bộ"
+        ],
+        "correct": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường văn hoá xã hội là môi trường",
+        "options": [
+            "Môi trường có đặc tính bất biến",
+            "Môi trường tiềm ẩn đặc tính ổn định và sự thay đổi",
+            "Môi trường có đặc tính thay đổi",
+            "Môi trường có đặc tính ổn định"
+        ],
+        "correct": [
+            "Môi trường tiềm ẩn đặc tính ổn định và sự thay đổi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phát biểu này là một phần của quá trình hoạch định trong tổ chức, thể hiện ý nghĩa về sự tồn tại của doanh nghiệp",
+        "options": [
+            "Phân quyền trong tổ chức",
+            "Phát biểu sứ mệnh",
+            "Hoạch định mục tiêu",
+            "Sắp xếp lại nguồn nhân lực"
+        ],
+        "correct": [
+            "Phát biểu sứ mệnh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nói một cách điển hình, yếu tố nào sau đây thuộc môi trường ngành của tổ chức?",
+        "options": [
+            "Các yếu tố công nghệ",
+            "Các điều kiện chính trị",
+            "Các yếu tố kinh tế",
+            "Đối thủ cạnh tranh"
+        ],
+        "correct": [
+            "Đối thủ cạnh tranh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Theo ma trận BCG, một SBU có các sản phẩm trong một ngành hấp dẫn nhưng lại có thị phần thấp thì được gọi là",
+        "options": [
+            "Con chó",
+            "Ngôi sao",
+            "Con bò sữa",
+            "Dấu chấm hỏi"
+        ],
+        "correct": [
+            "Dấu chấm hỏi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Xây dựng ngân quỹ là khi người quản lý",
+        "options": [
+            "Xác định số tiền cần huy động để thực hiện dự án",
+            "Xây dựng phương án phụ trợ",
+            "Xác định mục tiêu của kế hoạch",
+            "Tất cả các phương án trên sai"
+        ],
+        "correct": [
+            "Xác định số tiền cần huy động để thực hiện dự án"
+        ]
+    },
     {
         "type": "single",
         "q": "Quản trị theo học thuyết Z là",
@@ -2536,25 +2993,14 @@ let questions=[
         "type": "single",
         "q": "Tác giả của học thuyết Z là",
         "options": [
-            "Người Mỹ",
-            "Người Nhật",
-            "Người Mỹ gốc Nhật",
-            "Một người khác"
-        ],
-        "correct": [
-            "Người Mỹ gốc Nhật"
-        ]
-    },
-    {
-        "type": "single",
-        "q": "Tác giả của học thuyết Z là",
-        "options": [
             "William Ouchi",
             "Frederick Herzberg",
             "Douglas McGregor",
             "Henry Fayol"
         ],
-        "correct": [ "William Ouchi" ]
+        "correct": [
+            "William Ouchi"
+        ]
     },
     {
         "type": "single",
@@ -2753,19 +3199,6 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Điền vào chỗ trống: \"Theo trường phái định lượng tất cả các vấn đề quản trị đều có thể ... được bằng các mô hình toán.\"",
-        "options": [
-            "Mô tả",
-            "Giải quyết",
-            "Mô phỏng",
-            "Trả lời"
-        ],
-        "correct": [
-            "Giải quyết"
-        ]
-    },
-    {
-        "type": "single",
         "q": "Người đưa ra nguyên tắc \"tổ chức công việc khoa học\" là",
         "options": [
             "W. Taylor",
@@ -2799,7 +3232,9 @@ let questions=[
             "Cả (*) & (**)",
             "Quản trị định lượng"
         ],
-        "correct": ["Cả (*) & (**)"]
+        "correct": [
+            "Cả (*) & (**)"
+        ]
     },
     {
         "type": "single",
@@ -2855,15 +3290,929 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Trường phái \"quá trình quản trị\" được đề ra bởi",
+        "q": "Người đưa ra khái niệm về \"quyền hành thực tế\" là",
+        "options": [
+            "Fayol",
+            "Weber",
+            "Simon",
+            "Một người khác"
+        ],
+        "correct": [
+            "Weber"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các yếu tố trong mô hình 7'S của McKinsey là:",
+        "options": [
+            "Chiến lược; cơ cấu; hệ thống; tài chính; kỹ năng; nhân viên; mục tiêu phối hợp",
+            "Chiến lược; hệ thống; mục tiêu phối hợp; phong cách; công nghệ; tài chính; nhân viên",
+            "Chiến lược; kỹ năng; mục tiêu phối hợp; cơ cấu; hệ thống; nhân viên; phong cách",
+            "Chiến lược; cơ cấu; hệ thống; đào tạo; mục tiêu; kỹ năng; nhân viên"
+        ],
+        "correct": [
+            "Chiến lược; kỹ năng; mục tiêu phối hợp; cơ cấu; hệ thống; nhân viên; phong cách"
+        ]
+    }, 
+
+
+
+    ////////////////CHƯƠNG 3
+    {
+        "type": "single",
+        "q": "Các tổ chức cung cấp các sản phẩm, dịch vụ cùng loại với sản phẩm, dịch vụ mà doanh nghiệp đang cung cấp trên thị trường được gọi là",
+        "options": [
+            "Đối thủ cạnh tranh trực tiếp",
+            "Các nhà phân phối",
+            "Các khách hàng",
+            "Đối thủ cạnh tranh tiềm năng"
+        ],
+        "correct": [
+            "Đối thủ cạnh tranh trực tiếp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào sau đây không thuộc môi trường quản trị vi mô",
+        "options": [
+            "Khoa học công nghệ",
+            "Đối thủ cạnh tranh",
+            "Nhà cung cấp",
+            "Khách hàng"
+        ],
+        "correct": [
+            "Khoa học công nghệ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phân loại kế hoạch thành kế hoạch chiến lược và kế hoạch tác nghiệp là dựa trên tiêu chí:",
+        "options": [
+            "Thời gian",
+            "Phạm vi hoạt động",
+            "Mức độ cụ thể",
+            "Tần suất sử dụng"
+        ],
+        "correct": [
+            "Phạm vi hoạt động"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người ta thường sử dụng kế hoạch chiến lược nhằm",
+        "options": [
+            "Thực hiện kế hoạch hoạt động hàng quý",
+            "Giải quyết công việc hàng ngày",
+            "Xây dựng quy trình làm việc hàng ngày",
+            "Xác định tương lai lâu dài của doanh nghiệp"
+        ],
+        "correct": [
+            "Xác định tương lai lâu dài của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường nội bộ của doanh nghiệp",
+        "options": [
+            "Triết lý kinh doanh, nhân sự, nhà cung cấp, khách hàng, mục tiêu",
+            "Cơ sở vật chất, triết lý kinh doanh, nhân sự, nhà cung cấp, mục tiêu",
+            "Cơ sở vật chất, mục tiêu, triết lý kinh doanh, chiến lược, nhân sự",
+            "Cơ sở vật chất, triết lý kinh doanh, khách hàng, nhân sự, mục tiêu"
+        ],
+        "correct": [
+            "Cơ sở vật chất, mục tiêu, triết lý kinh doanh, chiến lược, nhân sự"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các phương án dưới đây là nguyên tắc lập kế hoạch, trừ",
+        "options": [
+            "Tạo môi trường làm việc có kế hoạch trong tổ chức",
+            "Kế hoạch cần được lập càng nhanh càng tốt",
+            "Cần có sự phối hợp giữa các loại kế hoạch",
+            "Kế hoạch cần linh hoạt"
+        ],
+        "correct": [
+            "Kế hoạch cần linh hoạt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Loại kế hoạch nào xác định vị thế của doanh nghiệp trong môi trường hoạt động?",
+        "options": [
+            "Thường trực",
+            "Cụ thể",
+            "Tác nghiệp",
+            "Chiến lược"
+        ],
+        "correct": [
+            "Chiến lược"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch tác nghiệp có",
+        "options": [
+            "Rủi ro lớn",
+            "Môi trường xác định",
+            "Kết quả lâu dài",
+            "Mục tiêu cụ thể, rõ ràng"
+        ],
+        "correct": [
+            "Mục tiêu cụ thể, rõ ràng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Tất cả nhân viên phải nghiêm túc tuân thủ các tiêu chuẩn về an toàn lao động\" là một ví dụ của",
+        "options": [
+            "Thủ tục",
+            "Chính sách",
+            "Quy tắc",
+            "Chương trình"
+        ],
+        "correct": [
+            "Quy tắc"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Một phương pháp quản trị bằng mục tiêu (MBO) là:",
+        "options": [
+            "Xác định các mục tiêu cụ thể của đơn vị",
+            "Việc hoàn thành mục tiêu được thúc đẩy bởi hệ thống mục tiêu đã đề ra và phần thưởng dựa trên thành tích",
+            "Kiểm tra thường xuyên tiến trình thực hiện các mục tiêu, thông tin phản hồi được cung cấp",
+            "Xác định mục tiêu tổng thể và chiến lược"
+        ],
+        "correct": [
+            "Việc hoàn thành mục tiêu được thúc đẩy bởi hệ thống mục tiêu đã đề ra và phần thưởng dựa trên thành tích"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong chiến lược chi phí thấp, yếu tố nào được ưu tiên nhiều nhất",
+        "options": [
+            "Đổi mới",
+            "Khả năng đáp ứng nhu cầu khách hàng",
+            "Hiệu suất",
+            "Chất lượng"
+        ],
+        "correct": [
+            "Hiệu suất"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà cung cấp và khách hàng là yếu tố thuộc:",
+        "options": [
+            "Môi trường quản trị vĩ mô",
+            "Môi trường quản trị vi mô",
+            "Môi trường xã hội",
+            "Môi trường nội bộ"
+        ],
+        "correct": [
+            "Môi trường quản trị vi mô"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào tác động trực tiếp tới doanh nghiệp",
+        "options": [
+            "Vai trò của chính phủ",
+            "Người tiêu dùng sản phẩm của doanh nghiệp",
+            "Tăng trưởng kinh tế",
+            "Văn hóa xã hội"
+        ],
+        "correct": [
+            "Người tiêu dùng sản phẩm của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây thể hiện thách thức của công ty?",
+        "options": [
+            "Tỷ lệ sản phẩm sai hỏng của bộ phận sản xuất cao",
+            "Nhu cầu của khách hàng về sản phẩm của công ty ngày càng tăng",
+            "Hoạt động nghiên cứu và phát triển sản phẩm mới của công ty có kết quả tốt",
+            "Nguồn nguyên liệu ngày càng khan hiếm"
+        ],
+        "correct": [
+            "Nguồn nguyên liệu ngày càng khan hiếm"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là những hoạt động cần thiết được sắp xếp theo trình tự thời gian và nhờ đó, hoạt động của các bộ phận được diễn ra một cách hiệu quả",
+        "options": [
+            "Quy trình",
+            "Quy tắc",
+            "Chính sách",
+            "Thủ tục"
+        ],
+        "correct": [
+            "Thủ tục"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây thể hiện điểm mạnh của công ty?",
+        "options": [
+            "Thị trường chưa được khai thác hết",
+            "Năng suất lao động của công ty cao",
+            "Chính sách thuế ưu đãi của cơ quan quản lý nhà nước với nguyên vật liệu của công ty",
+            "Cơ quan quản lý nhà nước tăng cường kiểm tra hoạt động của công ty"
+        ],
+        "correct": [
+            "Năng suất lao động của công ty cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hoạch định là :",
+        "options": [
+            "Công việc của các nhà quản trị cấp cao",
+            "Một công việc mang tính cứng nhắc",
+            "Công việc của mọi nhà quản trị các cấp",
+            "Kiểm tra quá trình thực hiện"
+        ],
+        "correct": [
+            "Công việc của các nhà quản trị cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc mở rộng sản lượng tiềm năng của một quốc gia trong một giai đoạn nhất định là",
+        "options": [
+            "Tăng trưởng GNP",
+            "Phát triển kinh tế",
+            "Tăng trưởng GDP",
+            "Tăng trưởng kinh tế"
+        ],
+        "correct": [
+            "Tăng trưởng GNP"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Văn hóa tổ chức thuộc yếu tố môi trường",
+        "options": [
+            "Nội bộ",
+            "Vĩ mô",
+            "Vi mô",
+            "Bên ngoài"
+        ],
+        "correct": [
+            "Nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào là những yếu tố của môi trường bên ngoài có tác động tích cực đến hoạt động của tổ chức?",
+        "options": [
+            "Các nguy cơ",
+            "Các điểm mạnh",
+            "Các điểm yếu",
+            "Các cơ hội"
+        ],
+        "correct": [
+            "Các cơ hội"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hoạch định do các nhà quản trị cấp cao đưa ra",
+        "options": [
+            "Hoạch định tác nghiệp",
+            "Hoạch định kế hoạch, hoạch định chiến lược",
+            "Hoạch định chiến lược",
+            "Hoạch định chiến lược, hoạch định tác nghiệp"
+        ],
+        "correct": [
+            "Hoạch định chiến lược"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch chiến lược có",
+        "options": [
+            "Mục tiêu cụ thể, rõ ràng",
+            "Kết quả có thể điều chỉnh",
+            "Môi trường biến đổi",
+            "Rủi ro hạn chế"
+        ],
+        "correct": [
+            "Môi trường biến đổi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Lạm phát năm nay tăng hơn so với năm ngoái khiến người tiêu dùng thắt chặt chi tiêu, ảnh hưởng đến hoạt động của doanh nghiệp, đó là ảnh hưởng của yếu tố",
+        "options": [
+            "Kinh tế",
+            "Xã hội",
+            "Khách hàng",
+            "Dân số"
+        ],
+        "correct": [
+            "Kinh tế"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Bước đầu tiên của quá trình hoạch định chiến lược là:",
+        "options": [
+            "Phân tích môi trường bên ngoài",
+            "Xác định sứ mạng, mục tiêu và các chiến lược hiện tại của doanh nghiệp",
+            "Phân tích những gì đối thủ cạnh tranh đang làm",
+            "Hình thành các chiến lược"
+        ],
+        "correct": [
+            "Xác định sứ mạng, mục tiêu và các chiến lược hiện tại của doanh nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Đối với công ty điện tử Samsung, các siêu thị điện máy, các cửa hàng giới thiệu sản phẩm điện máy, các đại lý bán hàng của Samsung là các ví dụ minh họa cho yếu tố nào dưới đây",
+        "options": [
+            "Các đối thủ cạnh tranh",
+            "Các khách hàng tiềm ẩn",
+            "Các nhà cung cấp",
+            "Các nhà phân phối"
+        ],
+        "correct": [
+            "Các nhà phân phối"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào là các đảm bảo vật chất cho việc thực hiện kế hoạch, đồng thời nó cũng là công cụ giúp cho nhà quản lý có thể kiểm tra được tiến độ thực hiện kế hoạch thông qua việc kiểm tra các nguồn thu và chi?",
+        "options": [
+            "Chương trình",
+            "Chính sách",
+            "Quy tắc",
+            "Ngân quỹ"
+        ],
+        "correct": [
+            "Ngân quỹ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc tìm kiếm cơ hội phát triển trong các thị trường mà doanh nghiệp đang hoạt động với những hàng hoá hay dịch vụ hiện có là",
+        "options": [
+            "Chiến lược phát triển sản phẩm",
+            "Chiến lược đa dạng hoá trong kinh doanh",
+            "Chiến lược mở rộng thị trường",
+            "Chiến lược thâm nhập thị trường"
+        ],
+        "correct": [
+            "Chiến lược thâm nhập thị trường"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kế hoạch chiến lược của doanh nghiệp thường do người quản lý cấp nào lập ra",
+        "options": [
+            "Cấp cơ sở",
+            "Cấp cao",
+            "Tất cả các phương án trên không đúng",
+            "Cấp trung"
+        ],
+        "correct": [
+            "Cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Không có đặc điểm nào dưới đây khi thiết lập một mục tiêu",
+        "options": [
+            "Thách thức và mang tính khả thi",
+            "Phải trình bày bằng văn bản",
+            "Mang tính dài hạn",
+            "Được phổ biến cho mọi đối tượng có liên quan"
+        ],
+        "correct": [
+            "Mang tính dài hạn"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chiến lược khác biệt hóa đòi hỏi",
+        "options": [
+            "Sản phẩm được thiết kế đặc biệt",
+            "Sản phẩm được thiết kế để sản xuất hàng loạt",
+            "Đẩy mạnh kênh phân phối",
+            "Đẩy mạnh chiến lược Marketing"
+        ],
+        "correct": [
+            "Sản phẩm được thiết kế đặc biệt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc lựa chọn chiến lược để đạt được mục tiêu của tổ chức là một phần của",
+        "options": [
+            "Chức năng tổ chức",
+            "Chức năng hoạch định",
+            "Chức năng lãnh đạo",
+            "Chức năng kiểm soát"
+        ],
+        "correct": [
+            "Chức năng hoạch định"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phương án nào dưới đây là căn cứ lập kế hoạch",
+        "options": [
+            "Tổng số nhân công",
+            "Xu hướng thị trường",
+            "Hệ thống phân phối của doanh nghiệp",
+            "Tất cả các phương án trên đều đúng"
+        ],
+        "correct": [
+            "Tất cả các phương án trên đều đúng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các kế hoạch được áp dụng cho từng bộ phận trong tổ chức, chỉ ra cách thức đạt được mục tiêu và liên quan tới công việc hàng ngày của tổ chức, được gọi là kế hoạch gì?",
+        "options": [
+            "Kế hoạch định hướng",
+            "Kế hoạch dài hạn",
+            "Kế hoạch tác nghiệp",
+            "Kế hoạch chiến lược"
+        ],
+        "correct": [
+            "Kế hoạch tác nghiệp"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Việc tìm kiếm những thị trường mới cho những sản phẩm hiện có là",
+        "options": [
+            "Chiến lược mở rộng thị trường",
+            "Chiến lược thâm nhập thị trường",
+            "Chiến lược đa dạng hoá trong kinh doanh",
+            "Chiến lược phát triển sản phẩm"
+        ],
+        "correct": [
+            "Chiến lược mở rộng thị trường"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Yếu tố nào không nằm trong môi trường nội bộ của doanh nghiệp",
+        "options": [
+            "Khách hàng",
+            "Nhân sự",
+            "Chiến lược",
+            "Sứ mệnh"
+        ],
+        "correct": [
+            "Khách hàng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường hoạt động của tổ chức là:",
+        "options": [
+            "Môi trường nội bộ",
+            "Môi trường ngành",
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ",
+            "Môi trường vĩ mô"
+        ],
+        "correct": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tồn trữ vật tư để dự phòng biến động giá cả, Bảo trì phòng ngừa những chi tiết vật tư đã đến kỳ bảo dưỡng, thay thế; Tuyển và huấn luyện nhân viên mới vào những mùa vụ hay có biến động nhân sự là các ví dụ minh họa cho giải pháp quản trị biến động môi trường nào dưới đây",
+        "options": [
+            "Hợp đồng",
+            "Dùng đệm (phòng ngừa)",
+            "Kết nạp",
+            "Cấp hạn chế"
+        ],
+        "correct": [
+            "Dùng đệm (phòng ngừa)"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong quản lý kế hoạch chiến lược, yếu tố nào xác định mục đích của tổ chức và trả lời câu hỏi: \"lý do tồn tại, hoạt động của tổ chức là gì\"",
+        "options": [
+            "Sứ mệnh.",
+            "Chiến lược.",
+            "Mục tiêu.",
+            "Đánh giá."
+        ],
+        "correct": [
+            "Sứ mệnh."
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường quản trị trong một tổ chức bao gồm",
+        "options": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ",
+            "Môi trường vĩ mô, môi trường vi mô, môi trường văn hóa – xã hội",
+            "Môi trường bên trong và môi trường vĩ mô",
+            "Môi trường cạnh tranh, môi trường văn hóa – xã hội, môi trường nội bộ"
+        ],
+        "correct": [
+            "Môi trường vĩ mô, môi trường vi mô, môi trường nội bộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Môi trường văn hoá xã hội là môi trường",
+        "options": [
+            "Môi trường có đặc tính bất biến",
+            "Môi trường tiềm ẩn đặc tính ổn định và sự thay đổi",
+            "Môi trường có đặc tính thay đổi",
+            "Môi trường có đặc tính ổn định"
+        ],
+        "correct": [
+            "Môi trường tiềm ẩn đặc tính ổn định và sự thay đổi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phát biểu này là một phần của quá trình hoạch định trong tổ chức, thể hiện ý nghĩa về sự tồn tại của doanh nghiệp",
+        "options": [
+            "Phân quyền trong tổ chức",
+            "Phát biểu sứ mệnh",
+            "Hoạch định mục tiêu",
+            "Sắp xếp lại nguồn nhân lực"
+        ],
+        "correct": [
+            "Phát biểu sứ mệnh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nói một cách điển hình, yếu tố nào sau đây thuộc môi trường ngành của tổ chức?",
+        "options": [
+            "Các yếu tố công nghệ",
+            "Các điều kiện chính trị",
+            "Các yếu tố kinh tế",
+            "Đối thủ cạnh tranh"
+        ],
+        "correct": [
+            "Đối thủ cạnh tranh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Theo ma trận BCG, một SBU có các sản phẩm trong một ngành hấp dẫn nhưng lại có thị phần thấp thì được gọi là",
+        "options": [
+            "Con chó",
+            "Ngôi sao",
+            "Con bò sữa",
+            "Dấu chấm hỏi"
+        ],
+        "correct": [
+            "Dấu chấm hỏi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Xây dựng ngân quỹ là khi người quản lý",
+        "options": [
+            "Xác định số tiền cần huy động để thực hiện dự án",
+            "Xây dựng phương án phụ trợ",
+            "Xác định mục tiêu của kế hoạch",
+            "Tất cả các phương án trên sai"
+        ],
+        "correct": [
+            "Xác định số tiền cần huy động để thực hiện dự án"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quản trị theo học thuyết Z là",
+        "options": [
+            "Quản trị theo cách của Mỹ",
+            "Quản trị theo cách của Nhật Bản",
+            "Quản trị kết hợp theo cách của Mỹ và của Nhật Bản",
+            "Các cách hiểu trên đều sai"
+        ],
+        "correct": [
+            "Quản trị kết hợp theo cách của Mỹ và của Nhật Bản"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Học thuyết Z chú trọng tới",
+        "options": [
+            "Mối quan hệ con người trong tổ chức",
+            "Vấn đề lương bổng cho người lao động",
+            "Sử dụng người dài hạn",
+            "Đào tạo đa năng"
+        ],
+        "correct": [
+            "Mối quan hệ con người trong tổ chức"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác giả của học thuyết Z là",
+        "options": [
+            "William Ouchi",
+            "Frederick Herzberg",
+            "Douglas McGregor",
+            "Henry Fayol"
+        ],
+        "correct": [
+            "William Ouchi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Trường phái quản trị khoa học quan tâm đến ... lao động thông qua việc hợp lý hóa các bước công việc.\"",
+        "options": [
+            "Điều kiện",
+            "Năng suất",
+            "Môi trường",
+            "Trình độ"
+        ],
+        "correct": [
+            "Năng suất"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điểm quan tâm chung của các trường phái quản trị là",
+        "options": [
+            "Năng suất lao động",
+            "Con người",
+            "Hiệu quả",
+            "Lợi nhuận"
+        ],
+        "correct": [
+            "Hiệu quả"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điểm quan tâm chung giữa các trường phái Quản trị khoa học, Quản trị Hành chính, Quản trị định lượng là",
+        "options": [
+            "Con người",
+            "Năng suất lao động",
+            "Cách thức quản trị",
+            "Lợi nhuận"
+        ],
+        "correct": [
+            "Năng suất lao động"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Trường phái tâm lý - xã hội trong quản trị nhấn mạnh đến vai trò của yếu tố tâm lý, quan hệ của con người trong ...\"",
+        "options": [
+            "Xã hội",
+            "Bình đẳng",
+            "Đẳng cấp",
+            "Lợi ích"
+        ],
+        "correct": [
+            "Xã hội"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các lý thuyết quản trị cổ điển có hạn chế là",
+        "options": [
+            "a. Quan niệm xí nghiệp là một hệ thống khép kín",
+            "b. Chưa chú trọng đúng mức đến yếu tố con người",
+            "Cả a & b",
+            "Cách nhìn phiến diện"
+        ],
+        "correct": [
+            "Cả a & b"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Lý thuyết \"Quản trị khoa học\" được xếp vào trường phái quản trị nào?",
+        "options": [
+            "Trường phái tâm lý – xã hội",
+            "Trường phái quản trị định lượng",
+            "Trường phái quản trị cổ điển",
+            "Trường phái quản trị hiện đại"
+        ],
+        "correct": [
+            "Trường phái quản trị cổ điển"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra 14 nguyên tắc \"Quản trị tổng quát\" là",
+        "options": [
+            "Frederick W. Taylor (1856-1915)",
+            "Henry Fayol (1814-1925)",
+            "Max Weber (1864-1920)",
+            "Douglas McGregor (1900-1964)"
+        ],
+        "correct": [
+            "Henry Fayol (1814-1925)"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tư tưởng của trường phái quản trị tổng quát (hành chính) thể hiện qua",
+        "options": [
+            "14 nguyên tắc của H. Fayol",
+            "4 nguyên tắc của W. Taylor",
+            "6 phạm trù của công việc quản trị",
+            "Mô hình tổ chức quan liêu bàn giấy"
+        ],
+        "correct": [
+            "14 nguyên tắc của H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Trường phái quản trị quá trình\" được Harold Koontz đề ra trên cơ sở tư tưởng của",
+        "options": [
+            "H. Fayol",
+            "M. Weber",
+            "R. Owen",
+            "W. Taylor"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Điền vào chỗ trống: \"Theo trường phái định lượng tất cả các vấn đề quản trị đều có thể giải quyết được bằng ...\"",
+        "options": [
+            "Mô tả",
+            "Mô hình toán",
+            "Mô phỏng",
+            "Kỹ thuật khác nhau"
+        ],
+        "correct": [
+            "Mô hình toán"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tác giả của \"Trường phái quản trị quá trình\" là",
         "options": [
             "Harold Koontz",
             "Henry Fayol",
-            "Winslow Taylor",
-            "Tất cả đều sai"
+            "R. Owen",
+            "Max Weber"
         ],
         "correct": [
             "Harold Koontz"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trường phái Hội nhập trong quản trị được xây dựng từ",
+        "options": [
+            "Sự tích hợp các lý thuyết quản trị trên cơ sở chọn lọc",
+            "Trường phái quản trị hệ thống và trường phái ngẫu nhiên",
+            "Một số trường phái khác nhau",
+            "Quá trình hội nhập kinh tế toàn cầu"
+        ],
+        "correct": [
+            "Sự tích hợp các lý thuyết quản trị trên cơ sở chọn lọc"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mô hình 7'S theo quan điểm của McKinsey thuộc trường phái quản trị nào?",
+        "options": [
+            "Trường phái quản trị hành chính",
+            "Trường phái quản trị hội nhập",
+            "Trường phái quản trị hiện đại",
+            "Trường phái quản trị khoa học"
+        ],
+        "correct": [
+            "Trường phái quản trị hiện đại"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các tác giả nổi tiếng của trường phái tâm lý – xã hội là",
+        "options": [
+            "Mayo; Maslow; Gregor; Vroom",
+            "Simon; Mayo; Maslow; Mayo; Maslow",
+            "Maslow; Gregor; Vroom; Gantt",
+            "Taylor; Maslow; Gregor; Fayol"
+        ],
+        "correct": [
+            "Mayo; Maslow; Gregor; Vroom"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà nghiên cứu về quản trị đã đưa ra lý thuyết \"tổ chức quan liêu bàn giấy\" là",
+        "options": [
+            "M. Weber",
+            "H. Fayol",
+            "W. Taylor",
+            "E. Mayo"
+        ],
+        "correct": [
+            "M. Weber"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc \"tổ chức công việc khoa học\" là",
+        "options": [
+            "W. Taylor",
+            "H. Fayol",
+            "C. Barnard",
+            "Một người khác"
+        ],
+        "correct": [
+            "W. Taylor"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc \"tập trung & phân tán\" là",
+        "options": [
+            "C. Barnard",
+            "H. Fayol",
+            "W. Taylor",
+            "Một người khác"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Năng suất lao động là chìa khóa để đạt hiệu quả quản trị\" là quan điểm của trường phái",
+        "options": [
+            "Tâm lý - xã hội trong quản trị (*)",
+            "Quản trị khoa học (**)",
+            "Cả (*) & (**)",
+            "Quản trị định lượng"
+        ],
+        "correct": [
+            "Cả (*) & (**)"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "\"Ra quyết định đúng là chìa khóa để đạt hiệu quả quản trị\" là quan điểm của trường phái",
+        "options": [
+            "Định lượng",
+            "Khoa học",
+            "Tổng quát",
+            "Tâm lý - xã hội"
+        ],
+        "correct": [
+            "Định lượng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Các lý thuyết quản trị cổ điển",
+        "options": [
+            "Không còn đúng trong quản trị hiện đại",
+            "Còn đúng trong quản trị hiện đại",
+            "Còn có giá trị trong quản trị hiện đại",
+            "Cần phân tích để vận dụng linh hoạt"
+        ],
+        "correct": [
+            "Cần phân tích để vận dụng linh hoạt"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Người đưa ra nguyên tắc thống nhất chỉ huy là",
+        "options": [
+            "M. Weber",
+            "H. Fayol",
+            "C. Barnard",
+            "Một người khác"
+        ],
+        "correct": [
+            "H. Fayol"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nguyên tắc thẩm quyền (quyền hạn) và trách nhiệm được đề ra bởi",
+        "options": [
+            "Herbert Simon",
+            "M. Weber",
+            "Winslow Taylor",
+            "Henry Fayol"
+        ],
+        "correct": [
+            "Henry Fayol"
         ]
     },
     {
@@ -2894,20 +4243,459 @@ let questions=[
     },
     {
         "type": "single",
-        "q": "Đại diện tiêu biểu của \"Trường phái quản trị quá trình\" là:",
+        "q": "Doanh nghiệp nên lựa chọn cơ cấu tổ chức nào sau đây?",
         "options": [
-            "Harold Koontz",
-            "Henry Fayol",
-            "Robert Owen",
-            "Max Weber"
+            "Tùy theo quy mô, ngành nghề, cơ cấu mỗi doanh nghiệp",
+            "Cơ cấu kiểu chức năng",
+            "Cơ cấu ma trận",
+            "Cơ cấu kiểu trực tuyến"
         ],
         "correct": [
-            "Harold Koontz"
+            "Tùy theo quy mô, ngành nghề, cơ cấu mỗi doanh nghiệp"
         ]
     },
-
-
-    ///////CHƯƠNG 3
+    {
+        "type": "single",
+        "q": "Các nguyên tắc cơ bản của phối hợp các bộ phận trong tổ chức là gì?",
+        "options": [
+            "Nguyên tắc mỗi nhân viên có nhiều người ra mệnh lệnh, nguyên tắc định hướng",
+            "Nguyên tắc định hướng, nguyên tắc tầm mức quản trị, nguyên tắc tuân thủ",
+            "Nguyên tắc tuân thủ, nguyên tắc mệnh lệnh",
+            "Nguyên tắc mỗi nhân viên chỉ có 1 người ra mệnh lệnh, nguyên tắc định hướng, nguyên tắc tầm mức quản trị"
+        ],
+        "correct": [
+            "Nguyên tắc mỗi nhân viên chỉ có 1 người ra mệnh lệnh, nguyên tắc định hướng, nguyên tắc tầm mức quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là việc tuyển dụng, lựa chọn, bổ nhiệm, và duy trì các chức vụ bổ nhiệm trong doanh nghiệp:",
+        "options": [
+            "Không có phương án nào đúng",
+            "Tổ chức quá trình quản lý",
+            "Tổ chức cơ cấu",
+            "Tổ chức nhân sự"
+        ],
+        "correct": [
+            "Tổ chức nhân sự"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phân quyền là:",
+        "options": [
+            "Phân chia quyền lực",
+            "Cả 2 phương án trên đều đúng",
+            "Cả 2 phương án trên đều sai",
+            "Phân tích quyền lực"
+        ],
+        "correct": [
+            "Phân chia quyền lực"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hùng làm việc tại công ty A & B. Ông có hai cấp trên trực tiếp, một nhà quản trị chức năng và một nhà quản trị một đơn vị độc lập. A & B tổ chức theo một cấu trúc:",
+        "options": [
+            "Địa lý",
+            "Chức năng",
+            "Đơn vị độc lập",
+            "Ma trận"
+        ],
+        "correct": [
+            "Ma trận"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhà quản trị thường không ủy quyền cho cấp dưới trong trường hợp nào?",
+        "options": [
+            "Cấp dưới có năng lực và kinh nghiệm",
+            "Môi trường biến động",
+            "Các quyết định ít quan trọng",
+            "Doanh nghiệp đang khủng hoảng"
+        ],
+        "correct": [
+            "Doanh nghiệp đang khủng hoảng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Kết quả của phân quyền là:",
+        "options": [
+            "Cấp dưới chủ động hơn trong công việc",
+            "Cấp dưới nhận thức được mệnh lệnh",
+            "Cấp dưới thực hiện công việc như chỉ dẫn",
+            "Cấp trên lạm quyền cấp dưới"
+        ],
+        "correct": [
+            "Cấp dưới chủ động hơn trong công việc"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Quyền chính thức và hợp pháp của người ra quyết định là:",
+        "options": [
+            "Trách nhiệm",
+            "Lãnh đạo",
+            "Ủy quyền",
+            "Quyền hành"
+        ],
+        "correct": [
+            "Quyền hành"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là bộ khung chính tắc theo đó các phần việc được phân chia, tập hợp, và điều phối.",
+        "options": [
+            "Cơ cấu tổ chức",
+            "Phân tích nguồn lực nội tại",
+            "Rà soát môi trường",
+            "Sứ mệnh"
+        ],
+        "correct": [
+            "Cơ cấu tổ chức"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nếu sử dụng phương pháp quản trị MBO, yếu tố nào sau đây làm tăng hiệu quả quản trị dựa trên sự khó khăn trong tương lai?",
+        "options": [
+            "Lãnh đạo theo phong cách tự do",
+            "Mục tiêu thách thức, cụ thể",
+            "Mục tiêu đưa từ trên xuống",
+            "Kiểm soát chặt chẽ"
+        ],
+        "correct": [
+            "Mục tiêu thách thức, cụ thể"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... có bộ máy quản lý vẫn được thiết kế theo nguyên tắc trực tuyến, nhưng ở mỗi cấp quản lý người ta tổ chức các bộ phận tham mưu có nhiệm vụ giúp người quản lý đó trong quá trình chuẩn bị, ban hành, và thực hiện tất cả các quyết định thuộc chức năng chuyên môn:",
+        "options": [
+            "Cơ cấu kiểu chức năng",
+            "Cơ cấu kiểu trực tuyến",
+            "Cơ cấu kiểu trực tuyến tham mưu",
+            "Cơ cấu kiểu trực tuyến chức năng"
+        ],
+        "correct": [
+            "Cơ cấu kiểu trực tuyến tham mưu"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tổ chức nhân sự bao gồm các nội dung:",
+        "options": [
+            "Đào tạo, đề bạt",
+            "Tuyển chọn, sử dụng, đào tạo, đãi ngộ",
+            "Sử dụng, đào tạo, đãi ngộ",
+            "Tuyển chọn, đào tạo"
+        ],
+        "correct": [
+            "Tuyển chọn, sử dụng, đào tạo, đãi ngộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là một hệ thống chính thức về các mối quan hệ vừa độc lập vừa phụ thuộc thể hiện rõ những việc do ai làm.",
+        "options": [
+            "Hệ thống công việc",
+            "Phân công lao động",
+            "Tầm hạn quản trị",
+            "Cơ cấu tổ chức"
+        ],
+        "correct": [
+            "Cơ cấu tổ chức"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Công ty C & D có phản ứng chậm với những thay đổi bên ngoài, ra quyết định tập trung và sự phối hợp kém. Nó có khả năng được tổ chức theo cơ cấu:",
+        "options": [
+            "Theo tuyến chức năng",
+            "Theo tuyến bộ phận",
+            "Trên cơ sở tiếp cận theo đội",
+            "Trên cơ sở tiếp cận theo mạng lưới ảo"
+        ],
+        "correct": [
+            "Theo tuyến chức năng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Phát biểu sau đây về mô hình tổ chức là sai:",
+        "options": [
+            "Một công ty có Tổng Giám đốc công ty và 03 Giám đốc phụ trách: bán hàng cho các đại lý, xuất khẩu hàng ra các nước, và bán hàng cho tiêu dùng lẻ trong nước, thì ta gọi đó là tổ chức theo khách hàng",
+            "Một công ty được sắp xếp gồm 4 phòng Tài vụ, Hành chính-nhân sự, Kế hoạch kinh doanh, Kỹ thuật, ta gọi đó là tổ chức theo chức năng",
+            "Một công ty có các mạng lưới đại lý ở các tỉnh, thành phố khắp nước thì ta gọi đó là tổ chức theo địa bàn hoạt động",
+            "Một công ty có Tổng Giám đốc Cty và các Giám đốc phụ trách riêng từng loại sản phẩm của công ty, ta gọi đó là tổ chức theo sản phẩm"
+        ],
+        "correct": [
+            "Một công ty có Tổng Giám đốc công ty và 03 Giám đốc phụ trách: bán hàng cho các đại lý, xuất khẩu hàng ra các nước, và bán hàng cho tiêu dùng lẻ trong nước, thì ta gọi đó là tổ chức theo khách hàng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Tầm mức quản trị là khái niệm:",
+        "options": [
+            "Dùng để chỉ số cấp quản trị trong tổ chức",
+            "Số lượng nhân viên báo cáo trực tiếp với nhà quản trị",
+            "Giới hạn quyền lực của nhà quản trị",
+            "Dùng để chỉ số lượng nhà quản trị trong một tổ chức"
+        ],
+        "correct": [
+            "Số lượng nhân viên báo cáo trực tiếp với nhà quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Hình thái phân quyền ở mức độ cao là:",
+        "options": [
+            "Lạm quyền",
+            "Tập quyền",
+            "Ủy quyền",
+            "Trao quyền"
+        ],
+        "correct": [
+            "Ủy quyền"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Trong việc xác định nhu cầu nhân sự của doanh nghiệp mình:",
+        "options": [
+            "Nhà quản trị có thể bị động",
+            "Nhà quản trị luôn chủ động",
+            "Nhà quản trị luôn chủ động, đôi khi bị động",
+            "Nhà quản trị nhân sự là người duy nhất phải xác định nhu cầu nhân sự của doanh nghiệp mình"
+        ],
+        "correct": [
+            "Nhà quản trị luôn chủ động, đôi khi bị động"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhóm bộ phận chế tạo máy tập thể thao vào một khu vực, may quần áo nam giới vào một bộ phận, và sản xuất mỹ phẩm vào một bộ phận khác là ví dụ minh họa cho hình thức hình thành bộ phận nào?",
+        "options": [
+            "Theo quá trình.",
+            "Theo sản phẩm.",
+            "Theo địa lý.",
+            "Theo khách hàng."
+        ],
+        "correct": [
+            "Theo sản phẩm."
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Thông tin nào không được cung cấp trong một cơ cấu tổ chức?",
+        "options": [
+            "Các tuyến quyền hạn",
+            "Tiền lương, chế độ đãi ngộ",
+            "Các cấp quản lý",
+            "Nhiệm vụ"
+        ],
+        "correct": [
+            "Tiền lương, chế độ đãi ngộ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Một cơ cấu tổ chức có thể cung cấp thông tin nào?",
+        "options": [
+            "Các cấp quản lý",
+            "Tất cả các thông tin trên",
+            "Các bộ phận",
+            "Nhiệm vụ"
+        ],
+        "correct": [
+            "Tất cả các thông tin trên"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là quyền tự chủ trong quá trình ra quyết định và quyền đòi hỏi sự tuân thủ quyết định gắn liền với một vị trí quản lý nhất định.",
+        "options": [
+            "Thứ bậc",
+            "Quyền hạn",
+            "Trách nhiệm hoạt động",
+            "Trách nhiệm"
+        ],
+        "correct": [
+            "Quyền hạn"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Nhược điểm của tầm quản trị rộng là:",
+        "options": [
+            "Có nguy cơ không kiểm soát nổi",
+            "Tốn kém nhiều chi phí quản trị",
+            "Tăng số cấp quản trị",
+            "Dễ can thiệp sâu vào công việc cấp dưới"
+        ],
+        "correct": [
+            "Có nguy cơ không kiểm soát nổi"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Xu thế quản lý trên thế giới hiện nay là:",
+        "options": [
+            "Giảm tầm hạn quản trị, giảm số cấp quản trị",
+            "Tăng tầm hạn quản trị, giảm số cấp quản trị",
+            "Tăng tầm hạn quản trị, tăng số cấp quản trị",
+            "Giảm tầm hạn quản trị, tăng số cấp quản trị"
+        ],
+        "correct": [
+            "Tăng tầm hạn quản trị, giảm số cấp quản trị"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Đặc điểm của tổ chức bao gồm:",
+        "options": [
+            "Có sự nỗ lực của tất cả các thành viên",
+            "Hoạt động vì mục tiêu lợi nhuận",
+            "Có sự nỗ lực của tất cả các thành viên và có sự phân công lao động, thứ bậc quyền lực",
+            "Có sự phân công lao động, có hệ thống thứ bậc quyền lực"
+        ],
+        "correct": [
+            "Có sự nỗ lực của tất cả các thành viên và có sự phân công lao động, thứ bậc quyền lực"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chức năng ...... là việc triển khai nguồn lực để đạt được mục tiêu của tổ chức:",
+        "options": [
+            "Kiểm tra",
+            "Tổ chức",
+            "Lập kế hoạch",
+            "Lãnh đạo"
+        ],
+        "correct": [
+            "Tổ chức"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Ưu điểm của tầm quản trị hẹp là:",
+        "options": [
+            "Nhà quản trị giỏi",
+            "Giảm số cấp quản trị",
+            "Có thể tiết kiệm được chi phí quản trị",
+            "Giám sát và kiểm soát chặt chẽ"
+        ],
+        "correct": [
+            "Giám sát và kiểm soát chặt chẽ"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Sau khi tốt nghiệp đại học, An đã đi làm được 3 năm với vị trí là kỹ sư chế tạo tại một Nhà máy sản xuất thép. An vừa được Ban giám đốc bổ nhiệm vị trí trưởng bộ phận chế tạo. Theo anh/chị, đối với An, kỹ năng quản trị nào là quan trọng nhất?",
+        "options": [
+            "Kỹ năng tư duy",
+            "Kỹ năng quan hệ",
+            "Kỹ năng kỹ thuật",
+            "Kỹ năng thuyết trình"
+        ],
+        "correct": [
+            "Kỹ năng kỹ thuật"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "...... là tuyến quyền hạn liên tục kéo dài từ cấp quản lý cao nhất đến cấp quản lý thấp nhất trong tổ chức và nêu rõ ai phải báo cáo tới ai.",
+        "options": [
+            "Cấu trúc liên tục",
+            "Chuỗi mệnh lệnh",
+            "Thứ bậc yêu cầu",
+            "Chuỗi yêu cầu"
+        ],
+        "correct": [
+            "Chuỗi mệnh lệnh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Cơ sở để thiết kế bộ máy tổ chức sẽ không nhất thiết đòi hỏi yếu tố nào dưới đây?",
+        "options": [
+            "Phải xác định môi trường vĩ mô, vi mô và công nghệ của doanh nghiệp",
+            "Phải xác định các nguồn lực, đặc biệt là nguồn nhân lực",
+            "Phải xác định được mục tiêu và chiến lược của doanh nghiệp",
+            "Phải tuân thủ tiến trình của chức năng tổ chức ở những tổ chức khác tương tự với mình"
+        ],
+        "correct": [
+            "Phải tuân thủ tiến trình của chức năng tổ chức ở những tổ chức khác tương tự với mình"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Mức độ tập trung quyền lực cao thường gặp trong kiểu cơ cấu tổ chức:",
+        "options": [
+            "Theo địa lý",
+            "Theo ma trận",
+            "Theo trực tuyến chức năng",
+            "Theo sản phẩm"
+        ],
+        "correct": [
+            "Theo trực tuyến chức năng"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Chức danh Giám đốc trong một doanh nghiệp là quản trị viên cấp nào?",
+        "options": [
+            "Chưa xác định được",
+            "Quản trị viên cấp cao",
+            "Quản trị viên cấp cơ sở",
+            "Quản trị viên cấp trung"
+        ],
+        "correct": [
+            "Quản trị viên cấp cao"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Gần đây, ông Hùng đang xem xét sơ đồ cấu trúc tổ chức của công ty mình để khám phá những người nào báo cáo cho người nào. Ông Hùng đang nghiên cứu điều gì về tổ chức của mình?",
+        "options": [
+            "Số lượng khác biệt hóa",
+            "Chuỗi mệnh lệnh",
+            "Mức độ chính thức hóa",
+            "Mức độ tập trung quyền hành"
+        ],
+        "correct": [
+            "Chuỗi mệnh lệnh"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Có phải kiểu cơ cấu tổ chức hỗn hợp (Trực tuyến – Chức năng) là hợp lý nhất cho mọi tổ chức?",
+        "options": [
+            "Hợp lý với các doanh nghiệp dịch vụ",
+            "Sai",
+            "Sai, vì có thể hợp với tổ chức này, và không phù hợp với tổ chức khác",
+            "Đúng"
+        ],
+        "correct": [
+            "Sai, vì có thể hợp với tổ chức này, và không phù hợp với tổ chức khác"
+        ]
+    },
+    {
+        "type": "single",
+        "q": "Công ty và các doanh nghiệp nên lựa chọn cơ cấu tổ chức như thế nào?",
+        "options": [
+            "Cơ cấu tổ chức phù hợp với thực tế của doanh nghiệp",
+            "Cơ cấu tổ chức theo chức năng",
+            "Cơ cấu tổ chức trực tuyến tham mưu",
+            "Cơ cấu tổ chức theo trực tuyến"
+        ],
+        "correct": [
+            "Cơ cấu tổ chức phù hợp với thực tế của doanh nghiệp"
+        ]
+    },
     {
         "type": "single",
         "q": "Phân tích môi trường hoạt động của tổ chức nhằm:",
@@ -3281,7 +5069,9 @@ let questions=[
             "Chiến tranh vùng Vịnh",
             "Bãi công xảy ra trong doanh nghiệp"
         ],
-        "correct": ["Bãi công xảy ra trong doanh nghiệp"]
+        "correct": [
+            "Bãi công xảy ra trong doanh nghiệp"
+        ]
     },
     {
         "type": "single",
@@ -3377,7 +5167,7 @@ function load(){
 
  const q=questions[idx];
  setQuestionMeta(q.type);
- qEl.innerHTML=`Câu ${idx+1}: ${q.q}`;
+ qEl.innerHTML = `Câu ${idx+1}: ${q.q.replace(/\n/g, "<br>")}`;
 
  if(q.type==="single") renderSingle(q);
  if(q.type==="multiple") renderMultiple(q);
